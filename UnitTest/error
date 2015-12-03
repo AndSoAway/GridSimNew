@@ -1,0 +1,8 @@
+g++ -Wall -c -o traj_helper.o ../Tra/trajectory_helper.cc -lboost_serialization
+g++ -Wall -c -o traj.o ../Tra/trajectory.cc -lboost_serialization
+g++ -Wall -std=c++11 -c -o sample_point.o ../Tra/sample_point.cc
+g++ -Wall -c -o utils.o ../Tra/utils.cc
+g++ -c -Wall -std=c++11 -o panel_insert.o panel_insert_test_main.cc -lboost_serialization 
+g++ -c -Wall -std=c++11 -o grid_panel.o ../Grid/grid_panel.cc
+g++ -c -Wall -std=c++11 -o panel.o ../Grid/panel.cc 
+g++ -o panel_insert_main traj_helper.o traj.o sample_point.o utils.o panel_insert.o grid_panel.o panel.o
