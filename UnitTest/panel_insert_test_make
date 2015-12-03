@@ -3,11 +3,14 @@ CM = -c -Wall -std=c++11
 BOOST = -I/usr/local/include -L/usr/local/lib -lboost_serialization
 TRA_DIR = ../Tra
 
-OBJS =  traj_helper.o traj.o sample_point.o utils.o tra_utils.o  panel_insert.o grid_panel.o panel.o verify.o rectangle.o geo_util.o
+OBJS =  traj_helper.o traj.o sample_point.o utils.o tra_utils.o  panel_insert.o grid_panel.o panel.o verify.o rectangle.o geo_util.o panel_insert_test.o
 panel_insert_main: $(OBJS) file_path.h 
 	$(CC) -o $@ $(OBJS) $(BOOST)
 
 panel_insert.o: panel_insert_test_main.cc
+	$(CC) $(CM) -o $@ $< $(BOOST) 
+
+panel_insert_test.o: panel_insert_test.cc panel_insert_test.h
 	$(CC) $(CM) -o $@ $< $(BOOST) 
 
 tra_utils.o: tra_utils.cc
