@@ -3,7 +3,7 @@ CM = -c -Wall -std=c++11
 BOOST = -I/usr/local/include -L/usr/local/lib -lboost_serialization
 TRA_DIR = ../Tra
 
-OBJS =  traj_helper.o traj.o sample_point.o utils.o tra_utils.o  panel_insert.o grid_panel.o panel.o verify.o rectangle.o
+OBJS =  traj_helper.o traj.o sample_point.o utils.o tra_utils.o  panel_insert.o grid_panel.o panel.o verify.o rectangle.o geo_util.o
 panel_insert_main: $(OBJS) file_path.h 
 	$(CC) -o $@ $(OBJS) $(BOOST)
 
@@ -22,6 +22,9 @@ panel.o: $(PANEL)
 	$(CC) $(CM) -o $@ $< 
 
 rectangle.o: ../Grid/rectangle.cc ../Grid/rectangle.h
+	$(CC) $(CM) -o $@ $<
+
+geo_util.o: ../Grid/geo_utils.cc ../Grid/geo_utils.h
 	$(CC) $(CM) -o $@ $<
 
 TRAJ_HELPER_OBJS = $(TRA_DIR)/trajectory_helper.cc $(TRA_DIR)/trajectory_helper.h
