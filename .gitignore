@@ -1,6 +1,7 @@
 #the compiling file
 *.so
 *.exe
+*.o
 
 #Test files
 **/traj_csv/
