@@ -1,0 +1,16 @@
+CC = g++
+CM = -c -Wall -std=c++11
+TRA_DIR = ../Tra
+
+OBJS = dis_test.o utils.o
+dis_test: $(OBJS)
+	$(CC) -o $@ $(OBJS)
+
+dis_test.o: dis_test.cc
+	$(CC) $(CM) -o $@ $<
+
+utils.o: $(TRA_DIR)/utils.cc $(TRA_DIR)/utils.h
+	$(CC) $(CM) -o $@ $<
+
+clean:
+	rm -rf *.o
