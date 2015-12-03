@@ -1,0 +1,8 @@
+#the compiling file
+*.so
+*.exe
+
+#Test files
+**/traj_csv/
+**/tra_data/
+test/
