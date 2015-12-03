@@ -1,0 +1,44 @@
+CC = g++
+CM = -c -Wall -std=c++11
+BOOST = -I/usr/local/include -L/usr/local/lib -lboost_serialization
+TRA_DIR = ../Tra
+
+OBJS =  traj_helper.o traj.o sample_point.o utils.o tra_utils.o  panel_insert.o grid_panel.o panel.o verify.o rectangle.o
+panel_insert_main: $(OBJS) file_path.h 
+	$(CC) -o $@ $(OBJS) $(BOOST)
+
+panel_insert.o: panel_insert_test_main.cc
+	$(CC) $(CM) -o $@ $< $(BOOST) 
+
+tra_utils.o: tra_utils.cc
+	$(CC) $(CM) -o $@ $<  
+
+GRID = ../Grid/grid_panel.cc ../Grid/grid_panel.h
+grid_panel.o: $(GRID)
+	$(CC) $(CM) -o $@ $<
+
+PANEL = ../Grid/panel.cc ../Grid/panel.h
+panel.o: $(PANEL)
+	$(CC) $(CM) -o $@ $< 
+
+rectangle.o: ../Grid/rectangle.cc ../Grid/rectangle.h
+	$(CC) $(CM) -o $@ $<
+
+TRAJ_HELPER_OBJS = $(TRA_DIR)/trajectory_helper.cc $(TRA_DIR)/trajectory_helper.h
+traj_helper.o: $(TRAJ_HELPER_OBJS)
+	$(CC) $(CM) -o $@ $< $(BOOST)
+
+traj.o: $(TRA_DIR)/trajectory.cc $(TRA_DIR)/trajectory.h
+	$(CC) $(CM) -o $@ $< $(BOOST)
+
+sample_point.o: $(TRA_DIR)/sample_point.cc $(TRA_DIR)/sample_point.h
+	$(CC) $(CM) -o $@ $<
+
+utils.o: $(TRA_DIR)/utils.cc $(TRA_DIR)/utils.h
+	$(CC) $(CM) -o $@ $<
+
+verify.o: ../Verify/verify.cc ../Verify/verify.h
+	$(CC) $(CM) -o $@ $<
+
+clean:
+	rm -rf *.o
