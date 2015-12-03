@@ -1,15 +1,15 @@
 #ifndef STRATEGY_BINARY_STRATEGY_H
 #define STRATEGY_BINARY_STRATEGY_H
-#include "Strategy"
+#include "strategy.h"
 
 class BinaryStrategy: public Strategy {
 public:
 	BinaryStrategy(int begin=0, int end=0): Strategy(begin, end) {
 	}
 
-	void candidateFilter(const GridPanel* grid_panel, const Trajectory& traj, std::list<int>& candidates) const;	
+	void FindCandidateTrajs(const GridPanel* grid_panel, const Trajectory& traj, double dis, std::list<int>& candidates);	
 
-	void GetCandidateTrajs(const GridPanel* grid_panel, const SamplePoint& point, double dis, std::list<int>& candidates) const;
+	void GetCandidateTrajs(const GridPanel* grid_panel, const SamplePoint& point, double dis, std::list<int>& candidates);
 
 	bool HasNext();
 		
@@ -18,7 +18,7 @@ public:
 	virtual ~BinaryStrategy() { }
 
 private:
-	void TrajMergeJoin(std::list<int>& father_trajs, const std::list<int>& child_trajs) const;	
+	void TrajMergeJoin(const std::list<int>& father_trajs, const std::list<int>& child_trajs, std::list<int>& res) const;	
 
 	bool get_new_index();
 
