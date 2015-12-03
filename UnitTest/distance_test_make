@@ -1,0 +1,11 @@
+CC = g++
+CM = -c -Wall
+
+dis_main: distance_test_main.o utils.o
+	$(CC) -o $@ distance_test_main.o utils.o
+
+distance_test_main.o: distance_test_main.cc distance_test.h
+	$(CC) $(CM) $<
+
+utils.o: ../Tra/utils.cc ../Tra/utils.h
+	$(CC) $(CM) $<
