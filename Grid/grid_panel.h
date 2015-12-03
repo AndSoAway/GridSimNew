@@ -20,8 +20,6 @@ public:
 
   void InsertTrajectory(const std::vector<Trajectory>& trajs);
 
-  std::vector<Trajectory> FindCandidate(const Trajectory& traj);
-
   void InsertTrajectory(const Trajectory& traj);
 
   void GetCandidateTrajs(const SamplePoint& point, double dis, std::set<int>& candidates) const;  
