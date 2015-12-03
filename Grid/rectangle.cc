@@ -18,12 +18,12 @@ bool Rectangle::IntersectSegment(const Point& begin_point, const Point& end_poin
   return is_intersect;
 }
 
-/*
 bool Rectangle::IntersectRectangle(const Rectangle& rectangle) const {
-	return false;	
+	bool res = !(left_bottom_.x() > rectangle.right_upper().x() || rectangle.left_bottom().x() > right_upper_.x() || left_bottom_.y() > rectangle.right_upper().y() || rectangle.left_bottom().y() > right_upper_.y());
+	return res;	
 }
 
-
+/*
 Rectangle* SplitNode() {
   if (splitted_)
     return children_;
