@@ -17,6 +17,7 @@ public:
 	
 	int Next() = 0;
 
+	virtual ~Strategy() { }
 protected:
 	int begin_, end_;
 	std::vector<int> index_;
