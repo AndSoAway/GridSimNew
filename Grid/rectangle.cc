@@ -1,4 +1,5 @@
 #include "rectangle.h"
+#include "../Tra/point.h"
 #include "geo_utils.h"
 
 bool Rectangle::ContainPoint(const Point& point) const {
@@ -12,10 +13,16 @@ bool Rectangle::IntersectSegment(const Point& begin_point, const Point& end_poin
   Point left_upper(left_bottom_.x(), right_upper_.y());
   Point right_bottom(right_upper_.x(), left_bottom_.y());
 
-  bool is_intersect = SegIntersectSeg(left_upper, right_bottom, begin_point, end_point) || SegIntersectSeg(left_bottom, right_upper, begin_point, end_point);
+  bool is_intersect = SegIntersectSeg(left_upper, right_bottom, begin_point, end_point) || SegIntersectSeg(left_bottom_, right_upper_, begin_point, end_point);
  
   return is_intersect;
 }
+
+/*
+bool Rectangle::IntersectRectangle(const Rectangle& rectangle) const {
+	return false;	
+}
+
 
 Rectangle* SplitNode() {
   if (splitted_)
@@ -40,3 +47,4 @@ Rectangle* SplitNode() {
 
   return (Rectangle*)children;
 }
+*/

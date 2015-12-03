@@ -40,7 +40,8 @@ double verify(const Trajectory& target, const Trajectory& candidate) {
 double minDistance(const SamplePoint& point, const Trajectory& tra) {
 	double min_dis = double(ULONG_MAX); 
 	const vector<SamplePoint>& point_list = tra.point_list();
-	for (int index = 1; index < point_list.size(); index++) {
+	int point_size = point_list.size();
+	for (int index = 1; index < point_size; index++) {
 		double cur_dis = minDistance(point, point_list.at(index), point_list.at(index - 1));
 		if (cur_dis < min_dis) {
 			min_dis = cur_dis;

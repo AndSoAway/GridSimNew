@@ -1,5 +1,6 @@
-#include "geo_utils.h"
 #include <cmath>
+#include "geo_utils.h"
+#include "rectangle.h"
 
 template <typename T>
 inline int GetSign(const T& num) { 
@@ -25,7 +26,7 @@ bool SegIntersectSeg(const Point& seg1_point1, const Point& seg1_point2, const P
     SortPoints(seg2_point1, seg2_point2, &rect2_left_bottom, &rect2_right_upper);
 
     Rectangle rectangle1(rect1_left_bottom, rect1_right_upper);
-    Rectangle rectangle2(rect2_left_bottom. rect2_right_upper);
+    Rectangle rectangle2(rect2_left_bottom, rect2_right_upper);
     
     if (!rectangle1.IntersectRectangle(rectangle2))
        return false;
@@ -53,7 +54,7 @@ bool SegIntersectSeg(const Point& seg1_point1, const Point& seg1_point2, const P
 }
 
 double CalculateCrossProduct(const Point& p1, const Point& begin, const Point& end) {
-  return CalculateCrossProdcuct(begin.x() - p1.x(), begin.y() - p1.x(), end.x() - p1.x(), end.y() - p1.y())
+  return CalculateCrossProduct(begin.x() - p1.x(), begin.y() - p1.x(), end.x() - p1.x(), end.y() - p1.y());
 }
 
 double CalculateCrossProduct(double a, double b, double c, double d) {
@@ -73,11 +74,11 @@ void SortPoints(const Point& point1, const Point& point2, Point* left_bottom, Po
   SortNumbers(&x1, &x2);
   SortNumbers(&y1, &y2);
 
-  left_bottom.set_x(x1);
-  left_bottom.set_y(y1);
+  left_bottom->set_x(x1);
+  left_bottom->set_y(y1);
 
-  right_upper.set_x(x2);
-  right_upper.set_y(y2);
+  right_upper->set_x(x2);
+  right_upper->set_y(y2);
 }
 
 
