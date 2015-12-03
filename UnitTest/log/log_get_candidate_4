@@ -1,0 +1,11 @@
+Get candidate trajs: 572, points sum : 53634
+candidate trajs: 572 
+----------------------------------------
+Get candidate trajs: 21339, points sum : 252158
+candidate trajs: 21339, filtered  trajs:63
+----------------------------------------
+Get candidate trajs: 6975, points sum : 349120
+candidate trajs: 6975, filtered  trajs:8
+----------------------------------------
+trajectory id:1351725, get candidate:8, cost time:0.887462 milsec
+clocks_per_sec 1000000

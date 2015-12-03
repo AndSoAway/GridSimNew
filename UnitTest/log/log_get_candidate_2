@@ -1,0 +1,55 @@
+Read file tra_data/tra_data0.txt
+read trajs: 4321, cost time:8.000000
+insert points: 572195, grid: 3843,  cost time:1.000000
+Read file tra_data/tra_data1.txt
+read trajs: 41682, cost time:49.000000
+insert points: 4554774, grid: 4641,  cost time:6.000000
+Read file tra_data/tra_data2.txt
+read trajs: 38669, cost time:42.000000
+insert points: 7978928, grid: 4800,  cost time:5.000000
+Read file tra_data/tra_data3.txt
+read trajs: 37528, cost time:43.000000
+insert points: 11510129, grid: 4872,  cost time:5.000000
+Read file tra_data/tra_data4.txt
+read trajs: 51591, cost time:61.000000
+insert points: 16523314, grid: 4923,  cost time:8.000000
+Read file tra_data/tra_data5.txt
+read trajs: 54530, cost time:63.000000
+insert points: 21804437, grid: 4958,  cost time:8.000000
+Read file tra_data/tra_data6.txt
+read trajs: 61314, cost time:65.000000
+insert points: 27137587, grid: 4992,  cost time:9.000000
+Read file tra_data/tra_data7.txt
+read trajs: 54932, cost time:65.000000
+insert points: 32569168, grid: 5020,  cost time:9.000000
+Read file tra_data/tra_data8.txt
+read trajs: 55424, cost time:68.000000
+insert points: 38202428, grid: 5035,  cost time:9.000000
+Read file tra_data/tra_data9.txt
+read trajs: 47253, cost time:55.000000
+insert points: 42608713, grid: 5048,  cost time:7.000000
+Get candidate points: 53634
+candidate trajs: 6715 
+Get candidate points: 252158
+Get candidate points: 349120
+Get candidate points: 46548
+Get candidate points: 136445
+Get candidate points: 17505
+Get candidate points: 346917
+Get candidate points: 216622
+Get candidate points: 136445
+Get candidate points: 56596
+Get candidate points: 83244
+Get candidate points: 178061
+Get candidate points: 346917
+Get candidate points: 232907
+Get candidate points: 118539
+Get candidate points: 136445
+Get candidate points: 136445
+Get candidate points: 53634
+Get candidate points: 52729
+Get candidate points: 72316
+Get candidate points: 79544
+Get candidate points: 54251
+trajectory id:1351725, get candidate:9, cost time:46.994606 milsec
+clocks_per_sec 1000000
