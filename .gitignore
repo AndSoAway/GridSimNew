@@ -2,6 +2,9 @@
 *.so
 *.exe
 *.o
+*.txt
+*.csv
+*.out
 
 #Test files
 **/traj_csv/
