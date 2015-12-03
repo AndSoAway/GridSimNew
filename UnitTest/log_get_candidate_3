@@ -1,0 +1,39 @@
+Read file tra_data/tra_data0.txt
+read trajs: 4321, cost time:7.000000
+insert points: 572195, grid: 3843,  cost time:3.000000
+Read file tra_data/tra_data1.txt
+read trajs: 41682, cost time:54.000000
+insert points: 4554774, grid: 4641,  cost time:22.000000
+Read file tra_data/tra_data2.txt
+read trajs: 38669, cost time:46.000000
+insert points: 7978928, grid: 4800,  cost time:21.000000
+Read file tra_data/tra_data3.txt
+read trajs: 37528, cost time:48.000000
+insert points: 11510129, grid: 4872,  cost time:22.000000
+Read file tra_data/tra_data4.txt
+read trajs: 51591, cost time:67.000000
+insert points: 16523314, grid: 4923,  cost time:30.000000
+Read file tra_data/tra_data5.txt
+read trajs: 54530, cost time:75.000000
+insert points: 21804437, grid: 4958,  cost time:35.000000
+Read file tra_data/tra_data6.txt
+read trajs: 61314, cost time:73.000000
+insert points: 27137587, grid: 4992,  cost time:38.000000
+Read file tra_data/tra_data7.txt
+read trajs: 54932, cost time:76.000000
+insert points: 32569168, grid: 5020,  cost time:41.000000
+Read file tra_data/tra_data8.txt
+read trajs: 55424, cost time:79.000000
+insert points: 38202428, grid: 5035,  cost time:42.000000
+Read file tra_data/tra_data9.txt
+read trajs: 47253, cost time:62.000000
+insert points: 42608713, grid: 5048,  cost time:31.000000
+Get candidate trajs: 572, points sum : 53634
+candidate trajs: 572 
+----------------------------------------
+Get candidate trajs: 21339, points sum : 252158
+----------------------------------------
+Get candidate trajs: 6975, points sum : 349120
+----------------------------------------
+trajectory id:1351725, get candidate:8, cost time:1.725151 milsec
+clocks_per_sec 1000000
