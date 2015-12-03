@@ -10,7 +10,8 @@ void Panel::InsertTrajectory(const Trajectory& traj) {
  
 	vector<SamplePoint>::const_iterator itor = point_list.cbegin();
 	if(traj.id() == 630818) {
-		printf("point size %d\n", point_list.size());
+		int size = point_list.size();
+		printf("point size %d\n", size);
 	}
 	InsertPoint(*itor, true);
 	itor++;

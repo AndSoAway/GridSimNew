@@ -72,7 +72,7 @@ void GridPanel::GetCandidateTrajs(const SamplePoint& point, double dis, set<int>
     }
   }  
 	
-	printf("Get candidate trajs: %ld, points sum : %d\n", candidates.size(), point_sum);
+//	printf("Get candidate trajs: %ld, points sum : %d\n", candidates.size(), point_sum);
 }
 
 void GridPanel::PrintPanel() const {
@@ -99,8 +99,8 @@ void GridPanel::BinaryFilter(const Trajectory& traj, set<int>& trajs) const {
 
 	if (binary_strategy.HasNext()) {
 	  GetCandidateTrajs(point_list.at(binary_strategy.Next()), TEST_DIS, trajs);
-		printf("candidate trajs: %ld \n", trajs.size()); 
-		printf("----------------------------------------\n");
+//		printf("candidate trajs: %ld \n", trajs.size()); 
+//		printf("----------------------------------------\n");
   }
 
 	while( binary_strategy.HasNext() && trajs.size() >= THRESHOLD) {
@@ -108,10 +108,10 @@ void GridPanel::BinaryFilter(const Trajectory& traj, set<int>& trajs) const {
 //		printf("cur: %d, ", cur);
 		set<int> cur_trajs;
     GetCandidateTrajs(point_list.at(cur), TEST_DIS, cur_trajs);
-		printf("candidate trajs: %ld, ", cur_trajs.size());
+//		printf("candidate trajs: %ld, ", cur_trajs.size());
     traj_filter(trajs, cur_trajs);
-		printf("filtered  trajs:%ld\n", trajs.size());
-		printf("----------------------------------------\n");
+//		printf("filtered  trajs:%ld\n", trajs.size());
+//		printf("----------------------------------------\n");
 	}
 
   //printf("Points size:%ld\n", trajs.size());
@@ -155,9 +155,10 @@ void GridPanel::traj_filter(std::set<int>& father_trajs, const std::set<int>& ch
 }
 
 bool BinaryStrategy::HasNext() { 
+	int size = index_.size();
 	if (is_end_) {
 		return get_end_index();
-	} else if (cur_ < index_.size()){
+	} else if (cur_ < size){
 		return true;
 	} else {
 		  return get_new_index();
@@ -191,7 +192,8 @@ bool BinaryStrategy::get_new_index() {
 	}
 
 bool BinaryStrategy::get_end_index() {
-      if (cur_ < index_.size()) {
+	int size = index_.size();
+      if (cur_ < size) {
         return true;
       } else{
         is_end_ = false;

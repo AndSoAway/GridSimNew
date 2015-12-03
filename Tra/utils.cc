@@ -121,7 +121,7 @@ void filterLoaded(FILE* stream, const string& file_name) {
 	double speed_;
 
 	while(fgets(line, 100, stream) != NULL) {
-		int res = sscanf(line, "%d,%4d-%2d-%2d %2d:%2d:%2d,%lf,%lf,%lf,%lf,%d", 
+		sscanf(line, "%d,%4d-%2d-%2d %2d:%2d:%2d,%lf,%lf,%lf,%lf,%d", 
 			&vehical_id_, 
 			&time_tm.tm_year,
 			&time_tm.tm_mon,
