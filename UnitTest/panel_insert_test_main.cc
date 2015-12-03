@@ -53,7 +53,7 @@ int main() {
 	read_cost = clock();
 	read_traj(traj_data);
 	read_cost = clock() - read_cost;
-	printf("read trajs: %ld, cost time %lf\n", traj_data.trajs.size(), read_cost / CLOCKS_PER_SEC);
+	printf("read trajs: %ld, cost time %lf\n", traj_data.trajs.size(), (double)read_cost / CLOCKS_PER_SEC);
 	
 	unordered_map<int, list<int> > can_map;
 	clock_t join_cost = clock();
@@ -61,7 +61,7 @@ int main() {
 	join_cost = clock() - join_cost;
 	double total_cost = join_cost / CLOCKS_PER_SEC;
 	double per_cost = total_cost / traj_data.trajs.size();
-	printf("join cost: %lf, per traj needs %lf", total_cost, per_cost);
+	printf("join cost: %lf, per traj needs %lf\n", total_cost, per_cost);
 
 	unordered_map<int, unordered_map<int, double> > sim_map;
 	clock_t sim_cost = clock();
@@ -171,12 +171,12 @@ void get_candidate_output(TrajData& traj_data, GridPanel& grid_panel) {
 
 void read_traj(TrajData& traj_data) {
   TrajectoryHelper* trajHelper = TrajectoryHelper::GetHelperInstance();
-  //for (int i = 0;  i < FILE_NUM; i++) {
-	//	FILE* file = fopen(file_paths[i], "rb");*/
-  for (int i = 0; i < 2; i++) {
-		FILE* file = fopen(test_files[i], "rb");
+  for (int i = 0;  i < FILE_NUM; i++) {
+		FILE* file = fopen(file_paths[i], "rb");
+  //for (int i = 0; i < 2; i++) {
+	//	FILE* file = fopen(test_files[i], "rb");
 		//FILE* file = fopen(filter_file_paths[i], "rb");
-		//printf("read %s\n", filter_file_paths[i]);
+		printf("read %s\n", filter_file_paths[i]);
 		trajHelper->ExtractTrajectory(file, traj_data.trajs);
 		fclose(file);
 	}
