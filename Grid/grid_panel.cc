@@ -20,6 +20,10 @@ void GridPanel::InsertTrajectory(const Trajectory& traj) {
   }
 }
 
+void GridPanel::FindCandidates(Strategy& strategy, const Trajectory& traj, double dis, list<int>& trajs) const {
+	strategy.FindCandidateTrajs(this, traj, dis, trajs);
+}
+
 void GridPanel::PrintPanel() const {
   printf("Panel info: %s", panel_.info().c_str());
 }
@@ -34,10 +38,4 @@ int GridPanel::PointSize() const {
 
 Trajectory& GridPanel::getTraj(int tra_id) {
 	return trajs_.at(tra_id);	
-}
-
-void GridPanel::FindCandidates(const Strategy& strategy, const Trajectory& traj, double dis, list<int>& trajs) const {
-
-	strategy.FindCandidateTrajs(this, traj, dis, trajs);
-	
 }

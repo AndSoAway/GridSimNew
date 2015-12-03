@@ -7,8 +7,10 @@
 
 #include "panel.h"
 #include "rectangle.h"
-
 #include "../Tra/trajectory.h"
+#include "../Strategy/strategy.h"
+
+class Strategy;
 
 class GridPanel {
 public:
@@ -22,7 +24,7 @@ public:
 
   void InsertTrajectory(const Trajectory& traj);
 
-  void FindCandidates(const Strategy& strategy, const Trajectory& traj, double dis, std::list<int>& trajs) const;
+  void FindCandidates(Strategy& strategy, const Trajectory& traj, double dis, std::list<int>& trajs) const;
 
   int GridSize() const;
   
@@ -31,6 +33,8 @@ public:
   void PrintPanel() const ;
 
 	Trajectory& getTraj(int tra_id);
+	
+	Panel panel() const { return panel_; }
 
 private:
   void traj_filter(std::set<int>& father_trajs, const std::set<int>& child_trajs) const;
