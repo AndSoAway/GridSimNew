@@ -1,5 +1,6 @@
 #include "panel_insert_test.h"
 #include "file_path.h"
+#include "../Strategy/binary_strategy.h"
 
 using namespace std;
 
@@ -32,8 +33,8 @@ void JoinAndCandidate(GridPanel& grid_panel, const vector<Trajectory>& trajs, un
 void GetCandidate(GridPanel& grid_panel, const Trajectory& traj, unordered_map<int, list<int>> can_map) {	
 	list<int> candidates;
 	int id = traj.id();
-	set<int> candidates_set;
-	grid_panel.BinaryFilter(traj, candidates_set);
+	BinaryStrategy binary_strategy(0, traj.point_list().size() - 1);	
+	grid_panel.FindCandidates(binary_strategy, traj, DISUNIT, candidates);
 	if (can_map.find(id) != can_map.end()) {
 		list<int> cur_can = can_map[id];
 		list<int>::iterator itor = cur_can.begin();
@@ -64,6 +65,7 @@ void filterFile() {
 	}
 }
 
+/*
 void get_candidate_output(TrajData& traj_data, GridPanel& grid_panel) {
 	BinaryStrategy binary_strategy(0, traj_data.trajs.size() - 1);
   int sum = 0;
@@ -103,6 +105,7 @@ void get_candidate_output(TrajData& traj_data, GridPanel& grid_panel) {
 	}
 }
 
+*/
 void read_traj(TrajData& traj_data) {
   TrajectoryHelper* trajHelper = TrajectoryHelper::GetHelperInstance();
   for (int i = 0;  i < FILE_NUM; i++) {

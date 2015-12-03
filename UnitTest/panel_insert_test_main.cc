@@ -1,4 +1,5 @@
 #include "panel_insert_test.h"
+#include "../Strategy/binary_strategy.h"
 using namespace std;
 
 int main() {

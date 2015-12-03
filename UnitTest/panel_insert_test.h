@@ -18,6 +18,8 @@
 #include "../Tra/trajectory.h"
 #include "traj_archive.h"
 
+#include "../Strategy/strategy.h"
+
 typedef boost::archive::text_iarchive iarchive;
 typedef boost::archive::text_oarchive oarchive;
 
@@ -33,7 +35,7 @@ void traj_archive(TrajData& traj_data, std::string file_name);
 
 void traj_load(TrajData& traj_data, std::string file_name);
 void output_traj(const Trajectory& traj, std::string& file_name);
-void get_candidate_output(TrajData& traj_data, GridPanel& grid_panel);
+//void get_candidate_output(TrajData& traj_data, GridPanel& grid_panel);
 
 void filterFile();
 
