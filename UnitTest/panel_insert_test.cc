@@ -1,6 +1,7 @@
 #include "panel_insert_test.h"
 #include "file_path.h"
 #include "../Strategy/binary_strategy.h"
+#include "../Strategy/special_point_strategy.h"
 
 using namespace std;
 
@@ -27,15 +28,22 @@ int VerifySim(GridPanel& grid_panel, unordered_map<int, list<int> >& can_map, un
 void JoinAndCandidate(GridPanel& grid_panel, const vector<Trajectory>& trajs, unordered_map<int, list<int> >& can_map) {
 	for(auto traj : trajs) {
 		GetCandidate(grid_panel, traj, can_map);
+		grid_panel.InsertTrajectory(traj);
 	}
 }
 
 void GetCandidate(GridPanel& grid_panel, const Trajectory& traj, unordered_map<int, list<int>> can_map) {	
 	list<int> candidates;
 	int id = traj.id();
-	BinaryStrategy binary_strategy(0, traj.point_list().size() - 1);	
-	grid_panel.FindCandidates(binary_strategy, traj, DISUNIT, candidates);
-	if (can_map.find(id) != can_map.end()) {
+	//BinaryStrategy binary_strategy(0, traj.point_list().size() - 1);	
+	SpecialPointStrategy special_point_strategy(0, traj.point_list().size() - 1);
+	grid_panel.FindCandidates(special_point_strategy, traj, DISUNIT, candidates);
+	
+	if (can_map.find(id) == can_map.end()) {
+		can_map[id] = candidates;
+	}
+	printf("Test id %d, candidates size %ld, traj size %d\n", id, candidates.size(), grid_panel.TrajSize());
+/*
 		list<int> cur_can = can_map[id];
 		list<int>::iterator itor = cur_can.begin();
 		bool contain = false;
@@ -50,8 +58,7 @@ void GetCandidate(GridPanel& grid_panel, const Trajectory& traj, unordered_map<i
 		if (!contain) {
 			cur_can.insert(itor, id);
 		}
-	}
-	can_map[traj.id()] = candidates;
+*/
 }
 
 void filterFile() {
