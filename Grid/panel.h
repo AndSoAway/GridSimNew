@@ -66,10 +66,10 @@ private:
   double width_;
   double height_;
   gridset grid_set_;
-	trajgridset traj_grid_set_;
+	trajgridlist point_traj_list_;
 	trajgridlist end_traj_grid_list_;
 //	trajInfoGridSet trajinfo_grid_set_;
-  trajgridlist traj_grid_list_;
+  trajgridlist seg_traj_list_;
 	static const std::vector<SamplePoint> empty_point_;
 };
 #endif

@@ -1,4 +1,5 @@
 #include <vector>
+#include <algorithm>
 #include "panel.h"
 
 using namespace std;
@@ -25,24 +26,20 @@ void Panel::InsertTrajectory(const Trajectory& traj) {
 
 
 void Panel::InsertPoint(const SamplePoint& point, bool end) {
-    int x_grid_index = GetXIndex(point.x());
-    int y_grid_index = GetYIndex(point.y());
+   int x_grid_index = GetXIndex(point.x());
+   int y_grid_index = GetYIndex(point.y());
     
-    grid_set_[x_grid_index][y_grid_index].push_back(point);
+  grid_set_[x_grid_index][y_grid_index].push_back(point);
 
-		int tra_id = point.tra_id();
-		traj_grid_set_[x_grid_index][y_grid_index].insert(tra_id);
+	int tra_id = point.tra_id();
+	traj_grid_list_[x_grid_index][y_grid_index].insert(tra_id);
 		
-		if (end) {
-			list<int>& end_traj_list = end_traj_grid_list_[x_grid_index][y_grid_index];
-			
-			
-			for (list<int>::iterator itor = end_traj_list.begin(); itor != end_traj_list.end(); itor++) {
-				if (*itor == tra_id) {
-					break;
-				}	
-			}
-			if (	
+	if (end) {
+		list<int>& end_traj_list = end_traj_grid_list_[x_grid_index][y_grid_index];
+		list<int>::iterator index = find(end_traj_list.begin(), end_traj_list.end(), tra_id);
+		if (index == end_traj_list.end()) {
+			end_traj_list.push_back(tra_id);
+		}
 	}
 }
 
@@ -69,7 +66,7 @@ void Panel::InsertSegment(int tra_id, const SamplePoint& begin, const SamplePoin
 			Point right_upper(x_right_log, y_right_lat);
 			Rectangle rect(left_bottom, right_upper);
 			if (rect.IntersectSegment(begin.point(), end.point())) {
-				list<int>& tra_id_list = traj_grid_list_[x][y];
+				list<int>& tra_id_list = seg_traj_list_[x][y];
 				bool contain = false;
 				list<int>::iterator itor = tra_id_list.begin();
 				for (itor = tra_id_list.begin(); itor != tra_id_list.end(); itor++) {
@@ -168,8 +165,12 @@ const vector<SamplePoint>& Panel::GetPointsInGrid(const std::pair<int, int>& gri
 } 
 
 
-const std::set<int>& Panel::GetTrajsInGrid(const pair<int, int>& grid_index) const {
-	return traj_grid_set_.at(grid_index.first).at(grid_index.second);
+const std::list<int>& Panel::GetTrajsInGrid(const pair<int, int>& grid_index, bool is_end) const {
+	if (is_end) {
+		return end_traj_grid_list_.at(grid_index.first).at(grid_index.second);
+	} else {
+		return traj_grid_list_.at(grid_index.first).at(grid_index.second);
+	}
 }
 
 const std::list<int>& Panel::GetEndTrajsInGrid(const pair<int, int>& grid_index) const {

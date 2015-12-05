@@ -30,4 +30,6 @@ double disSample(const Point&, const Point&);
 
 void filterLoaded(FILE* stream, const std::string& file_name);
 
+template<class container, class T>
+container::iterator insert(container& arr, const T& val);
 #endif
