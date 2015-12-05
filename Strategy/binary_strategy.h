@@ -4,7 +4,11 @@
 
 class BinaryStrategy: public Strategy {
 public:
-	BinaryStrategy(int begin=0, int end=0): Strategy(begin, end) {
+	BinaryStrategy(int begin=0, int end=0): begin_(begin), end_(end), cur_(0), is_end_(true) {
+  index_.push_back(begin); 
+  index_.push_back(end);
+	end_index_ = index_;
+  is_used_ = std::vector<bool>(end + 1, false);
 	}
 
 	void FindCandidateTrajs(const GridPanel* grid_panel, const Trajectory& traj, double dis, std::list<int>& candidates);	
@@ -18,12 +22,16 @@ public:
 	virtual ~BinaryStrategy() { }
 
 private:
-	void TrajMergeJoin(const std::list<int>& father_trajs, const std::list<int>& child_trajs, std::list<int>& res) const;	
-
 	bool get_new_index();
 
 	bool get_end_index();
 	
+	int begin_, end_;
+	std::vector<int> index_;
+	std::vector<int> end_index_; 
+	int cur_;
+	bool is_end_;
+	std::vector<bool> is_used_;
 };
 
 #endif
