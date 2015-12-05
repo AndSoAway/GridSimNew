@@ -32,6 +32,8 @@ public:
 
   void PrintPanel() const ;
 
+	int TrajSize() const { return trajs_.size(); }
+
 	Trajectory& getTraj(int tra_id);
 	
 	Panel panel() const { return panel_; }

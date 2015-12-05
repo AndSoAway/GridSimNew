@@ -141,24 +141,3 @@ void filterLoaded(FILE* stream, const string& file_name) {
 	} 
 	fclose(output);
 }
-
-template<class container, class T>
-container::iterator insert(container& arr, const T& val) {
-	bool contain = false;
-	container::iterator itor = arr.begin();
-	while (itor != arr.end()) {
-		if (*itor == val) {
-			contain = true;
-			break;
-		} else if (*itor > val) {
-			break;
-		}
-		itor++;
-	}
-	if (!contain) {
-		tra_id_list.insert(itor, tra_id);
-		return (--itor);
-	} else {
-		return itor;
-	}
-}

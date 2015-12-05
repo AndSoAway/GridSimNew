@@ -4,15 +4,10 @@
 
 class SpecialPointStrategy: public Strategy {
 public:
-	SpecialPointStrategy(int begin=0, int end=0): Strategy(begin, end) {
-		
+	SpecialPointStrategy(int begin=0, int end=0): Strategy() {
 	}
  
-
 	virtual void FindCandidateTrajs(const GridPanel* grid_panel, const Trajectory& traj, double dis, std::list<int>& candidates);
-
-
-	virtual void GetCandidateTrajs(const GridPanel* grid_panel, const SamplePoint& point, double dis, std::list<int>& candidates);
 
 	virtual ~SpecialPointStrategy() { }
 

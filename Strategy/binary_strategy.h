@@ -13,8 +13,6 @@ public:
 
 	void FindCandidateTrajs(const GridPanel* grid_panel, const Trajectory& traj, double dis, std::list<int>& candidates);	
 
-	void GetCandidateTrajs(const GridPanel* grid_panel, const SamplePoint& point, double dis, std::list<int>& candidates);
-
 	bool HasNext();
 		
 	int Next();

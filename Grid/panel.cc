@@ -1,10 +1,13 @@
 #include <vector>
 #include <algorithm>
 #include "panel.h"
+#include "../Tra/utils.h"
 
 using namespace std;
 
 const vector<SamplePoint> Panel::empty_point_;
+
+const list<int> Panel::empty_list_;
 
 void Panel::InsertTrajectory(const Trajectory& traj) {
   const vector<SamplePoint>& point_list = traj.point_list();
@@ -32,10 +35,12 @@ void Panel::InsertPoint(const SamplePoint& point, bool end) {
   grid_set_[x_grid_index][y_grid_index].push_back(point);
 
 	int tra_id = point.tra_id();
-	traj_grid_list_[x_grid_index][y_grid_index].insert(tra_id);
+	
+	//point_traj_list_[x_grid_index][y_grid_index].insert(tra_id);
+	insert(point_traj_list_[x_grid_index][y_grid_index], tra_id);
 		
 	if (end) {
-		list<int>& end_traj_list = end_traj_grid_list_[x_grid_index][y_grid_index];
+		list<int>& end_traj_list = end_traj_list_[x_grid_index][y_grid_index];
 		list<int>::iterator index = find(end_traj_list.begin(), end_traj_list.end(), tra_id);
 		if (index == end_traj_list.end()) {
 			end_traj_list.push_back(tra_id);
@@ -84,24 +89,6 @@ void Panel::InsertSegment(int tra_id, const SamplePoint& begin, const SamplePoin
 		}
 	}
 }
-
-/*
-void Panel::InsertPoint(const SamplePoint& point) {
-   int x_grid_index = GetXIndex(point.x());
-   int y_grid_index = GetYIndex(point.y());
-
-   grid_set_[x_grid_index][y_gird_index].push_back(point);
-
-   int traid = point.tra_id();
-   list<int>::iterator itor;
-   for (itor = traj_grid_list_.begin(); itor != traj_grid_list_.end(); ++itor) {
-     if (*itor >= traid) {
-        break;
-		 }
-  }
-   traj_grid_list_.insert(itor, traid);
-}
-*/
 
 int Panel::GetXIndex(double lon) const {
     double x_len = (lon - rectangle_.left_bottom().x()) * LEN_PER_X;    
@@ -166,15 +153,17 @@ const vector<SamplePoint>& Panel::GetPointsInGrid(const std::pair<int, int>& gri
 
 
 const std::list<int>& Panel::GetTrajsInGrid(const pair<int, int>& grid_index, bool is_end) const {
-	if (is_end) {
-		return end_traj_grid_list_.at(grid_index.first).at(grid_index.second);
-	} else {
-		return traj_grid_list_.at(grid_index.first).at(grid_index.second);
+	if (is_end && IsContainEndPoint(grid_index)) {
+		return end_traj_list_.at(grid_index.first).at(grid_index.second);
+	} else if (IsContainPoint(grid_index)) {
+		return point_traj_list_.at(grid_index.first).at(grid_index.second);
 	}
+
+	return Panel::empty_list_;
 }
 
 const std::list<int>& Panel::GetEndTrajsInGrid(const pair<int, int>& grid_index) const {
-	return end_traj_grid_set_.at(grid_index.first).at(grid_index.second);
+	return end_traj_list_.at(grid_index.first).at(grid_index.second);
 }
 
 /*
@@ -187,6 +176,6 @@ bool Panel::IsContainPoint(const pair<int, int>& grid_index) const  {
 }
 
 bool Panel::IsContainEndPoint(const pair<int, int>& grid_index) const {
-  return (end_traj_grid_set_.find(grid_index.first) != end_traj_grid_set_.end() && end_traj_grid_set_.at(grid_index.first).find(grid_index.second) != end_traj_grid_set_.at(grid_index.first).end());
+  return (end_traj_list_.find(grid_index.first) != end_traj_list_.end() && end_traj_list_.at(grid_index.first).find(grid_index.second) != end_traj_list_.at(grid_index.first).end());
 }
 

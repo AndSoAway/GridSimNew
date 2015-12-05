@@ -1,4 +1,8 @@
 #include "strategy.h"
+using namespace std;
+
+#define CONVERT_TO_X(x) ((x) / LEN_PER_X)
+#define CONVERT_TO_Y(y) ((y) / LEN_PER_Y)
 
 void Strategy::TrajMergeJoin(const list<int>& father_trajs, const std::list<int>& child_trajs, list<int>& join_res) const {
 	list<int>::const_iterator fa_itor, ch_itor;
@@ -18,7 +22,7 @@ void Strategy::TrajMergeJoin(const list<int>& father_trajs, const std::list<int>
 	}
 }
 
-void BinaryStrategy::GetCandidateTrajs(const GridPanel* grid_panel, const SamplePoint& point, double dis, list<int>& candidates, bool is_end) {
+void Strategy::GetCandidateTrajs(const GridPanel* grid_panel, const SamplePoint& point, double dis, list<int>& candidates, bool is_end) {
   double x_dif = CONVERT_TO_X(dis);
 	double y_dif = CONVERT_TO_Y(dis);
   double x_bottom = point.x() - x_dif ;
@@ -33,7 +37,7 @@ void BinaryStrategy::GetCandidateTrajs(const GridPanel* grid_panel, const Sample
 		for (int j = bottom.second; j <= upper.second; j++) {
 			pair<int, int> grid_index = make_pair(i, j);
 			const list<int>& trajs = grid_panel->panel().GetTrajsInGrid(grid_index, is_end);
-			set<int>::const_iterator cur_itor, pre_itor;
+			list<int>::const_iterator cur_itor, pre_itor;
 			cur_itor = trajs.cbegin();
 			list<int>::iterator can_itor = candidates.begin();
 			while (cur_itor != trajs.cend() && can_itor != candidates.end()) {

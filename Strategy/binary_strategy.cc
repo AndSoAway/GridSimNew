@@ -4,9 +4,6 @@ using namespace std;
 #define TEST_DIS 500
 #define THRESHOLD 10
 
-#define CONVERT_TO_X(x) ((x) / LEN_PER_X)
-#define CONVERT_TO_Y(y) ((y) / LEN_PER_Y)
-
 void BinaryStrategy::FindCandidateTrajs(const GridPanel* grid_panel, const Trajectory& traj, double dis, list<int>& candidates) {
 	const vector<SamplePoint>& point_list = traj.point_list();
 	//int size = traj.point_list().size();	
