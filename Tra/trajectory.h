@@ -25,22 +25,15 @@ public:
     void PushPoint(SamplePoint& point);
 
     const std::vector<SamplePoint>& point_list() const { return point_list_; }
-
+		const std::vector<SamplePoint>& special_point() const { return special_point_; }
     int id() const { return tra_id_; }
-    
     int point_size() const { return point_list_.size(); } 
 
-//		inline bool is_end(const SamplePoint& point) const;
 private:
+		void UpdateSpecialPoint();
     int tra_id_;
     std::vector<SamplePoint> point_list_;
+		std::vector<SamplePoint> special_point_;
     static int tra_counter;
 };
-
-/*inline bool Trajectory::is_end(const SamplePoint& point) const {
-	std::vector<SamplePoint>::const_iterator first, end;
-	first = point_list_.cbegin();
-	end = --point_list_.cend();
-	return (*first == point || *end == point);
-}*/
 #endif

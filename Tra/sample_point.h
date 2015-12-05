@@ -34,7 +34,7 @@ public:
   
   const time_t timestamp() const { return timestamp_; }
 
-  const Point point() const { return point_; }
+  const Point& point() const { return point_; }
   
   double x() const { return point_.x(); }
 

@@ -44,6 +44,10 @@
 
 #define PRECISE 1e-5
 
+
+//----trajectory.cc----
+#define ANGLETHRESHOLD 135.0
+
 const  Point left_bottom(BJMINX * ENLARGE, BJMINY * ENLARGE);  
 const  Point right_upper(BJMAXX * ENLARGE, BJMAXY * ENLARGE);
 const  Rectangle BJMAP(left_bottom, right_upper);

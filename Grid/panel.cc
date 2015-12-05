@@ -25,17 +25,25 @@ void Panel::InsertTrajectory(const Trajectory& traj) {
 
 
 void Panel::InsertPoint(const SamplePoint& point, bool end) {
-		//printf("insert point\n");
     int x_grid_index = GetXIndex(point.x());
     int y_grid_index = GetYIndex(point.y());
     
     grid_set_[x_grid_index][y_grid_index].push_back(point);
 
-		traj_grid_set_[x_grid_index][y_grid_index].insert(point.tra_id());
+		int tra_id = point.tra_id();
+		traj_grid_set_[x_grid_index][y_grid_index].insert(tra_id);
 		
 		if (end) {
-			end_traj_grid_set_[x_grid_index][y_grid_index].insert(point.tra_id());
-		}
+			list<int>& end_traj_list = end_traj_grid_list_[x_grid_index][y_grid_index];
+			
+			
+			for (list<int>::iterator itor = end_traj_list.begin(); itor != end_traj_list.end(); itor++) {
+				if (*itor == tra_id) {
+					break;
+				}	
+			}
+			if (	
+	}
 }
 
 void Panel::InsertSegment(int tra_id, const SamplePoint& begin, const SamplePoint& end) {
@@ -164,7 +172,7 @@ const std::set<int>& Panel::GetTrajsInGrid(const pair<int, int>& grid_index) con
 	return traj_grid_set_.at(grid_index.first).at(grid_index.second);
 }
 
-const std::set<int>& Panel::GetEndTrajsInGrid(const pair<int, int>& grid_index) const {
+const std::list<int>& Panel::GetEndTrajsInGrid(const pair<int, int>& grid_index) const {
 	return end_traj_grid_set_.at(grid_index.first).at(grid_index.second);
 }
 

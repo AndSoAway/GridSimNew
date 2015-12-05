@@ -51,10 +51,9 @@ public:
 
   const std::vector<SamplePoint>& GetPointsInGrid(const std::pair<int, int>&) const;
 
-  const std::set<int>& GetTrajsInGrid(const std::pair<int, int>&) const;
+  const std::list<int>& GetTrajsInGrid(const std::pair<int, int>&, bool is_end = false) const;
 
 	const std::set<int>& GetEndTrajsInGrid(const std::pair<int, int>& grid_index) const;
-  //const std::list<int>& GetTrajsInGrid(const std::pair<int, int>&) const;
 
   bool IsContainPoint(const std::pair<int, int>&) const;
  
@@ -68,7 +67,7 @@ private:
   double height_;
   gridset grid_set_;
 	trajgridset traj_grid_set_;
-	trajgridset end_traj_grid_set_;
+	trajgridlist end_traj_grid_list_;
 //	trajInfoGridSet trajinfo_grid_set_;
   trajgridlist traj_grid_list_;
 	static const std::vector<SamplePoint> empty_point_;
