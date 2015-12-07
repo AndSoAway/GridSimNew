@@ -37,15 +37,10 @@ void Panel::InsertPoint(const SamplePoint& point, bool end) {
 
 	int tra_id = point.tra_id();
 	
-	//point_traj_list_[x_grid_index][y_grid_index].insert(tra_id);
 	insert(point_traj_list_[x_grid_index][y_grid_index], tra_id);
 		
 	if (end) {
-		list<int>& end_traj_list = end_traj_list_[x_grid_index][y_grid_index];
-		list<int>::iterator index = find(end_traj_list.begin(), end_traj_list.end(), tra_id);
-		if (index == end_traj_list.end()) {
-			end_traj_list.push_back(tra_id);
-		}
+		insert(end_traj_list_[x_grid_index][y_grid_index], tra_id);
 	}
 }
 
