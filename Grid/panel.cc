@@ -21,10 +21,11 @@ void Panel::InsertTrajectory(const Trajectory& traj) {
 		itor++;
   }
 	InsertPoint(*itor, true);
-
+/*
 	int point_size = point_list.size();
 	for (int index = 1; index < point_size - 1; index++) 
 		InsertSegment(id, point_list[index - 1], point_list[index]);
+*/
 }
 
 
@@ -72,19 +73,7 @@ void Panel::InsertSegment(int tra_id, const SamplePoint& begin, const SamplePoin
 			Rectangle rect(left_bottom, right_upper);
 			if (rect.IntersectSegment(begin.point(), end.point())) {
 				list<int>& tra_id_list = seg_traj_list_[x][y];
-				bool contain = false;
-				list<int>::iterator itor = tra_id_list.begin();
-				for (itor = tra_id_list.begin(); itor != tra_id_list.end(); itor++) {
-					if (*itor == tra_id) {
-						contain = true;
-						break;
-					} else if(*itor > tra_id) {
-						break;
-					}
-				}
-				if (!contain) {
-					tra_id_list.insert(itor, tra_id);
-				}
+				insert(tra_id_list, tra_id);
 			} 
 		}
 	}
@@ -146,6 +135,7 @@ pair<int, int> Panel::GetGrid(double x, double y) const {
 }
 
 const vector<SamplePoint>& Panel::GetPointsInGrid(const std::pair<int, int>& grid_index) const {
+	//printf("Enter GetPointsInGrid\n");
   if (!IsContainPoint(grid_index))
 		return Panel::empty_point_; 
   return grid_set_.at(grid_index.first).at(grid_index.second);

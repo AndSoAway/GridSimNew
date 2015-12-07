@@ -26,23 +26,27 @@ int VerifySim(GridPanel& grid_panel, unordered_map<int, list<int> >& can_map, un
 }
 
 void JoinAndCandidate(GridPanel& grid_panel, const vector<Trajectory>& trajs, unordered_map<int, list<int> >& can_map) {
+	printf("total traj size:%ld\n", trajs.size());
 	for(auto traj : trajs) {
 		GetCandidate(grid_panel, traj, can_map);
 		grid_panel.InsertTrajectory(traj);
 	}
 }
 
-void GetCandidate(GridPanel& grid_panel, const Trajectory& traj, unordered_map<int, list<int>> can_map) {	
+void GetCandidate(GridPanel& grid_panel, const Trajectory& traj, unordered_map<int, list<int>>& can_map) {	
 	list<int> candidates;
 	int id = traj.id();
+	//printf("Test traj id %d, point size %ld, Dmax %d\n", id, traj.point_list().size(), DISUNIT);
 	//BinaryStrategy binary_strategy(0, traj.point_list().size() - 1);	
 	SpecialPointStrategy special_point_strategy(0, traj.point_list().size() - 1);
 	grid_panel.FindCandidates(special_point_strategy, traj, DISUNIT, candidates);
-	
+	if (!candidates.empty())
+		printf("id %d can size %ld\n", id, candidates.size());
 	if (can_map.find(id) == can_map.end()) {
 		can_map[id] = candidates;
 	}
-	printf("Test id %d, candidates size %ld, traj size %d\n", id, candidates.size(), grid_panel.TrajSize());
+
+//	printf("Test id %d, candidates size %ld, traj size %d\n", id, candidates.size(), grid_panel.TrajSize());
 /*
 		list<int> cur_can = can_map[id];
 		list<int>::iterator itor = cur_can.begin();
@@ -72,7 +76,7 @@ void filterFile() {
 	}
 }
 
-/*
+
 void get_candidate_output(TrajData& traj_data, GridPanel& grid_panel) {
 	BinaryStrategy binary_strategy(0, traj_data.trajs.size() - 1);
   int sum = 0;
@@ -84,10 +88,10 @@ void get_candidate_output(TrajData& traj_data, GridPanel& grid_panel) {
 		Trajectory traj = traj_data.trajs[cur];
 		if (traj.point_list().size() < POINT_NUM)
 			continue;
-		set<int> can_trajs;
-	//	grid_panel.BinaryFilter(traj, can_trajs);
-//		grid_panel.TopThreeJoin(traj, can_trajs);
-		grid_panel.BinaryFilter(traj, can_trajs);
+		list<int> can_trajs;
+		SpecialPointStrategy special_point_strategy(0, traj.point_list().size() - 1);
+		grid_panel.FindCandidates(special_point_strategy, traj, DISUNIT, can_trajs);
+		can_trajs.remove(traj.id());
 		if (can_trajs.empty() || can_trajs.size() >= MAXTRAJCOUNT) {
 			continue;
 		}
@@ -101,7 +105,7 @@ void get_candidate_output(TrajData& traj_data, GridPanel& grid_panel) {
 		string file_ori_ = file_ori;
 		file_ori_.insert(12, to_string(traj.id()));
 		output_traj(traj, file_ori_);
-		for (set<int>::iterator itor = can_trajs.begin(); itor != can_trajs.end(); itor++) {
+		for (list<int>::iterator itor = can_trajs.begin(); itor != can_trajs.end(); itor++) {
 			int id = *itor;
 			string id_s = to_string(id);
 			Trajectory& can_traj = grid_panel.getTraj(id);
@@ -112,14 +116,16 @@ void get_candidate_output(TrajData& traj_data, GridPanel& grid_panel) {
 	}
 }
 
-*/
 void read_traj(TrajData& traj_data) {
   TrajectoryHelper* trajHelper = TrajectoryHelper::GetHelperInstance();
+  /*for (int i = 0;  i < FILE_NUM; i++) {
+		FILE* file = fopen(file_paths[i], "rb");*/
+
+//  for (int i = 0; i < 2; i++) {
+//		FILE* file = fopen(test_files[i], "rb");
+
   for (int i = 0;  i < FILE_NUM; i++) {
-		FILE* file = fopen(file_paths[i], "rb");
-  //for (int i = 0; i < 2; i++) {
-	//	FILE* file = fopen(test_files[i], "rb");
-		//FILE* file = fopen(filter_file_paths[i], "rb");
+		FILE* file = fopen(filter_file_paths[i], "rb");
 		printf("read %s\n", filter_file_paths[i]);
 		trajHelper->ExtractTrajectory(file, traj_data.trajs);
 		fclose(file);

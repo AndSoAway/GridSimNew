@@ -19,8 +19,9 @@ void distance_test() {
 }
 
 void calculate() {
-  double disHav1 = distHaversineRAD(116.302330, 39.952461, 116.303139, 39.951721);
-	printf("dis %lf\n", disHav1);	
+  //double disHav1 = distHaversineRAD(116.304298, 39.923931, 116.350578, 39.939480);
+  double disSim1 = distSimplify(116.304298, 39.923931, 116.350578, 39.939480);
+	printf("dis %lf\n", disSim1);	
 }
 
 int main() {

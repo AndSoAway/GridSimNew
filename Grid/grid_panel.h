@@ -36,7 +36,7 @@ public:
 
 	Trajectory& getTraj(int tra_id);
 	
-	Panel panel() const { return panel_; }
+	const Panel& panel() const { return panel_; }
 
 private:
   void traj_filter(std::set<int>& father_trajs, const std::set<int>& child_trajs) const;

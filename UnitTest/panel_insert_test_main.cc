@@ -2,17 +2,31 @@
 #include "../Strategy/binary_strategy.h"
 using namespace std;
 
+void Join(TrajData&, GridPanel&);
+
+void FindGroundTruth(TrajData&, GridPanel&);
+
 int main() {
 	TrajData traj_data;
 	GridPanel grid_panel(BJMAP, WIDTH, HEIGHT); 
-
 
 	clock_t read_cost;
 	read_cost = clock();
 	read_traj(traj_data);
 	read_cost = clock() - read_cost;
 	printf("read trajs: %ld, cost time %lf\n", traj_data.trajs.size(), (double)read_cost / CLOCKS_PER_SEC);
-	
+
+	FindGroundTruth(traj_data, grid_panel);
+}
+void FindGroundTruth(TrajData& traj_data, GridPanel& grid_panel) {
+	clock_t insert = clock();
+	grid_panel.InsertTrajectory(traj_data.trajs);
+	insert = clock() - insert;
+	printf("Trajs count: %ld, Insert cost: %lf\n", traj_data.trajs.size(), insert / CLOCKS_PER_SEC);
+	get_candidate_output(traj_data, grid_panel);
+}
+
+void Join(TrajData& traj_data, GridPanel& grid_panel) {	
 	unordered_map<int, list<int> > can_map;
 	clock_t join_cost = clock();
 	JoinAndCandidate(grid_panel, traj_data.trajs, can_map);

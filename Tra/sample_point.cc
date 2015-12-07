@@ -31,3 +31,5 @@ bool SamplePoint::ExtractSamplePoint(char *line_str) {
 void SamplePoint::set_tra(const Trajectory *p_tra) {
 	tra_id_ = p_tra->id();
 }
+
+

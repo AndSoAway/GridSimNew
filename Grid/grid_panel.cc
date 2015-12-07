@@ -8,8 +8,14 @@
 using namespace std;
 
 void GridPanel::InsertTrajectory(const vector<Trajectory>& trajs) {
+	int count = 0;
    for(auto traj : trajs) {
+//			printf("Insert traj id %d\n", traj.id());
       InsertTrajectory(traj);
+		count++;
+		if (count % 10000 == 0) {
+			printf("Insert traj %d\n", count);
+		}
    }
 }
 

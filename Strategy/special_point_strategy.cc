@@ -19,7 +19,7 @@ void SpecialPointStrategy::FindCandidateTrajs(const GridPanel* grid_panel, const
 	
 	for (vector<SamplePoint>::const_iterator itor = special_point.cbegin(); itor != special_point.cend() && !candidates.empty(); itor++) {
 		list<int> cur_can;
-		GetCandidateTrajs(grid_panel, *itor, dis, cur_can, true);
+		GetCandidateTrajs(grid_panel, *itor, dis, cur_can, false);
 		list<int> res;
 		TrajMergeJoin(candidates, cur_can, res);
 		candidates.swap(res);

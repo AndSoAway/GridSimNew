@@ -85,7 +85,7 @@ void SortPoints(const Point& point1, const Point& point2, Point* left_bottom, Po
 template <typename T>
 void SortNumbers(T* num1, T* num2) {
   if (*num1 > *num2) {
-    int tmp = *num1;
+    T tmp = *num1;
     *num1 = *num2;
     *num2 = tmp;
   }

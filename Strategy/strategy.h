@@ -21,5 +21,6 @@ public:
 	virtual ~Strategy() { }
 protected:
 	virtual void TrajMergeJoin(const std::list<int>& father_trajs, const std::list<int>& child_trajs, std::list<int>& res) const;	
+	virtual void TrajMergeUnion(std::list<int>& father_trajs, const std::list<int>& child_trajs) const;
 };
 #endif

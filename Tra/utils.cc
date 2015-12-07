@@ -102,9 +102,11 @@ double disSample(const SamplePoint& point1, const SamplePoint& point2) {
 }
 
 double disSample(const Point& begin, const Point& end) {
-	double x_dif = (begin.x() - end.x()) * ENLARGE * LEN_PER_X;
-	double y_dif = (begin.y() - end.y()) * ENLARGE * LEN_PER_Y;
+/*	double x_dif = (begin.x() - end.x()) * LEN_PER_X;
+	double y_dif = (begin.y() - end.y()) * LEN_PER_Y;
 	double dis = sqrt(x_dif * x_dif + y_dif * y_dif);
+*/
+	double dis = distSimplify(begin.x() / ENLARGE, begin.y() / ENLARGE, end.x() / ENLARGE, end.y() / ENLARGE);
 	return dis;
 }
 

@@ -58,7 +58,7 @@ public:
 
 	void set_line(std::string line) { line_ = line; }
 
-  std::string line() const{ return line_; }
+  const std::string& line() const{ return line_; }
 
 private:
   friend class boost::serialization::access;
