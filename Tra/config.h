@@ -11,7 +11,7 @@
 
 //distance unit 500m
 //#define DISUNIT 500
-#define DISUNIT 100
+#define DISUNIT 500
 
 #define BJMAXY 41.083332 
 #define BJMAXX 117.5

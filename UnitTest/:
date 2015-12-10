@@ -45,6 +45,3 @@ int GridPanel::PointSize() const {
 const Trajectory& GridPanel::getTraj(int tra_id) const {
 	return trajs_.at(tra_id);	
 }
- Trajectory& GridPanel::getTraj(int tra_id) {
-	return trajs_.at(tra_id);
-}

@@ -3,7 +3,7 @@ CM = -std=c++0x -c -Wall
 BOOST = -I/usr/local/include -L/usr/local/lib -lboost_serialization
 TRA_DIR = ../Tra
 
-OBJS =  traj_helper.o traj.o sample_point.o utils.o tra_utils.o  panel_insert.o grid_panel.o panel.o verify.o rectangle.o geo_util.o panel_insert_test.o bi_stra.o strategy.o sp_stra.o
+OBJS =  traj_helper.o traj.o sample_point.o utils.o  panel_insert.o grid_panel.o panel.o verify.o rectangle.o geo_util.o panel_insert_test.o bi_stra.o strategy.o sp_stra.o ep_stra.o
 panel_insert_main: $(OBJS) file_path.h 
 	$(CC) -g -o $@ $(OBJS) $(BOOST)
 	rm -rf *.o
@@ -13,9 +13,6 @@ panel_insert.o: panel_insert_test_main.cc
 
 panel_insert_test.o: panel_insert_test.cc panel_insert_test.h
 	$(CC) $(CM) -o $@ $< $(BOOST) 
-
-tra_utils.o: tra_utils.cc
-	$(CC) $(CM) -o $@ $<  
 
 GRID = ../Grid/grid_panel.cc ../Grid/grid_panel.h
 grid_panel.o: $(GRID)
@@ -54,6 +51,9 @@ bi_stra.o: ../Strategy/binary_strategy.cc ../Strategy/binary_strategy.h
 	$(CC) $(CM) -o $@ $<
 
 sp_stra.o: ../Strategy/special_point_strategy.cc ../Strategy/special_point_strategy.h
+	$(CC) $(CM) -o $@ $<
+
+ep_stra.o: ../Strategy/end_point_strategy.cc ../Strategy/end_point_strategy.h
 	$(CC) $(CM) -o $@ $<
 
 clean:

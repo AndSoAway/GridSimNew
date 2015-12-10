@@ -5,10 +5,10 @@
 #include <ctime>
 #include <set>
 #include <fstream>
+#include <string>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
 
-#include "tra_utils.h"
 #include "../Verify/verify.h"
 #include "../Tra/config.h"
 #include "../Grid/rectangle.h"
@@ -45,4 +45,7 @@ int VerifySim(GridPanel& grid_panel, std::unordered_map<int, std::list<int>>& ca
 
 
 void GetCandidate(GridPanel& grid_panel, const Trajectory& traj, std::unordered_map<int, std::list<int>>& can_map);	
+
+void DistSimplify();
+void output_sim(std::unordered_map<int, std::unordered_map<int, double> >&, std::string& file);
 #endif

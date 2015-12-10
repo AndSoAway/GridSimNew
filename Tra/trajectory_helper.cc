@@ -27,7 +27,7 @@ void TrajectoryHelper::ExtractTrajectory(FILE* stream, vector<Trajectory>& tras)
 //  while(fgets(line, kLineLength, stream) != NULL) {
 //    cur_point = SamplePoint(line);
 	while (fscanfPoint(stream, cur_point) > 0) {
-    if (abs(difftime(cur_point.timestamp(), pre_point.timestamp())) > TIMEINTERVAL || p_tra->point_size() >= MAXPOINTSIZE) { 
+    if (abs(difftime(cur_point.timestamp(), pre_point.timestamp())) > TIMEINTERVAL) { //|| p_tra->point_size() >= MAXPOINTSIZE) { 
       if (p_tra->point_size() >= MINPOINTSIZE) {
         tras.push_back(*p_tra);
       }

@@ -2,14 +2,17 @@
 #include "file_path.h"
 #include "../Strategy/binary_strategy.h"
 #include "../Strategy/special_point_strategy.h"
+#include "../Strategy/end_point_strategy.h"
 
 using namespace std;
 
 #define POINT_NUM 20
 #define MAXTRAJCOUNT 10
+#define MIN_DIST 20
 
 int VerifySim(GridPanel& grid_panel, unordered_map<int, list<int> >& can_map, unordered_map<int, unordered_map<int, double>>& sim_map) {
 	int pair_count = 0;
+	int success_pair_count = 0;
 	for(unordered_map<int, list<int> >::iterator itor = can_map.begin(); itor != can_map.end(); itor++) {
 		int first_id = itor->first;
 		list<int>& can_list = itor->second;
@@ -19,9 +22,12 @@ int VerifySim(GridPanel& grid_panel, unordered_map<int, list<int> >& can_map, un
 			Trajectory& second_traj = grid_panel.getTraj(second_id);
 			double sim = verify(first_traj, second_traj);
 			sim_map[first_id][second_id] = sim;
-			pair_count++;
+			if (sim >= 0 && sim <= 1.0)
+				success_pair_count++;
+			pair_count ++;
 		}
 	}
+	printf("total pair count %d, success pair count %d\n", pair_count, success_pair_count);
 	return pair_count;
 }
 
@@ -38,10 +44,11 @@ void GetCandidate(GridPanel& grid_panel, const Trajectory& traj, unordered_map<i
 	int id = traj.id();
 	//printf("Test traj id %d, point size %ld, Dmax %d\n", id, traj.point_list().size(), DISUNIT);
 	//BinaryStrategy binary_strategy(0, traj.point_list().size() - 1);	
-	SpecialPointStrategy special_point_strategy(0, traj.point_list().size() - 1);
-	grid_panel.FindCandidates(special_point_strategy, traj, DISUNIT, candidates);
+	//SpecialPointStrategy strategy(0, traj.point_list().size() - 1);
+	EndPointStrategy strategy;
+	grid_panel.FindCandidates(strategy, traj, DISUNIT, candidates);
 	if (!candidates.empty())
-		printf("id %d can size %ld\n", id, candidates.size());
+		//printf("id %d can size %ld\n", id, candidates.size());
 	if (can_map.find(id) == can_map.end()) {
 		can_map[id] = candidates;
 	}
@@ -78,25 +85,27 @@ void filterFile() {
 
 
 void get_candidate_output(TrajData& traj_data, GridPanel& grid_panel) {
-	BinaryStrategy binary_strategy(0, traj_data.trajs.size() - 1);
+	//BinaryStrategy binary_strategy(0, traj_data.trajs.size() - 1);
+	int size = traj_data.trajs.size();
   int sum = 0;
  	string file_path = "traj_csv/can/output_can_traj.csv";
 	string file_ori = "traj_csv/can/output_ori.csv";
 	string file_dir = "traj_csv/can";
-  while (binary_strategy.HasNext() && sum < 100) {
-		int cur = binary_strategy.Next();
-		Trajectory traj = traj_data.trajs[cur];
-		if (traj.point_list().size() < POINT_NUM)
-			continue;
+  for (int i = 0; i < size; i++) {// && sum < 100) {
+		//int cur = binary_strategy.Next();
+		Trajectory traj = traj_data.trajs[i];
+		//if (traj.point_list().size() < POINT_NUM)
+	//		continue;
 		list<int> can_trajs;
-		SpecialPointStrategy special_point_strategy(0, traj.point_list().size() - 1);
-		grid_panel.FindCandidates(special_point_strategy, traj, DISUNIT, can_trajs);
+	//	SpecialPointStrategy strategy(0, traj.point_list().size() - 1);
+		EndPointStrategy strategy;
+		grid_panel.FindCandidates(strategy, traj, DISUNIT, can_trajs);
 		can_trajs.remove(traj.id());
-		if (can_trajs.empty() || can_trajs.size() >= MAXTRAJCOUNT) {
+		if (can_trajs.empty()) {// || can_trajs.size() >= MAXTRAJCOUNT) {
 			continue;
 		}
 		sum++;
-		printf("sum %d, traj id %d, candidate %ld\n", sum, traj.id(), can_trajs.size());
+//		printf("sum %d, traj id %d, candidate %ld\n", sum, traj.id(), can_trajs.size());
 		string file_dir_ = file_dir;
 		file_dir_.insert(12, to_string(traj.id()));
 		system(("mkdir " + file_dir_).c_str());
@@ -184,4 +193,53 @@ void traj_load(TrajData& traj_data, string file_name) {
   iarchive ia(ifs);
   ia >> traj_data;
   ifs.close();
+}
+
+void DistSimplify() {
+  for (int i = 0; i < FILE_NUM; i++) {
+			string file_ori = filter_file_paths[i];
+			file_ori.insert(0, "sim");
+      FILE *file = fopen(filter_file_paths[i], "rb");
+			FILE *out_file = fopen(file_ori.c_str(), "wb");
+			SamplePoint pre, aft;
+      fscanfPoint(file, pre);
+			int sum = 0;
+			int smplfy = 0;
+			fputs(pre.line().c_str(), out_file);
+			while (fscanfPoint(file, aft) > 0) {
+				double pre_x = pre.point().x() / ENLARGE;
+				double pre_y = pre.point().y() / ENLARGE;
+				double aft_x = aft.point().x() / ENLARGE;
+ 				double aft_y = aft.point().y() / ENLARGE;
+				double dist = distHaversineRAD(pre_x, pre_y, aft_x, aft_y);
+				if (dist > 20) {
+					fputs(aft.line().c_str(), out_file);
+					//printf("dis %lf\n", dist);
+					pre = aft;
+				} else {
+					printf("dis %lf\n", dist);
+					smplfy++;
+				}
+				sum++;
+			}
+			printf("total %d, sim %d\n", sum , smplfy);
+			fclose(file);
+			fclose(out_file);
+  }
+}
+
+void output_sim(unordered_map<int, unordered_map<int, double>>& sim_map, string& file_path) {
+	FILE *file = fopen(file_path.c_str(), "wb");
+	for(unordered_map<int, unordered_map<int, double>>::iterator itor = sim_map.begin(); itor != sim_map.end(); itor++) {
+		string res = "{" + to_string(itor->first) + ": {";
+		unordered_map<int, double>& res_map = itor->second;
+		int can_size = res_map.size();
+		res = res + "can_size : " + to_string(can_size) + ","; 
+		res = res + "res:{";
+		for(unordered_map<int, double>::iterator u_itor = res_map.begin(); u_itor != res_map.end(); u_itor++) {
+			res = res + to_string(u_itor->first) + ":" +  to_string(u_itor->second) + ",";
+		}
+		res += "}}}\n";
+		fputs(res.c_str(), file);
+	}
 }

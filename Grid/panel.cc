@@ -11,7 +11,7 @@ const list<int> Panel::empty_list_;
 
 void Panel::InsertTrajectory(const Trajectory& traj) {
   const vector<SamplePoint>& point_list = traj.point_list();
-	int id = traj.id();
+	//int id = traj.id();
 	vector<SamplePoint>::const_iterator itor = point_list.cbegin();
 	InsertPoint(*itor, true);
 	itor++;

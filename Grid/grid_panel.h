@@ -34,8 +34,10 @@ public:
 
 	int TrajSize() const { return trajs_.size(); }
 
-	Trajectory& getTraj(int tra_id);
+	const Trajectory& getTraj(int tra_id) const;
 	
+	Trajectory& getTraj(int tra_id);
+
 	const Panel& panel() const { return panel_; }
 
 private:
