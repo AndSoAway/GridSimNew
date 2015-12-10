@@ -1,8 +1,10 @@
 #include "panel_insert_test.h"
 #include "file_path.h"
+#include "log.h"
 #include "../Strategy/binary_strategy.h"
 #include "../Strategy/special_point_strategy.h"
 #include "../Strategy/end_point_strategy.h"
+#include "../Strategy/end_ascommon_strategy.h"
 
 using namespace std;
 
@@ -27,12 +29,14 @@ int VerifySim(GridPanel& grid_panel, unordered_map<int, list<int> >& can_map, un
 			pair_count ++;
 		}
 	}
+
+	string verifyInfo = "total pair count " + to_string(pair_count) + ", success pair count " + to_string(success_pair_count);
+	Log::log(verifyInfo);
 	printf("total pair count %d, success pair count %d\n", pair_count, success_pair_count);
 	return pair_count;
 }
 
 void JoinAndCandidate(GridPanel& grid_panel, const vector<Trajectory>& trajs, unordered_map<int, list<int> >& can_map) {
-	printf("total traj size:%ld\n", trajs.size());
 	int count = 0;
 	for(auto traj : trajs) {
 		count ++;
@@ -49,10 +53,11 @@ void GetCandidate(GridPanel& grid_panel, const Trajectory& traj, unordered_map<i
 	//printf("Test traj id %d, point size %ld, Dmax %d\n", id, traj.point_list().size(), DISUNIT);
 	//BinaryStrategy binary_strategy(0, traj.point_list().size() - 1);	
 	//SpecialPointStrategy strategy(0, traj.point_list().size() - 1);
-	EndPointStrategy strategy;
+	//EndPointStrategy strategy;
+	EndAsCommonStrategy strategy;
 	grid_panel.FindCandidates(strategy, traj, DISUNIT, candidates);
 	if (!candidates.empty())
-		//printf("id %d can size %ld\n", id, candidates.size());
+		printf("id %d can size %ld\n", id, candidates.size());
 	if (can_map.find(id) == can_map.end()) {
 		can_map[id] = candidates;
 	}

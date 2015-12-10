@@ -1,10 +1,12 @@
 #include "panel_insert_test.h"
+#include "log.h"
 #include "../Strategy/binary_strategy.h"
 using namespace std;
 
-void Join(TrajData&, GridPanel&);
+void Join(TrajData&, GridPanel&, unordered_map<int, list<int>>& can_map);
 
 void FindGroundTruth(TrajData&, GridPanel&);
+void FindGroundTruth(unordered_map<int, list<int>>& can_map, GridPanel&);
 
 void StoreTrajs(TrajData&);
 
@@ -24,12 +26,16 @@ void ReadAndProcess() {
 	read_traj(traj_data);
 	read_cost = clock() - read_cost;
 	int point_size = grid_panel.PointSize();
+
+	string readInfo = "read trajs: " + to_string(traj_data.trajs.size()) + ", cost time " + to_string((double)read_cost / CLOCKS_PER_SEC);
+	Log::log(readInfo);
 	printf("read trajs: %ld, point size %d, cost time %lf\n", traj_data.trajs.size(), point_size, (double)read_cost / CLOCKS_PER_SEC);
 
 //	StoreTrajs(traj_data);
 	//FindGroundTruth(traj_data, grid_panel);
-	Join(traj_data, grid_panel);
-	FindGroundTruth(traj_data, grid_panel);
+	unordered_map<int, list<int>> can_map;
+	Join(traj_data, grid_panel, can_map);
+	FindGroundTruth(can_map, grid_panel);
 }
 
 void StoreTrajs(TrajData& traj_data) {
@@ -42,6 +48,38 @@ void StoreTrajs(TrajData& traj_data) {
 	}
 }
 
+void FindGroundTruth(unordered_map<int, list<int>>& can_map, GridPanel& grid_panel) {
+ 	string file_path = "traj_csv/can/output_can_traj.csv";
+	string file_ori = "traj_csv/can/output_ori.csv";
+	string file_dir = "traj_csv/can";
+	for(unordered_map<int, list<int>>::iterator itor = can_map.begin(); itor != can_map.end(); itor++) {
+		int test_id = itor->first;
+		Trajectory& traj = grid_panel.getTraj(test_id);
+		list<int>& can_trajs = itor->second;
+		printf("traj id %d, candidate %ld\n", test_id, can_trajs.size());
+		string file_dir_ = file_dir;
+
+		file_dir_.insert(12, to_string(traj.id()));
+		system(("mkdir " + file_dir_).c_str());
+
+		string file_path_ = file_path;
+		file_path_.insert(12, to_string(traj.id()));
+
+		string file_ori_ = file_ori;
+		file_ori_.insert(12, to_string(traj.id()));
+		output_traj(traj, file_ori_);
+		
+		for (list<int>::iterator itor = can_trajs.begin(); itor != can_trajs.end(); itor++) {
+			int id = *itor;
+			string id_s = to_string(id);
+			Trajectory& can_traj = grid_panel.getTraj(id);
+			string output_file = file_path_;
+			output_file.insert(output_file.size() - 4, to_string(id));
+			output_traj(can_traj, output_file);
+		}
+	}
+}
+
 void FindGroundTruth(TrajData& traj_data, GridPanel& grid_panel) {
 /*	clock_t insert_cost = clock();
 	grid_panel.InsertTrajectory(traj_data.trajs);
@@ -50,27 +88,37 @@ void FindGroundTruth(TrajData& traj_data, GridPanel& grid_panel) {
 	int traj_size = traj_data.trajs.size();
 	printf("Trajs count: %d, Insert cost: %lf, per traj : %lf\n", traj_size, insert_time, insert_time / traj_size);
 */
+	printf("Begin output traj\n");
+	Log::log("Begin output traj");
 	get_candidate_output(traj_data, grid_panel);
+	Log::log("End out traj");
 }
 
-void Join(TrajData& traj_data, GridPanel& grid_panel) {	
-	printf("Begin Join\n");
-	unordered_map<int, list<int> > can_map;
+void Join(TrajData& traj_data, GridPanel& grid_panel, unordered_map<int, list<int>>& can_map) {	
+	Log::log("Begin Join\n");
 	clock_t join_cost = clock();
 	JoinAndCandidate(grid_panel, traj_data.trajs, can_map);
 	join_cost = clock() - join_cost;
 	double total_cost = join_cost / CLOCKS_PER_SEC;
 	double per_cost = total_cost / traj_data.trajs.size();
+	
+	string joinInfo = "join cost: " + to_string(total_cost) + ", per traj needs " + to_string(per_cost);
+	Log::log(joinInfo);
 	printf("join cost: %lf, per traj needs %lf\n", total_cost, per_cost);
 
+	Log::log("begin verify\n");
 	unordered_map<int, unordered_map<int, double> > sim_map;
 	clock_t sim_cost = clock();
 	int pair_count = VerifySim(grid_panel, can_map, sim_map);
 	sim_cost = clock() - sim_cost;
 	double sim_total = (double)sim_cost / CLOCKS_PER_SEC;
 	double sim_per = sim_total / pair_count;
+	
+	string verifyInfo = "calculate sim time : " + to_string(sim_cost) + ", seconds : " + to_string(sim_total) + ", pair_count : " + to_string(pair_count) + ", per pair needs " + to_string(sim_per);
+	Log::log(verifyInfo);
 	printf("calculate sim : %ld, seconds: %lf, pair_count: %d, per pair needs %lf\n", sim_cost, sim_total, pair_count, sim_per);
 
+	Log::log("begin output res of sim");
 	string file_path = "sim_res.csv";
 	output_sim(sim_map, file_path);
 }
