@@ -33,7 +33,11 @@ int VerifySim(GridPanel& grid_panel, unordered_map<int, list<int> >& can_map, un
 
 void JoinAndCandidate(GridPanel& grid_panel, const vector<Trajectory>& trajs, unordered_map<int, list<int> >& can_map) {
 	printf("total traj size:%ld\n", trajs.size());
+	int count = 0;
 	for(auto traj : trajs) {
+		count ++;
+		if (count % 10000 == 0)
+			printf("Test tra %d\n", count);
 		GetCandidate(grid_panel, traj, can_map);
 		grid_panel.InsertTrajectory(traj);
 	}

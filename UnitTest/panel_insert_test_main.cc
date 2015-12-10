@@ -43,12 +43,13 @@ void StoreTrajs(TrajData& traj_data) {
 }
 
 void FindGroundTruth(TrajData& traj_data, GridPanel& grid_panel) {
-	clock_t insert_cost = clock();
+/*	clock_t insert_cost = clock();
 	grid_panel.InsertTrajectory(traj_data.trajs);
 	insert_cost = clock() - insert_cost;
 	double insert_time = insert_cost / CLOCKS_PER_SEC;
 	int traj_size = traj_data.trajs.size();
 	printf("Trajs count: %d, Insert cost: %lf, per traj : %lf\n", traj_size, insert_time, insert_time / traj_size);
+*/
 	get_candidate_output(traj_data, grid_panel);
 }
 
