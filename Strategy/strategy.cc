@@ -1,4 +1,5 @@
 #include "strategy.h"
+#include <algorithm>
 using namespace std;
 
 #define CONVERT_TO_X(x) ((x) / LEN_PER_X)
@@ -71,4 +72,33 @@ void Strategy::GetCandidateTrajs(const GridPanel* grid_panel, const SamplePoint&
 		}
 	}
 //	printf("Get can_trajs %ld, point size %d\n", candidates.size(), point_sum);
+}
+
+void Strategy::FilterEnd(const GridPanel* grid_panel, const Trajectory& traj, std::list<int>& candidates) {
+	vector<pair<int, int>> end_grid;
+	GetEndGrid(grid_panel, traj, end_grid);
+	sort(end_grid.begin(), end_grid.end());
+
+	list<int>::iterator itor = candidates.begin();
+	while (itor != candidates.end()) {
+		vector<pair<int, int>> can_end_grid;
+		GetEndGrid(grid_panel, grid_panel->getTraj(*itor), can_end_grid);
+		sort(can_end_grid.begin(), can_end_grid.end());
+		if (end_grid[0].first == can_end_grid[0].first && end_grid[0].second == can_end_grid[0].second && end_grid[1].first == can_end_grid[1].first && end_grid[1].second == can_end_grid[1].second) {
+			itor++;
+		} else {
+			itor = candidates.erase(itor);
+		}
+	}
+}
+
+void Strategy::GetEndGrid(const GridPanel* grid_panel, const Trajectory& traj, vector<pair<int, int>>& end_grid) {
+	const vector<SamplePoint>& point_list = traj.point_list();
+	int point_size = point_list.size();
+	const SamplePoint& begin_point = point_list[0];
+	const SamplePoint& end_point = point_list[point_size - 1];
+	std::pair<int, int> first_grid = grid_panel->panel().GetGrid(begin_point);
+	std::pair<int, int> second_grid = grid_panel->panel().GetGrid(end_point);
+	end_grid.push_back(first_grid);
+	end_grid.push_back(second_grid);
 }

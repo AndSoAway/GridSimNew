@@ -1,6 +1,8 @@
 #ifndef STRATEGY_SPECIAL_STRATEGY_H
 #define STRATEGY_SPECIAL_STRATEGY_H
 #include "strategy.h"
+#include <vector>
+#include <utility>
 
 class SpecialPointStrategy: public Strategy {
 public:
@@ -10,8 +12,5 @@ public:
 	virtual void FindCandidateTrajs(const GridPanel* grid_panel, const Trajectory& traj, double dis, std::list<int>& candidates);
 
 	virtual ~SpecialPointStrategy() { }
-
-private:
-	
 };
 #endif
