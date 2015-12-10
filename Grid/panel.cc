@@ -10,22 +10,21 @@ const vector<SamplePoint> Panel::empty_point_;
 const list<int> Panel::empty_list_;
 
 void Panel::InsertTrajectory(const Trajectory& traj) {
-  const vector<SamplePoint>& point_list = traj.point_list();
-	//int id = traj.id();
+ 	const vector<SamplePoint>& point_list = traj.point_list();
 	vector<SamplePoint>::const_iterator itor = point_list.cbegin();
 	InsertPoint(*itor, true);
 	itor++;
-  while( itor != (point_list.cend() - 1)) {
+ 	while( itor != (point_list.cend() - 1)) {
 	//	printf("point tra is :%d\n", point.tra()->id());
-    InsertPoint(*itor, false);
+    		InsertPoint(*itor, false);
 		itor++;
-  }
+	}
 	InsertPoint(*itor, true);
-/*
+
+	int id = traj.id();
 	int point_size = point_list.size();
 	for (int index = 1; index < point_size - 1; index++) 
 		InsertSegment(id, point_list[index - 1], point_list[index]);
-*/
 }
 
 
