@@ -54,7 +54,7 @@ void Strategy::TrajMergeUnion(list<int>& father_trajs, const std::list<int>& chi
 
 void Strategy::GetCandidateTrajs(const GridPanel* grid_panel, const SamplePoint& point, double dis, list<int>& candidates, bool is_end) {
   double x_dif = CONVERT_TO_X(dis);
-	double y_dif = CONVERT_TO_Y(dis);
+  double y_dif = CONVERT_TO_Y(dis);
   double x_bottom = point.x() - x_dif ;
   double y_bottom = point.y() - y_dif;
   double x_upper = point.x() + x_dif;
@@ -67,7 +67,13 @@ void Strategy::GetCandidateTrajs(const GridPanel* grid_panel, const SamplePoint&
 		for (int j = bottom.second; j <= upper.second; j++) {
 			pair<int, int> grid_index = make_pair(i, j);
 			const list<int>& trajs = grid_panel->panel().GetTrajsInGrid(grid_index, is_end);
+			string unionInfo = "can size: " + to_string(candidates.size()) +     ", trajs size " + to_string(trajs.size());
+ 			clock_t cur = clock();
+
 			TrajMergeUnion(candidates, trajs);
+			cur = clock() - cur;
+			unionInfo += ", union time " + to_string((double)cur / CLOCKS_PE    R_SEC);
+ 			Log::log(1, unionInfo);
 			point_sum += grid_panel->panel().GetPointsInGrid(grid_index).size();
 		}
 	}
