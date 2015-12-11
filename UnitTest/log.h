@@ -5,7 +5,12 @@
 #include <cstdlib>
 class Log {
 public:
-	static bool log(std::string str) { 
+	static bool log(int type, std::string str) {
+		std::string file_name; 
+		if(type == 0)
+			file_name = "Million_log_file.txt";
+		else 
+			file_name = "Per_log_file.txt";
 		char buf[128] = {0};
 		time_t t;
 		tm* local;
