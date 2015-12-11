@@ -29,25 +29,4 @@ double disSample(const SamplePoint&, const SamplePoint&);
 double disSample(const Point&, const Point&);
 
 void filterLoaded(FILE* stream, const std::string& file_name);
-
-template<class container, class T>
-typename container::iterator insert(container& arr, const T& val) {
-	bool contain = false;
-	typename container::iterator itor = arr.begin();
-	while (itor != arr.end()) {
-		if (*itor == val) {
-			contain = true;
-			break;
-		} else if (*itor > val) {
-			break;
-		}
-		itor++;
-	}
-	if (!contain) {
-		arr.insert(itor, val);
-		return (--itor);
-	} else {
-		return itor;
-	}
-}
 #endif
