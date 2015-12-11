@@ -31,23 +31,41 @@ int VerifySim(GridPanel& grid_panel, unordered_map<int, list<int> >& can_map, un
 	}
 
 	string verifyInfo = "total pair count " + to_string(pair_count) + ", success pair count " + to_string(success_pair_count);
-	Log::log(verifyInfo);
+	Log::log(0, verifyInfo);
 	printf("total pair count %d, success pair count %d\n", pair_count, success_pair_count);
 	return pair_count;
 }
 
 void JoinAndCandidate(GridPanel& grid_panel, const vector<Trajectory>& trajs, unordered_map<int, list<int> >& can_map) {
 	int count = 0;
+	clock_t query_time = 0;
+	clock_t insert_time = 0;	
+	int total_can_pair = 0; 
 	for(auto traj : trajs) {
 		count ++;
-		if (count % 10000 == 0)
-			printf("Test tra %d\n", count);
-		GetCandidate(grid_panel, traj, can_map);
+		if (count % 10000 == 0) {
+			string processInfo = "Joined tra count " + to_string(count) + ", query_time: " + to_string((double)query_time / CLOCKS_PER_SEC) + ", insert_time: " + to_string((double)insert_time / CLOCKS_PER_SEC) + ", new pair count: " + to_string(total_can_pair);;
+			Log::log(0, processInfo);	
+			printf("Joined tra count %d\n", count);
+			query_time = 0;
+			insert_time = 0;
+			total_can_pair = 0;
+		}	
+		clock_t tmp_query = clock();
+		int cur_size = GetCandidate(grid_panel, traj, can_map);
+		tmp_query = clock() - tmp_query;
+		query_time += tmp_query;
+
+		total_can_pair += cur_size;
+
+		clock_t tmp_insert = clock();
 		grid_panel.InsertTrajectory(traj);
+		tmp_insert = clock() - tmp_insert;
+		insert_time += tmp_insert;
 	}
 }
 
-void GetCandidate(GridPanel& grid_panel, const Trajectory& traj, unordered_map<int, list<int>>& can_map) {	
+int GetCandidate(GridPanel& grid_panel, const Trajectory& traj, unordered_map<int, list<int>>& can_map) {	
 	list<int> candidates;
 	int id = traj.id();
 	//printf("Test traj id %d, point size %ld, Dmax %d\n", id, traj.point_list().size(), DISUNIT);
@@ -55,13 +73,13 @@ void GetCandidate(GridPanel& grid_panel, const Trajectory& traj, unordered_map<i
 	//SpecialPointStrategy strategy(0, traj.point_list().size() - 1);
 	//EndPointStrategy strategy;
 	EndAsCommonStrategy strategy;
-	grid_panel.FindCandidates(strategy, traj, DISUNIT, candidates);
+	grid_panel.FindCandidates(strategy, traj, DMAX, candidates);
 	if (!candidates.empty())
 		printf("id %d can size %ld\n", id, candidates.size());
 	if (can_map.find(id) == can_map.end()) {
 		can_map[id] = candidates;
 	}
-
+	return candidates.size();
 //	printf("Test id %d, candidates size %ld, traj size %d\n", id, candidates.size(), grid_panel.TrajSize());
 /*
 		list<int> cur_can = can_map[id];

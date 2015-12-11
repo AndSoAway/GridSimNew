@@ -28,7 +28,7 @@ void ReadAndProcess() {
 	int point_size = grid_panel.PointSize();
 
 	string readInfo = "read trajs: " + to_string(traj_data.trajs.size()) + ", cost time " + to_string((double)read_cost / CLOCKS_PER_SEC);
-	Log::log(readInfo);
+	Log::log(0, readInfo);
 	printf("read trajs: %ld, point size %d, cost time %lf\n", traj_data.trajs.size(), point_size, (double)read_cost / CLOCKS_PER_SEC);
 
 //	StoreTrajs(traj_data);
@@ -89,13 +89,13 @@ void FindGroundTruth(TrajData& traj_data, GridPanel& grid_panel) {
 	printf("Trajs count: %d, Insert cost: %lf, per traj : %lf\n", traj_size, insert_time, insert_time / traj_size);
 */
 	printf("Begin output traj\n");
-	Log::log("Begin output traj");
+	Log::log(0, "Begin output traj");
 	get_candidate_output(traj_data, grid_panel);
-	Log::log("End out traj");
+	Log::log(0, "End out traj");
 }
 
 void Join(TrajData& traj_data, GridPanel& grid_panel, unordered_map<int, list<int>>& can_map) {	
-	Log::log("Begin Join\n");
+	Log::log(0, "Begin Join\n");
 	clock_t join_cost = clock();
 	JoinAndCandidate(grid_panel, traj_data.trajs, can_map);
 	join_cost = clock() - join_cost;
@@ -103,10 +103,10 @@ void Join(TrajData& traj_data, GridPanel& grid_panel, unordered_map<int, list<in
 	double per_cost = total_cost / traj_data.trajs.size();
 	
 	string joinInfo = "join cost: " + to_string(total_cost) + ", per traj needs " + to_string(per_cost);
-	Log::log(joinInfo);
+	Log::log(0, joinInfo);
 	printf("join cost: %lf, per traj needs %lf\n", total_cost, per_cost);
 
-	Log::log("begin verify\n");
+	Log::log(0, "begin verify\n");
 	unordered_map<int, unordered_map<int, double> > sim_map;
 	clock_t sim_cost = clock();
 	int pair_count = VerifySim(grid_panel, can_map, sim_map);
@@ -115,10 +115,10 @@ void Join(TrajData& traj_data, GridPanel& grid_panel, unordered_map<int, list<in
 	double sim_per = sim_total / pair_count;
 	
 	string verifyInfo = "calculate sim time : " + to_string(sim_cost) + ", seconds : " + to_string(sim_total) + ", pair_count : " + to_string(pair_count) + ", per pair needs " + to_string(sim_per);
-	Log::log(verifyInfo);
+	Log::log(0, verifyInfo);
 	printf("calculate sim : %ld, seconds: %lf, pair_count: %d, per pair needs %lf\n", sim_cost, sim_total, pair_count, sim_per);
 
-	Log::log("begin output res of sim");
+	Log::log(0, "begin output res of sim");
 	string file_path = "sim_res.csv";
 	output_sim(sim_map, file_path);
 }
