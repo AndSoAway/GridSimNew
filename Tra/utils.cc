@@ -143,3 +143,8 @@ void filterLoaded(FILE* stream, const string& file_name) {
 	} 
 	fclose(output);
 }
+
+
+bool order_by_count(pair<int, int> count1, pair<int, int> count2) {
+	return count1.second < count2.second;
+}

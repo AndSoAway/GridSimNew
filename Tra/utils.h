@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <ctime>
+#include <utility>
 #include "config.h"
 #include "sample_point.h"
 #include "point.h"
@@ -29,4 +30,5 @@ double disSample(const SamplePoint&, const SamplePoint&);
 double disSample(const Point&, const Point&);
 
 void filterLoaded(FILE* stream, const std::string& file_name);
+bool order_by_count(std::pair<int, int> count1, std::pair<int, int> count2);
 #endif

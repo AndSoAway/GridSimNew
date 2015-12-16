@@ -5,6 +5,9 @@
 #include "../Strategy/special_point_strategy.h"
 #include "../Strategy/end_point_strategy.h"
 #include "../Strategy/end_ascommon_strategy.h"
+#include "../Strategy/single_point_strategy.h"
+#include "../Strategy/two_point_strategy.h"
+#include "../Strategy/k_point_strategy.h"
 
 using namespace std;
 
@@ -15,6 +18,9 @@ using namespace std;
 int VerifySim(GridPanel& grid_panel, unordered_map<int, list<int> >& can_map, unordered_map<int, unordered_map<int, double>>& sim_map) {
 	int pair_count = 0;
 	int success_pair_count = 0;
+	clock_t verify_clock  = 0;
+	time_t verify_begin = time(NULL);;
+	time_t verify_end = time(NULL);
 	for(unordered_map<int, list<int> >::iterator itor = can_map.begin(); itor != can_map.end(); itor++) {
 		int first_id = itor->first;
 		list<int>& can_list = itor->second;
@@ -22,11 +28,24 @@ int VerifySim(GridPanel& grid_panel, unordered_map<int, list<int> >& can_map, un
 			int second_id = *l_itor;
 			Trajectory& first_traj = grid_panel.getTraj(first_id);
 			Trajectory& second_traj = grid_panel.getTraj(second_id);
+
+			clock_t verify_cur = clock();
 			double sim = verify(first_traj, second_traj);
+			verify_cur = clock() - verify_cur;
+			verify_clock += verify_cur;
+			
 			sim_map[first_id][second_id] = sim;
 			if (sim >= 0 && sim <= 1.0)
 				success_pair_count++;
 			pair_count ++;
+			if (pair_count % 10000 == 0) {
+				verify_end = time(NULL);
+				string verifyInfo = "Verfiy tra count " + to_string(pair_count) + ", verify clock: " + to_string((double)verify_clock / CLOCKS_PER_SEC) + ", success_pair_count: " + to_string(success_pair_count) + ", time interval: " + to_string(verify_end  - verify_begin);
+				Log::log(0, verifyInfo);
+				printf("%s\n", verifyInfo.c_str());
+				verify_clock = 0;
+				verify_begin = time(NULL);		
+			}
 		}
 	}
 
@@ -41,15 +60,20 @@ void JoinAndCandidate(GridPanel& grid_panel, const vector<Trajectory>& trajs, un
 	clock_t query_time = 0;
 	clock_t insert_time = 0;	
 	int total_can_pair = 0; 
+	time_t begin_ts = time(NULL);
+	time_t end_ts = time(NULL);
 	for(auto traj : trajs) {
 		count ++;
 		if (count % 10000 == 0) {
-			string processInfo = "Joined tra count " + to_string(count) + ", query_time: " + to_string((double)query_time / CLOCKS_PER_SEC) + ", insert_time: " + to_string((double)insert_time / CLOCKS_PER_SEC) + ", new pair count: " + to_string(total_can_pair);;
+			end_ts = time(NULL);
+				
+			string processInfo = "Joined tra count " + to_string(count) + ", query_time: " + to_string((double)query_time / CLOCKS_PER_SEC) + ", insert_time: " + to_string((double)insert_time / CLOCKS_PER_SEC) + ", time_interval "+ to_string(end_ts - begin_ts) + ", new pair count: " + to_string(total_can_pair);;
 			Log::log(0, processInfo);	
 			printf("Joined tra count %d\n", count);
 			query_time = 0;
 			insert_time = 0;
 			total_can_pair = 0;
+			begin_ts = time(NULL);
 		}	
 		clock_t tmp_query = clock();
 		int cur_size = GetCandidate(grid_panel, traj, can_map);
@@ -70,12 +94,15 @@ int GetCandidate(GridPanel& grid_panel, const Trajectory& traj, unordered_map<in
 	int id = traj.id();
 	//printf("Test traj id %d, point size %ld, Dmax %d\n", id, traj.point_list().size(), DISUNIT);
 	//BinaryStrategy binary_strategy(0, traj.point_list().size() - 1);	
-	//SpecialPointStrategy strategy(0, traj.point_list().size() - 1);
+	SpecialPointStrategy strategy;
 	//EndPointStrategy strategy;
-	EndAsCommonStrategy strategy;
+	//EndAsCommonStrategy strategy;
+	//SinglePointStrategy strategy;
+	//TwoPointStrategy strategy;
+	//KPointStrategy strategy(3);
 	grid_panel.FindCandidates(strategy, traj, DMAX, candidates);
-	if (!candidates.empty())
-		printf("id %d can size %ld\n", id, candidates.size());
+	//if (!candidates.empty())
+		//printf("id %d can size %ld\n", id, candidates.size());
 	if (can_map.find(id) == can_map.end()) {
 		can_map[id] = candidates;
 	}
@@ -125,7 +152,8 @@ void get_candidate_output(TrajData& traj_data, GridPanel& grid_panel) {
 	//		continue;
 		list<int> can_trajs;
 	//	SpecialPointStrategy strategy(0, traj.point_list().size() - 1);
-		EndPointStrategy strategy;
+		//EndPointStrategy strategy;
+		SinglePointStrategy strategy;
 		grid_panel.FindCandidates(strategy, traj, DISUNIT, can_trajs);
 		can_trajs.remove(traj.id());
 		if (can_trajs.empty()) {// || can_trajs.size() >= MAXTRAJCOUNT) {

@@ -12,7 +12,7 @@
 //distance unit 500m
 //#define DISUNIT 500
 #define DISUNIT 100
-#define DMAX 500
+#define DMAX 100
 
 #define BJMAXY 41.083332 
 #define BJMAXX 117.5
@@ -48,6 +48,9 @@
 
 //----trajectory.cc----
 #define ANGLETHRESHOLD 135.0
+
+//-----panel_inset_test_main.cc-----
+#define OUTPUTCOUNT 1000
 
 const  Point left_bottom(BJMINX * ENLARGE, BJMINY * ENLARGE);  
 const  Point right_upper(BJMAXX * ENLARGE, BJMAXY * ENLARGE);
