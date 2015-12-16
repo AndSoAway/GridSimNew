@@ -32,14 +32,31 @@ void Panel::InsertPoint(const SamplePoint& point, bool end) {
    int x_grid_index = GetXIndex(point.x());
    int y_grid_index = GetYIndex(point.y());
     
+   int x_lb = x_grid_index - 1;
+   int x_up = x_grid_index + 1;
+   int y_lb = y_grid_index - 1;
+   int y_up = y_grid_index + 1;
   grid_set_[x_grid_index][y_grid_index].push_back(point);
 
 	int tra_id = point.tra_id();
 	
-	insert(point_traj_list_[x_grid_index][y_grid_index], tra_id);
+	//insert(point_traj_list_[x_grid_index][y_grid_index], tra_id);
+	list<int>& point_id_list = point_traj_list_[x_grid_index][y_grid_index];
+	if (point_id_list.empty() || tra_id != point_id_list.back()) {
+		point_id_list.insert(point_id_list.end(), tra_id);
+		for (int x = x_lb; x <= x_up; x++) {
+			for (int y = y_lb; y <= y_up; y++) {
+				int count = all_traj_count_[x][y];
+				all_traj_count_[x][y] = count + 1;
+			}
+		}
+	}
 		
 	if (end) {
-		insert(end_traj_list_[x_grid_index][y_grid_index], tra_id);
+		//insert(end_traj_list_[x_grid_index][y_grid_index], tra_id);
+		list<int>& end_id_list = end_traj_list_[x_grid_index][y_grid_index];
+		if (point_id_list.empty() || tra_id != point_id_list.back())
+			end_id_list.insert(end_id_list.end(), tra_id);
 	}
 }
 
@@ -66,8 +83,10 @@ void Panel::InsertSegment(int tra_id, const SamplePoint& begin, const SamplePoin
 			Point right_upper(x_right_log, y_right_lat);
 			Rectangle rect(left_bottom, right_upper);
 			if (rect.IntersectSegment(begin.point(), end.point())) {
-				list<int>& tra_id_list = seg_traj_list_[x][y];
-				insert(tra_id_list, tra_id);
+				list<int>& tra_id_list = point_traj_list_[x][y];
+				//insert(tra_id_list, tra_id);
+				if (tra_id_list.empty() || tra_id_list.front() != tra_id)
+					tra_id_list.insert(tra_id_list.end(), tra_id);
 			} 
 		}
 	}
@@ -144,6 +163,44 @@ const std::list<int>& Panel::GetTrajsInGrid(const pair<int, int>& grid_index, bo
 	}
 
 	return Panel::empty_list_;
+}
+
+int Panel::GetAroundTrajCount(const std::pair<int, int>& grid_index) const {
+	trajgridcount::const_iterator itor = all_traj_count_.find(grid_index.first);
+	if (itor != all_traj_count_.end()) {
+		unordered_map<int, int>::const_iterator a_itor = itor->second.find(grid_index.second);
+		if (a_itor != itor->second.end()) {
+			return a_itor->second;
+		}
+	}
+	return 0;
+}
+
+int Panel::GetTrajCountInGrid(const pair<int, int>& grid_index, bool is_end) const {
+	if (is_end) {
+		trajgridlist::const_iterator itor = end_traj_list_.find(grid_index.first);
+		if (itor != end_traj_list_.end()) {
+			unordered_map<int, list<int>>::const_iterator a_itor = itor->second.find(grid_index.second);
+			if (a_itor != itor->second.end())
+				return a_itor->second.size();	
+		}
+	} else {
+		trajgridlist::const_iterator itor = point_traj_list_.find(grid_index.first);
+		if (itor != point_traj_list_.end()) {
+			unordered_map<int, list<int>>::const_iterator a_itor = itor->second.find(grid_index.second);
+			if (a_itor != itor->second.end())
+				return a_itor->second.size();	
+		}
+	}
+	return 0;
+/*
+	if (is_end && end_traj_list_.find(grid_index.first) != end_traj_list_.end() && end_traj_list_.at(grid_index.first).find(grid_index.second) != end_traj_list_.at(grid_index.first).end()) {
+		return end_traj_list_.at(grid_index.first).at(grid_index.second).size();
+	} else if (point_traj_list_.find(grid_index.first) != point_traj_list_.end() && point_traj_list_.at(grid_index.first).find(grid_index.second) != point_traj_list_.at(grid_index.first).end()) {
+		return point_traj_list_.at(grid_index.first).at(grid_index.second).size();
+	}
+	return 0;
+*/
 }
 
 const std::list<int>& Panel::GetEndTrajsInGrid(const pair<int, int>& grid_index) const {

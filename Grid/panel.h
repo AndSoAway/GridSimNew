@@ -30,6 +30,7 @@ public:
   typedef std::unordered_map<int, std::set<int>> trajgrid;
 //	typedef std::unordered_map<int, std::unordered_map<int, std::set<int>>> trajInfoGridSet;
   typedef std::unordered_map<int, std::unordered_map<int, std::list<int>>> trajgridlist;
+  typedef std::unordered_map<int, std::unordered_map<int, int>> trajgridcount;
 
   void InsertTrajectory(const Trajectory& traj);
 
@@ -53,11 +54,15 @@ public:
 
   const std::list<int>& GetTrajsInGrid(const std::pair<int, int>&, bool is_end = false) const;
 
-	const std::list<int>& GetEndTrajsInGrid(const std::pair<int, int>& grid_index) const;
+  int GetAroundTrajCount(const std::pair<int, int>& grid_index) const;
+
+  int GetTrajCountInGrid(const std::pair<int, int>& grid_index, bool is_end = false) const ;
+
+  const std::list<int>& GetEndTrajsInGrid(const std::pair<int, int>& grid_index) const;
 
   bool IsContainPoint(const std::pair<int, int>&) const;
  
-	bool IsContainEndPoint(const std::pair<int, int>&) const;
+  bool IsContainEndPoint(const std::pair<int, int>&) const;
 private:
   int GetXIndex(double) const;
   int GetYIndex(double) const;
@@ -68,8 +73,9 @@ private:
   gridset grid_set_;
 	trajgridlist point_traj_list_;
 	trajgridlist end_traj_list_;
+	trajgridcount all_traj_count_;
 //	trajInfoGridSet trajinfo_grid_set_;
-  trajgridlist seg_traj_list_;
+  	//trajgridlist seg_traj_list_;
 	static const std::vector<SamplePoint> empty_point_;
 	static const std::list<int> empty_list_;
 };
