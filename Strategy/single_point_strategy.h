@@ -7,7 +7,7 @@ class SinglePointStrategy : public Strategy {
 public:
 	SinglePointStrategy() { }
 	
-	virtual void FindCandidateTrajs(const GridPanel* grid_panel, const Trajectory& traj, double dis, std::list<int>& candidates) = 0;
+	virtual void FindCandidateTrajs(const GridPanel* grid_panel, const Trajectory& traj, double dis, std::list<int>& candidates);
 	
 	~SinglePointStrategy() {}
 private:
