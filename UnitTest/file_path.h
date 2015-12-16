@@ -1,7 +1,7 @@
 #ifndef FILE_PATH_H_
 #define FILE_PATH_H_
 
-#define FILE_NUM 20
+#define FILE_NUM 10
 
 const char * file_paths[FILE_NUM] = {
    "tra_data/tra_data0.txt",
@@ -32,6 +32,8 @@ const char * filter_file_paths[FILE_NUM] = {
    "tra_data/tra_data08filter.txt",
    "tra_data/tra_data09filter.txt",
    "tra_data/tra_data12filter.txt",
+};
+/*
    "tra_data/tra_data19filter.txt",
    "tra_data/tra_data21filter.txt",
    "tra_data/tra_data22filter.txt",
@@ -43,4 +45,5 @@ const char * filter_file_paths[FILE_NUM] = {
    "tra_data/tra_data28filter.txt",
    "tra_data/tra_data29filter.txt",
 };
+*/
 #endif

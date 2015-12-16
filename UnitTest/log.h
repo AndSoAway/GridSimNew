@@ -17,9 +17,9 @@ public:
 		t = time(NULL);
 		local = localtime(&t);
 		strftime(buf, 64, "%Y-%m-%d %H:%M:%S", local);
-		FILE *log_file = fopen("log_file.txt", "a+");
+		FILE *log_file = fopen(file_name.c_str(), "a+");
 		if(log_file == NULL) {
-			printf("cannot open logfile: log_file.txt\n");
+			printf("cannot open logfile: %s\n", file_name.c_str());
 			return false;
 		}
 		fputs(buf, log_file);
