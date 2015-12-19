@@ -50,6 +50,8 @@ public:
 
   std::pair<int, int> GetGrid(double x, double y) const;
 
+  void GetPointInfo(PointInfo& point_info) const;
+
   const std::vector<SamplePoint>& GetPointsInGrid(const std::pair<int, int>&) const;
 
   const std::list<int>& GetTrajsInGrid(const std::pair<int, int>&, bool is_end = false) const;
@@ -66,6 +68,9 @@ public:
 private:
   int GetXIndex(double) const;
   int GetYIndex(double) const;
+  
+  inline double GetXLen(double) const;
+  inline double GetYLen(double) const;
 
   Rectangle rectangle_;
   double width_;
@@ -79,4 +84,14 @@ private:
 	static const std::vector<SamplePoint> empty_point_;
 	static const std::list<int> empty_list_;
 };
+
+inline double Panel::GetXLen(double lon) const {
+    double x_len = (lon - rectangle_.left_bottom().x()) * LEN_PER_X;
+    return x_len;
+}
+
+inline double Panel::GetYLen(double lat) const {
+    double y_len = (lat - rectangle_.left_bottom().y()) * LEN_PER_Y;
+    return y_len;
+}
 #endif

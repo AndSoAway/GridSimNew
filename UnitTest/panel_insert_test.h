@@ -6,9 +6,6 @@
 #include <set>
 #include <fstream>
 #include <string>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/text_oarchive.hpp>
-
 #include "../Verify/verify.h"
 #include "../Tra/config.h"
 #include "../Grid/rectangle.h"
@@ -19,9 +16,6 @@
 #include "traj_archive.h"
 
 #include "../Strategy/strategy.h"
-
-typedef boost::archive::text_iarchive iarchive;
-typedef boost::archive::text_oarchive oarchive;
 
 void panel_insert_test(GridPanel&, TrajData&);
 

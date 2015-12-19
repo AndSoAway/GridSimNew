@@ -10,8 +10,8 @@ const vector<SamplePoint> Panel::empty_point_;
 const list<int> Panel::empty_list_;
 
 void Panel::InsertTrajectory(const Trajectory& traj) {
- 	const vector<SamplePoint>& point_list = traj.point_list();
-	vector<SamplePoint>::const_iterator itor = point_list.cbegin();
+ 	const vector<PointInfo>& point_list = traj.point_list();
+	vector<PointInfo>::const_iterator itor = point_list.cbegin();
 	InsertPoint(*itor, true);
 	itor++;
  	while( itor != (point_list.cend() - 1)) {
@@ -102,6 +102,21 @@ int Panel::GetYIndex(double lat) const {
     double y_len = (lat - rectangle_.left_bottom().y()) * LEN_PER_Y;
     int y_index = y_len / DISUNIT;
     return y_index;
+}
+
+void Panel::GetPointInfo(PointInfo& point_info) const {
+	const Point& point = point_info.point();
+	pair<int, int> grid_index = GetGrid(point_info);
+	point_info.grid_index_ = grid_index;
+	double x_len = GetXLen(point.x());
+	double y_len = GetYLen(point.y());
+	point_info.x_len = x_len;
+	point_info.y_len = y_len;
+	double x_part = x_len - grid_index.first * DISUNIT;
+	double y_part = y_len - grid_index.second * DISUNIT;
+	double min_x = min(x_part, DISUNIT - x_part);
+	double min_y = min(y_part, DISUNIT - y_part);
+	point_info.min_dis_ = min(min_x, min_y);
 }
 
 string Panel::info() const {

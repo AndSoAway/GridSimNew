@@ -26,20 +26,22 @@ public:
 
   void FindCandidates(Strategy& strategy, const Trajectory& traj, double dis, std::list<int>& trajs) const;
 
+  void GetPointInfo(PointInfo& point_info) const { panel_.GetPointInfo(point_info);}
+
   int GridSize() const;
   
   int PointSize() const;
 
   void PrintPanel() const ;
 
-	int TrajSize() const { return trajs_.size(); }
+  int TrajSize() const { return trajs_.size(); }
 
-	const Trajectory& getTraj(int tra_id) const;
+  const Trajectory& getTraj(int tra_id) const;
 	
-	Trajectory& getTraj(int tra_id);
+  Trajectory& getTraj(int tra_id);
 
-	const Panel& panel() const { return panel_; }
-	Panel& panel() { return panel_; }
+  const Panel& panel() const { return panel_; }
+  Panel& panel() { return panel_; }
 
 private:
   void traj_filter(std::set<int>& father_trajs, const std::set<int>& child_trajs) const;

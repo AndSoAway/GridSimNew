@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "panel_insert_test.h"
 #include "log.h"
 #include "../Strategy/binary_strategy.h"
@@ -13,6 +14,10 @@ void OutputTruth(unordered_map<int, unordered_map<int, double>>& sim_map, GridPa
 void StoreTrajs(TrajData&);
 
 void ReadAndProcess();
+
+bool CompareTraj(const Trajectory& traj1, const Trajectory& traj2) {
+		return traj1.point_list().size() > traj2.point_list().size();
+}
 
 int main() {
 	ReadAndProcess();
@@ -32,13 +37,22 @@ void ReadAndProcess() {
 	Log::log(0, readInfo);
 	printf("read trajs: %ld, point size %d, cost time %lf\n", traj_data.trajs.size(), point_size, (double)read_cost / CLOCKS_PER_SEC);
 
+	clock_t sort_cost = clock();
+	sort(traj_data.trajs.begin(), traj_data.trajs.end(), CompareTraj);
+	sort_cost = clock() - sort_cost;
+	printf("Sort needs %lf\n", (double)sort_cost / CLOCKS_PER_SEC);
+	int trajs_size = traj_data.trajs.size();
+	for (int i = 0; i < trajs_size; i++) {
+		traj_data.trajs[i].set_id(i + 1);
+		printf("%ld\n", traj_data.trajs[i].point_list().size());
+	}
 //	StoreTrajs(traj_data);
-	//FindGroundTruth(traj_data, grid_panel);
-	unordered_map<int, list<int>> can_map;
-	unordered_map<int, unordered_map<int, double>> sim_map;
-	Join(traj_data, grid_panel, can_map, sim_map);
-	FindGroundTruth(can_map, grid_panel);
-	OutputTruth(sim_map, grid_panel);
+//	FindGroundTruth(traj_data, grid_panel);
+//	unordered_map<int, list<int>> can_map;
+//	unordered_map<int, unordered_map<int, double>> sim_map;
+//	Join(traj_data, grid_panel, can_map, sim_map);
+//	FindGroundTruth(can_map, grid_panel);
+//	OutputTruth(sim_map, grid_panel);
 }
 
 void StoreTrajs(TrajData& traj_data) {

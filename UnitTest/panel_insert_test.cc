@@ -30,7 +30,7 @@ int VerifySim(GridPanel& grid_panel, unordered_map<int, list<int> >& can_map, un
 			Trajectory& second_traj = grid_panel.getTraj(second_id);
 
 			clock_t verify_cur = clock();
-			double sim = verify(first_traj, second_traj);
+			double sim = verify(first_traj, second_traj, SIMTHRESHOLD);
 			verify_cur = clock() - verify_cur;
 			verify_clock += verify_cur;
 			
@@ -209,8 +209,8 @@ void output_traj(const Trajectory& traj, std::string& file_name) {
 	FILE* output = fopen(file_name.c_str(), "wb");
 	if (output == NULL)
 		printf("output cannot open\n");
-  const vector<SamplePoint>& points = traj.point_list();
-  for (vector<SamplePoint>::const_iterator citor = points.cbegin(); citor != points.cend(); ++ citor) {
+  const vector<PointInfo>& points = traj.point_list();
+  for (vector<PointInfo>::const_iterator citor = points.cbegin(); citor != points.cend(); ++ citor) {
 		fputs(citor->line().c_str(), output);
 	}
   fclose(output);
@@ -234,20 +234,6 @@ void file_read_speed() {
 	}
 	time(&read_end);
 	printf("total cost time : %lf\n", difftime(read_end, read_begin));
-}
-
-void traj_archive(TrajData& traj_data, string file_name) {
-  ofstream ofs(file_name.c_str());
-  oarchive oa(ofs);
-  oa << traj_data;
-	ofs.close();
-}
-
-void traj_load(TrajData& traj_data, string file_name) {
-  ifstream ifs(file_name.c_str(), ios::binary);
-  iarchive ia(ifs);
-  ia >> traj_data;
-  ifs.close();
 }
 
 void DistSimplify() {
