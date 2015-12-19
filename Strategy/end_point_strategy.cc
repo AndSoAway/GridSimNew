@@ -3,7 +3,7 @@
 using namespace std;
 
 void EndPointStrategy::FindCandidateTrajs(const GridPanel* grid_panel, const Trajectory& traj, double dis, list<int>& candidates) {
-    const vector<SamplePoint>& point_list = traj.point_list();
+    const vector<PointInfo>& point_list = traj.point_list();
     int point_size = point_list.size();
     const SamplePoint& begin_point = point_list[0];
     const SamplePoint& end_point = point_list[point_size - 1];

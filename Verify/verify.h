@@ -3,8 +3,7 @@
 #include "../Tra/trajectory.h"
 #include "../Tra/sample_point.h"
 
-double verify(const Trajectory& target, const Trajectory& candidate);
-
+double verify(const Trajectory& target, const Trajectory& candidate, double threshold);
 
 double minDistance(const SamplePoint& point, const Trajectory& tra);
 

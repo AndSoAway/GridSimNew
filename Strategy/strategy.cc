@@ -146,7 +146,7 @@ void Strategy::FilterEnd(const GridPanel* grid_panel, const Trajectory& traj, st
 }
 
 void Strategy::GetEndGrid(const GridPanel* grid_panel, const Trajectory& traj, vector<pair<int, int>>& end_grid) {
-	const vector<SamplePoint>& point_list = traj.point_list();
+	const vector<PointInfo>& point_list = traj.point_list();
 	int point_size = point_list.size();
 	const SamplePoint& begin_point = point_list[0];
 	const SamplePoint& end_point = point_list[point_size - 1];

@@ -6,7 +6,7 @@ int SpecialPointStrategy::special_point_size_ = 0;
 int SpecialPointStrategy::joined_tra_count_ = 0;
 int SpecialPointStrategy::total_point_size_ = 0;
 void SpecialPointStrategy::FindCandidateTrajs(const GridPanel* grid_panel, const Trajectory& traj, double dis, list<int>& candidates) {
-	const vector<SamplePoint>& point_list = traj.point_list();
+	const vector<PointInfo>& point_list = traj.point_list();
 	int point_size = point_list.size();
 	const SamplePoint& begin_point = point_list[0];
 	const SamplePoint& end_point = point_list[point_size - 1];	

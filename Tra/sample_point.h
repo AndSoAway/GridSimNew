@@ -2,10 +2,8 @@
 #define TRA_SAMPLE_POINT_H
 #include <time.h>
 #include <string>
-#include <boost/serialization/access.hpp>
 #include "point.h"
 #include "utils.h"
-#include "trajectory.h"
 
 class Trajectory;
 
@@ -24,7 +22,7 @@ public:
   }
 
   SamplePoint(char* line_str) {
-		point_id_ = point_counter++;
+    point_id_ = point_counter++;
     ExtractSamplePoint(line_str);
   }
 
@@ -59,25 +57,11 @@ public:
 	void set_line(std::string line) { line_ = line; }
 
   const std::string& line() const{ return line_; }
-
-private:
-  friend class boost::serialization::access;
-  template<class Archive>
-  void serialize(Archive& ar, const unsigned int version) {
-	ar & point_id_;
-	ar & vehical_id_;
-  ar & timestamp_;
-  ar & point_;
-  ar & heading_angle_to_north_;
-  ar & speed_;
-  ar & is_loaded_;
-  ar & tra_id_;
-  ar & point_counter;
-}
-
+    virtual ~SamplePoint() {}
+protected:
   bool ExtractSamplePoint(char* line_str);
 	
-	long point_id_;
+  long point_id_;
   int vehical_id_;
   time_t timestamp_;
   Point point_;
@@ -90,5 +74,20 @@ private:
   static int point_counter;
  
   std::string line_;
+};
+
+struct PointInfo: public SamplePoint {
+public:
+    PointInfo(const SamplePoint& sample_point):SamplePoint(sample_point){	
+    } 
+
+    PointInfo(const PointInfo& point_info) :SamplePoint(point_info){ }
+
+    PointInfo& operator=(const SamplePoint& samplePoint);
+
+    std::pair<int, int> grid_index_;
+    double min_dis_;
+    double x_len;
+    double y_len;
 };
 #endif

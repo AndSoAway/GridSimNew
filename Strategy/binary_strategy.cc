@@ -5,7 +5,7 @@ using namespace std;
 #define THRESHOLD 10
 
 void BinaryStrategy::FindCandidateTrajs(const GridPanel* grid_panel, const Trajectory& traj, double dis, list<int>& candidates) {
-	const vector<SamplePoint>& point_list = traj.point_list();
+	const vector<PointInfo>& point_list = traj.point_list();
 	//int size = traj.point_list().size();	
 
 	int cur = 0;

@@ -11,7 +11,7 @@ inline double TOMS(clock_t x) {
 }
 
 void SinglePointStrategy::FindCandidateTrajs(const GridPanel* grid_panel, const Trajectory& traj, double dis, list<int>& candidates) {
-	const vector<SamplePoint>& point_list = traj.point_list();
+	const vector<PointInfo>& point_list = traj.point_list();
 	int point_size = point_list.size();
 
 //	clock_t total = clock();

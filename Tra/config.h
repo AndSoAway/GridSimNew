@@ -45,12 +45,15 @@
 
 #define PRECISE 1e-5
 
-
 //----trajectory.cc----
 #define ANGLETHRESHOLD 135.0
 
 //-----panel_inset_test_main.cc-----
 #define OUTPUTCOUNT 1000
+
+//-----verify-----
+#define OVERMINDIS -10000
+#define SIMTHRESHOLD 0
 
 const  Point left_bottom(BJMINX * ENLARGE, BJMINY * ENLARGE);  
 const  Point right_upper(BJMAXX * ENLARGE, BJMAXY * ENLARGE);

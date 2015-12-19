@@ -1,6 +1,6 @@
 #include <string>
 #include <vector>
-
+#include "../Tra/trajectory.h"
 #include "sample_point.h"
 #include "utils.h"
 #include "config.h"
@@ -32,4 +32,9 @@ void SamplePoint::set_tra(const Trajectory *p_tra) {
 	tra_id_ = p_tra->id();
 }
 
-
+PointInfo& PointInfo::operator=(const SamplePoint& rhs) {
+	if (this != &rhs) {
+		SamplePoint::operator=(rhs);
+	}
+	return *this;
+}
