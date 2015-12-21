@@ -69,7 +69,7 @@ protected:
   double speed_;
   bool is_loaded_;
   //Trajectory* p_tra_;
-	int tra_id_;
+  int tra_id_;
   
   static int point_counter;
  
@@ -89,5 +89,11 @@ public:
     double min_dis_;
     double x_len;
     double y_len;
+    std::pair<int, int> neighbour_index_;
 };
+
+inline bool min_dis_dsc(const PointInfo& left, const PointInfo& right) {
+	return left.min_dis_ > right.min_dis_;
+}
+
 #endif

@@ -14,9 +14,9 @@ void Trajectory::PushPoint(SamplePoint& point) {
 	UpdateSpecialPoint();
 }
 
-void Trajectory::CalMinDis(const GridPanel* grid_panel) {
+void Trajectory::CalPointInfo(const GridPanel* grid_panel, double dis) {
 	for (vector<PointInfo>::iterator itor = point_info_.begin(); itor != point_info_.end(); itor++) {
-		grid_panel->GetPointInfo(*itor);			
+		grid_panel->GetPointInfo(*itor, dis);			
 	}
 }
 

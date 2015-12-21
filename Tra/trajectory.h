@@ -22,7 +22,7 @@ public:
     void set_id(int id) { tra_id_ = id; }    
     //int point_size() const { return point_list_.size(); } 
     int point_size() const { return point_info_.size(); }
-    void CalMinDis(const GridPanel* grid_panel);
+    void CalPointInfo(const GridPanel* grid_panel);
 private:
     void UpdateSpecialPoint();
     int tra_id_;
