@@ -91,6 +91,10 @@ void Strategy::GetCandidateTrajs(const GridPanel* grid_panel, const SamplePoint&
 //	printf("Get can_trajs %ld, point size %d\n", candidates.size(), point_sum);
 }
 
+void Strategy::FindCandidateTrajs(const GridPanel* grid_panel, Trajectory& traj, double dis, std::list<int>& candidates) {
+	const Trajectory& con_traj = traj;
+	FindCandidateTrajs(grid_panel, con_traj, dis, candidates);
+}
 
 int Strategy::GetTotalTrajCount(const GridPanel* grid_panel, const SamplePoint& point, double dis, bool is_end) {
 	pair<int, int> grid_index = grid_panel->panel().GetGrid(point);
