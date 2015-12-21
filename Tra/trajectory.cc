@@ -9,7 +9,7 @@ using namespace std;
 void Trajectory::PushPoint(SamplePoint& point) {
 	point.set_tra(this);
 	//point_list_.push_back(point);
-	PointInfo point_info(point_info);
+	PointInfo point_info(point);
 	point_info_.push_back(point_info);
 	UpdateSpecialPoint();
 }

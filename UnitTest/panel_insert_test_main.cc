@@ -44,13 +44,13 @@ void ReadAndProcess() {
 	int trajs_size = traj_data.trajs.size();
 	for (int i = 0; i < trajs_size; i++) {
 		traj_data.trajs[i].set_id(i + 1);
-		printf("%ld\n", traj_data.trajs[i].point_list().size());
+		//printf("%ld\n", traj_data.trajs[i].point_list().size());
 	}
 //	StoreTrajs(traj_data);
 //	FindGroundTruth(traj_data, grid_panel);
-//	unordered_map<int, list<int>> can_map;
-//	unordered_map<int, unordered_map<int, double>> sim_map;
-//	Join(traj_data, grid_panel, can_map, sim_map);
+	unordered_map<int, list<int>> can_map;
+	unordered_map<int, unordered_map<int, double>> sim_map;
+	Join(traj_data, grid_panel, can_map, sim_map);
 //	FindGroundTruth(can_map, grid_panel);
 //	OutputTruth(sim_map, grid_panel);
 }
@@ -101,6 +101,7 @@ void OutputTruth(unordered_map<int, unordered_map<int, double>>& sim_map, GridPa
 	}
 }
 
+
 void FindGroundTruth(unordered_map<int, list<int>>& can_map, GridPanel& grid_panel) {
  	string file_path = "traj_csv/can/output_can_traj.csv";
 	string file_ori = "traj_csv/can/output_ori.csv";
@@ -133,6 +134,8 @@ void FindGroundTruth(unordered_map<int, list<int>>& can_map, GridPanel& grid_pan
 		}
 	}
 }
+
+
 
 void FindGroundTruth(TrajData& traj_data, GridPanel& grid_panel) {
 /*	clock_t insert_cost = clock();
@@ -173,6 +176,6 @@ void Join(TrajData& traj_data, GridPanel& grid_panel, unordered_map<int, list<in
 
 	Log::log(0, "begin output res of sim");
 	string file_path = "sim_res.csv";
-	output_sim(sim_map, file_path);
+//	output_sim(sim_map, file_path);
 }
 

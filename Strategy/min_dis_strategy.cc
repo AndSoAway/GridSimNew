@@ -13,6 +13,7 @@ void MinDisStrategy::FindCandidateTrajs(const GridPanel* grid_panel, Trajectory&
 	int top_k = 0;
 	vector<const list<int>*> top_k_lists;
 	for (vector<PointInfo>::iterator itor = point_info.begin(); itor != point_info.end() && sum_min_dis < dis; itor++) {
+		printf("min_dis_ %lf, sum_min_dis %lf\n", itor->min_dis_, sum_min_dis);
 		sum_min_dis += itor->min_dis_;
 		top_k++;
 		pair<int, int>& grid_index = itor->grid_index_;

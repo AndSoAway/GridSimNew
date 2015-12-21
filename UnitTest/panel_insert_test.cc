@@ -8,6 +8,7 @@
 #include "../Strategy/single_point_strategy.h"
 #include "../Strategy/two_point_strategy.h"
 #include "../Strategy/k_point_strategy.h"
+#include "../Strategy/min_dis_strategy.h"
 
 using namespace std;
 
@@ -55,7 +56,7 @@ int VerifySim(GridPanel& grid_panel, unordered_map<int, list<int> >& can_map, un
 	return pair_count;
 }
 
-void JoinAndCandidate(GridPanel& grid_panel, const vector<Trajectory>& trajs, unordered_map<int, list<int> >& can_map) {
+void JoinAndCandidate(GridPanel& grid_panel, vector<Trajectory>& trajs, unordered_map<int, list<int> >& can_map) {
 	int count = 0;
 	clock_t query_time = 0;
 	clock_t insert_time = 0;	
@@ -89,17 +90,18 @@ void JoinAndCandidate(GridPanel& grid_panel, const vector<Trajectory>& trajs, un
 	}
 }
 
-int GetCandidate(GridPanel& grid_panel, const Trajectory& traj, unordered_map<int, list<int>>& can_map) {	
+int GetCandidate(GridPanel& grid_panel, Trajectory& traj, unordered_map<int, list<int>>& can_map) {	
 	list<int> candidates;
 	int id = traj.id();
 	//printf("Test traj id %d, point size %ld, Dmax %d\n", id, traj.point_list().size(), DISUNIT);
 	//BinaryStrategy binary_strategy(0, traj.point_list().size() - 1);	
-	SpecialPointStrategy strategy;
+	//SpecialPointStrategy strategy;
 	//EndPointStrategy strategy;
 	//EndAsCommonStrategy strategy;
 	//SinglePointStrategy strategy;
 	//TwoPointStrategy strategy;
 	//KPointStrategy strategy(3);
+	MinDisStrategy strategy(3);
 	grid_panel.FindCandidates(strategy, traj, DMAX, candidates);
 	//if (!candidates.empty())
 		//printf("id %d can size %ld\n", id, candidates.size());
@@ -153,7 +155,8 @@ void get_candidate_output(TrajData& traj_data, GridPanel& grid_panel) {
 		list<int> can_trajs;
 	//	SpecialPointStrategy strategy(0, traj.point_list().size() - 1);
 		//EndPointStrategy strategy;
-		SinglePointStrategy strategy;
+	//	SinglePointStrategy strategy;
+		MinDisStrategy strategy(3);
 		grid_panel.FindCandidates(strategy, traj, DISUNIT, can_trajs);
 		can_trajs.remove(traj.id());
 		if (can_trajs.empty()) {// || can_trajs.size() >= MAXTRAJCOUNT) {
@@ -185,10 +188,10 @@ void read_traj(TrajData& traj_data) {
   /*for (int i = 0;  i < FILE_NUM; i++) {
 		FILE* file = fopen(file_paths[i], "rb");*/
 
-//  for (int i = 0; i < 2; i++) {
+  for (int i = 0; i < 2; i++) {
 //		FILE* file = fopen(test_files[i], "rb");
 
-  for (int i = 0;  i < FILE_NUM; i++) {
+//  for (int i = 0;  i < FILE_NUM; i++) {
 		FILE* file = fopen(filter_file_paths[i], "rb");
 		printf("read %s\n", filter_file_paths[i]);
 		trajHelper->ExtractTrajectory(file, traj_data.trajs);

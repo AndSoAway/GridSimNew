@@ -24,7 +24,7 @@ public:
 
   void InsertTrajectory(const Trajectory& traj);
 
-  void FindCandidates(Strategy& strategy, const Trajectory& traj, double dis, std::list<int>& trajs) const;
+  void FindCandidates(Strategy& strategy, Trajectory& traj, double dis, std::list<int>& trajs) const;
 
   void GetPointInfo(PointInfo& point_info, double dis) const { panel_.GetPointInfo(point_info, dis);}
 

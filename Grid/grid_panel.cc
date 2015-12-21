@@ -26,7 +26,7 @@ void GridPanel::InsertTrajectory(const Trajectory& traj) {
   }
 }
 
-void GridPanel::FindCandidates(Strategy& strategy, const Trajectory& traj, double dis, list<int>& trajs) const {
+void GridPanel::FindCandidates(Strategy& strategy, Trajectory& traj, double dis, list<int>& trajs) const {
 	strategy.FindCandidateTrajs(this, traj, dis, trajs);
 }
 
