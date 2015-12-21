@@ -5,6 +5,9 @@
 
 using namespace std;
 
+#define CONVERT_TO_X(x) ((x) / LEN_PER_X)
+#define CONVERT_TO_Y(y) ((y) / LEN_PER_Y)
+
 const vector<SamplePoint> Panel::empty_point_;
 
 const list<int> Panel::empty_list_;
@@ -104,7 +107,7 @@ int Panel::GetYIndex(double lat) const {
     return y_index;
 }
 
-void Panel::GetPointInfo(PointInfo& point_info) const {
+void Panel::GetPointInfo(PointInfo& point_info, double dis) const {
 	const Point& point = point_info.point();
 	pair<int, int> grid_index = GetGrid(point_info);
 	point_info.grid_index_ = grid_index;
@@ -117,6 +120,21 @@ void Panel::GetPointInfo(PointInfo& point_info) const {
 	double min_x = min(x_part, DISUNIT - x_part);
 	double min_y = min(y_part, DISUNIT - y_part);
 	point_info.min_dis_ = min(min_x, min_y);
+	
+  	double x_dif = CONVERT_TO_X(dis);
+  	double y_dif = CONVERT_TO_Y(dis);
+  	double x_bottom = point.x() - x_dif ;
+  	double y_bottom = point.y() - y_dif;
+  	double x_upper = point.x() + x_dif;
+  	double y_upper = point.y() + y_dif;
+	pair<int, int> bottom = grid_panel->panel().GetGrid(x_bottom, y_bottom);
+	pair<int, int> upper = grid_panel->panel().GetGrid(x_upper, y_upper); 
+
+	for(int i = bottom.first; i <= upper.first; i++) {
+		for(int j = bottom.second; j <= upper.second; j++) {
+			point_info.neighbour_grid_.push_back(make_pair(i, j));
+		}
+	}
 }
 
 string Panel::info() const {
