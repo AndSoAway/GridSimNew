@@ -5,13 +5,13 @@
 class MinDisStrategy : public Strategy {
 public:
 	MinDisStrategy(int k=3) { k_ = k; }
-	void FindCandidateTrajs(const GridPanel* grid_panel, const Trajectory& traj, double dis, std::list<int>& candidates);
+	void FindCandidateTrajs(const GridPanel* grid_panel, Trajectory& traj, double dis, std::list<int>& candidates);
 
-	virtual void GetCandidateTrajs(const GridPanel* grid_panel, const PointInfo& point, std::list<int>& candidates, bool is_end = false);
-
+	void GetCandidateTrajs(const GridPanel* grid_panel, const PointInfo& point_info, std::list<int>& candidates);
 	virtual ~MinDisStrategy() { }
 
 protected:
 	int k_;
 
 }; 
+#endif

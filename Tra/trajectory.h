@@ -17,12 +17,12 @@ public:
 
     const std::vector<PointInfo>& point_list() const { return point_info_; }
     const std::vector<SamplePoint>& special_point() const { return special_point_; }
-    const std::vector<PointInfo>& pointinfo_list() const { return point_info_; }
+    std::vector<PointInfo>& pointinfo_list() { return point_info_; }
     int id() const { return tra_id_; }
     void set_id(int id) { tra_id_ = id; }    
     //int point_size() const { return point_list_.size(); } 
     int point_size() const { return point_info_.size(); }
-    void CalPointInfo(const GridPanel* grid_panel);
+    void CalPointInfo(const GridPanel* grid_panel, double dis);
 private:
     void UpdateSpecialPoint();
     int tra_id_;

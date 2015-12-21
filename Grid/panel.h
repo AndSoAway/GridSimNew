@@ -50,7 +50,7 @@ public:
 
   std::pair<int, int> GetGrid(double x, double y) const;
 
-  void GetPointInfo(PointInfo& point_info) const;
+  void GetPointInfo(PointInfo& point_info, double dis) const;
 
   const std::vector<SamplePoint>& GetPointsInGrid(const std::pair<int, int>&) const;
 

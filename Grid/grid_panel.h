@@ -26,7 +26,7 @@ public:
 
   void FindCandidates(Strategy& strategy, const Trajectory& traj, double dis, std::list<int>& trajs) const;
 
-  void GetPointInfo(PointInfo& point_info) const { panel_.GetPointInfo(point_info);}
+  void GetPointInfo(PointInfo& point_info, double dis) const { panel_.GetPointInfo(point_info, dis);}
 
   int GridSize() const;
   

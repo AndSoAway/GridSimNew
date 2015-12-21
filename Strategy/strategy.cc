@@ -23,6 +23,10 @@ void Strategy::TrajMergeJoin(const list<int>& father_trajs, const std::list<int>
 	}
 }
 
+void Strategy::FindCandidateTrajs(const GridPanel* grid_panel, const Trajectory& traj, double dis, list<int>& candidates) {
+
+}
+
 void Strategy::TrajMergeUnion(list<int>& father_trajs, const std::list<int>& child_trajs) const {
 			list<int>::const_iterator cur_itor, pre_itor;
 			cur_itor = child_trajs.cbegin();
@@ -53,15 +57,15 @@ void Strategy::TrajMergeUnion(list<int>& father_trajs, const std::list<int>& chi
 }
 
 void Strategy::GetCandidateTrajs(const GridPanel* grid_panel, const SamplePoint& point, double dis, list<int>& candidates, bool is_end) {
-  //clock_t get_grid = clock();
-  double x_dif = CONVERT_TO_X(dis);
-  double y_dif = CONVERT_TO_Y(dis);
-  double x_bottom = point.x() - x_dif ;
-  double y_bottom = point.y() - y_dif;
-  double x_upper = point.x() + x_dif;
-  double y_upper = point.y() + y_dif; 
-  pair<int, int> bottom = grid_panel->panel().GetGrid(x_bottom, y_bottom);
-  pair<int, int> upper = grid_panel->panel().GetGrid(x_upper, y_upper);
+	//clock_t get_grid = clock();
+	double x_dif = CONVERT_TO_X(dis);
+	double y_dif = CONVERT_TO_Y(dis);
+	double x_bottom = point.x() - x_dif ;
+	double y_bottom = point.y() - y_dif;
+	double x_upper = point.x() + x_dif;
+	double y_upper = point.y() + y_dif; 
+	pair<int, int> bottom = grid_panel->panel().GetGrid(x_bottom, y_bottom);
+	pair<int, int> upper = grid_panel->panel().GetGrid(x_upper, y_upper);
 	
 	//int point_sum = 0;
 	vector<const list<int>*> neighbour_lists;	

@@ -19,7 +19,7 @@ void Panel::InsertTrajectory(const Trajectory& traj) {
 	itor++;
  	while( itor != (point_list.cend() - 1)) {
 	//	printf("point tra is :%d\n", point.tra()->id());
-    		InsertPoint(*itor, false);
+	  		InsertPoint(*itor, false);
 		itor++;
 	}
 	InsertPoint(*itor, true);
@@ -32,14 +32,14 @@ void Panel::InsertTrajectory(const Trajectory& traj) {
 
 
 void Panel::InsertPoint(const SamplePoint& point, bool end) {
-   int x_grid_index = GetXIndex(point.x());
-   int y_grid_index = GetYIndex(point.y());
-    
-   int x_lb = x_grid_index - 1;
-   int x_up = x_grid_index + 1;
-   int y_lb = y_grid_index - 1;
-   int y_up = y_grid_index + 1;
-  grid_set_[x_grid_index][y_grid_index].push_back(point);
+	int x_grid_index = GetXIndex(point.x());
+	int y_grid_index = GetYIndex(point.y());
+	
+	int x_lb = x_grid_index - 1;
+	int x_up = x_grid_index + 1;
+	int y_lb = y_grid_index - 1;
+	int y_up = y_grid_index + 1;
+	grid_set_[x_grid_index][y_grid_index].push_back(point);
 
 	int tra_id = point.tra_id();
 	
@@ -96,15 +96,15 @@ void Panel::InsertSegment(int tra_id, const SamplePoint& begin, const SamplePoin
 }
 
 int Panel::GetXIndex(double lon) const {
-    double x_len = (lon - rectangle_.left_bottom().x()) * LEN_PER_X;    
-    int x_index = int(x_len / DISUNIT); 
-    return x_index;
+	double x_len = (lon - rectangle_.left_bottom().x()) * LEN_PER_X;    
+	int x_index = int(x_len / DISUNIT); 
+	return x_index;
 }
 
 int Panel::GetYIndex(double lat) const {
-    double y_len = (lat - rectangle_.left_bottom().y()) * LEN_PER_Y;
-    int y_index = y_len / DISUNIT;
-    return y_index;
+	double y_len = (lat - rectangle_.left_bottom().y()) * LEN_PER_Y;
+	int y_index = y_len / DISUNIT;
+	return y_index;
 }
 
 void Panel::GetPointInfo(PointInfo& point_info, double dis) const {
@@ -121,14 +121,14 @@ void Panel::GetPointInfo(PointInfo& point_info, double dis) const {
 	double min_y = min(y_part, DISUNIT - y_part);
 	point_info.min_dis_ = min(min_x, min_y);
 	
-  	double x_dif = CONVERT_TO_X(dis);
-  	double y_dif = CONVERT_TO_Y(dis);
-  	double x_bottom = point.x() - x_dif ;
-  	double y_bottom = point.y() - y_dif;
-  	double x_upper = point.x() + x_dif;
-  	double y_upper = point.y() + y_dif;
-	pair<int, int> bottom = grid_panel->panel().GetGrid(x_bottom, y_bottom);
-	pair<int, int> upper = grid_panel->panel().GetGrid(x_upper, y_upper); 
+	double x_dif = CONVERT_TO_X(dis);
+	double y_dif = CONVERT_TO_Y(dis);
+	double x_bottom = point.x() - x_dif ;
+	double y_bottom = point.y() - y_dif;
+	double x_upper = point.x() + x_dif;
+	double y_upper = point.y() + y_dif;
+	pair<int, int> bottom = GetGrid(x_bottom, y_bottom);
+	pair<int, int> upper = GetGrid(x_upper, y_upper); 
 
 	for(int i = bottom.first; i <= upper.first; i++) {
 		for(int j = bottom.second; j <= upper.second; j++) {
@@ -138,53 +138,53 @@ void Panel::GetPointInfo(PointInfo& point_info, double dis) const {
 }
 
 string Panel::info() const {
-   string str;
-   str.append("Point distribution:\n");
-   for(gridset::const_iterator itor = grid_set_.begin(); itor != grid_set_.end(); itor++) {
-      int x_index = itor->first;
-      for(grid::const_iterator griditor = itor->second.begin(); griditor != itor->second.end(); griditor++) {
-         int y_index = griditor->first;
-         int point_count = griditor->second.size();
-         str.append(to_string(x_index)).append(", ").append(to_string(y_index)).append(" count: ").append(to_string(point_count)).append("\n");
-      }
-   }
-   return str;
+	string str;
+	str.append("Point distribution:\n");
+	for(gridset::const_iterator itor = grid_set_.begin(); itor != grid_set_.end(); itor++) {
+		int x_index = itor->first;
+		for(grid::const_iterator griditor = itor->second.begin(); griditor != itor->second.end(); griditor++) {
+	     int y_index = griditor->first;
+	     int point_count = griditor->second.size();
+	     str.append(to_string(x_index)).append(", ").append(to_string(y_index)).append(" count: ").append(to_string(point_count)).append("\n");
+	  }
+	}
+	return str;
 }
 
 int Panel::GridSize() const {
-  int total = 0;
-  for (gridset::const_iterator itor = grid_set_.begin(); itor != grid_set_.end(); ++itor) {
-    total += itor->second.size(); 
-  }
+	int total = 0;
+	for (gridset::const_iterator itor = grid_set_.begin(); itor != grid_set_.end(); ++itor) {
+	total += itor->second.size(); 
+	}
 
-  return total;
+	return total;
 }
 
 int Panel::PointSize() const {
-  int total = 0;
-  for(gridset::const_iterator itor = grid_set_.begin(); itor != grid_set_.end(); itor++) {
-    for(grid::const_iterator griditor = itor->second.begin(); griditor != itor->second.end(); griditor++) {
-      total += griditor->second.size();
-    }
-  }
-  return total;
+	int total = 0;
+	for(gridset::const_iterator itor = grid_set_.begin(); itor != grid_set_.end(); itor++) {
+		for(grid::const_iterator griditor = itor->second.begin(); griditor != itor->second.end(); griditor++) {
+	  		total += griditor->second.size();
+		}
+	}
+	return total;
 }
 
 pair<int, int> Panel::GetGrid(const SamplePoint& sample_point) const {
-  return GetGrid(sample_point.x(), sample_point.y());
+	return GetGrid(sample_point.x(), sample_point.y());
 }
 
 pair<int, int> Panel::GetGrid(double x, double y) const {
-  int x_index = GetXIndex(x);
-  int y_index = GetYIndex(y);
-  return make_pair(x_index, y_index); 
+	int x_index = GetXIndex(x);
+	int y_index = GetYIndex(y);
+	return make_pair(x_index, y_index); 
 }
 
 const vector<SamplePoint>& Panel::GetPointsInGrid(const std::pair<int, int>& grid_index) const {
 	//printf("Enter GetPointsInGrid\n");
-  if (!IsContainPoint(grid_index))
+	if (!IsContainPoint(grid_index))
 		return Panel::empty_point_; 
-  return grid_set_.at(grid_index.first).at(grid_index.second);
+	return grid_set_.at(grid_index.first).at(grid_index.second);
 } 
 
 

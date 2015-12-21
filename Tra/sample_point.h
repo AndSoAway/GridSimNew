@@ -85,11 +85,12 @@ public:
 
     PointInfo& operator=(const SamplePoint& samplePoint);
 
+	int total_traj_count_;
     std::pair<int, int> grid_index_;
     double min_dis_;
     double x_len;
     double y_len;
-    std::pair<int, int> neighbour_index_;
+    std::vector<std::pair<int, int>> neighbour_grid_;
 };
 
 inline bool min_dis_dsc(const PointInfo& left, const PointInfo& right) {
