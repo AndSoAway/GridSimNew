@@ -1,5 +1,5 @@
 CC = g++
-CM = -std=c++0x -c -Wall
+CM = -std=c++11 -c -Wall
 #BOOST = -I/usr/local/include -L/usr/local/lib -lboost_serialization
 BOOST = 
 TRA_DIR = ../Tra
