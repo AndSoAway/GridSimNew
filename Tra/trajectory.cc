@@ -11,7 +11,7 @@ void Trajectory::PushPoint(SamplePoint& point) {
 	//point_list_.push_back(point);
 	PointInfo point_info(point);
 	point_info_.push_back(point_info);
-	UpdateSpecialPoint();
+//	UpdateSpecialPoint();
 }
 
 void Trajectory::CalPointInfo(const GridPanel* grid_panel, double dis) {

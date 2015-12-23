@@ -17,13 +17,13 @@ public:
 
 	SamplePoint(time_t atime=time(NULL), int vehical_id=0, double x=0, double y=0, double angle=0, double speed=0, bool is_loaded=false)
 	:vehical_id_(vehical_id), timestamp_(atime), heading_angle_to_north_(angle), speed_(speed), is_loaded_(is_loaded) {
-	point_id_ = point_counter++;
-	point_ = Point(x, y);
+		point_id_ = point_counter++;
+		point_ = Point(x, y);
 	}
 
 	SamplePoint(char* line_str) {
-	point_id_ = point_counter++;
-	ExtractSamplePoint(line_str);
+		point_id_ = point_counter++;
+		ExtractSamplePoint(line_str);
 	}
 
 	int point_id() const { return point_id_; }
@@ -83,7 +83,7 @@ public:
 	PointInfo(const SamplePoint& sample_point):SamplePoint(sample_point), total_traj_count_(0), min_dis_(0), x_len(0), y_len(0){
 	} 
 
-	PointInfo(const PointInfo& point_info) :SamplePoint(point_info){ }
+	//PointInfo(const PointInfo& point_info) :SamplePoint(point_info){ }
 
 	PointInfo& operator=(const SamplePoint& samplePoint);
 

@@ -56,21 +56,24 @@ int VerifySim(GridPanel& grid_panel, unordered_map<int, list<int> >& can_map, un
 	return pair_count;
 }
 
-void JoinAndCandidate(GridPanel& grid_panel, vector<Trajectory>& trajs, unordered_map<int, list<int> >& can_map) {
+void JoinAndCandidate(GridPanel& grid_panel, TrajData& traj_data, unordered_map<int, list<int> >& can_map) {
 	int count = 0;
 	clock_t query_time = 0;
 	clock_t insert_time = 0;	
 	int total_can_pair = 0; 
 	time_t begin_ts = time(NULL);
 	time_t end_ts = time(NULL);
-	for(auto traj : trajs) {
+	int size = traj_data.traj_index_point_count.size();
+	for(int i = 0; i < size; i++) {
+		int traj_index = traj_data.traj_index_point_count[i].first;
+		Trajectory &traj = traj_data.trajs[traj_index];
 		count ++;
 		if (count % 10000 == 0) {
 			end_ts = time(NULL);
 				
 			string processInfo = "Joined tra count " + to_string(count) + ", query_time: " + to_string((double)query_time / CLOCKS_PER_SEC) + ", insert_time: " + to_string((double)insert_time / CLOCKS_PER_SEC) + ", time_interval "+ to_string(end_ts - begin_ts) + ", new pair count: " + to_string(total_can_pair);;
 			Log::log(0, processInfo);	
-			printf("Joined tra count %d\n", count);
+			printf("%s\n", processInfo.c_str());
 			query_time = 0;
 			insert_time = 0;
 			total_can_pair = 0;
@@ -139,7 +142,7 @@ void filterFile() {
 	}
 }
 
-
+/*
 void get_candidate_output(TrajData& traj_data, GridPanel& grid_panel) {
 	//BinaryStrategy binary_strategy(0, traj_data.trajs.size() - 1);
 	int size = traj_data.trajs.size();
@@ -182,7 +185,7 @@ void get_candidate_output(TrajData& traj_data, GridPanel& grid_panel) {
 		}
 	}
 }
-
+*/
 void read_traj(TrajData& traj_data) {
   TrajectoryHelper* trajHelper = TrajectoryHelper::GetHelperInstance();
   /*for (int i = 0;  i < FILE_NUM; i++) {
@@ -194,7 +197,7 @@ void read_traj(TrajData& traj_data) {
 //  for (int i = 0;  i < FILE_NUM; i++) {
 		FILE* file = fopen(filter_file_paths[i], "rb");
 		printf("read %s\n", filter_file_paths[i]);
-		trajHelper->ExtractTrajectory(file, traj_data.trajs);
+		trajHelper->ExtractTrajectory(file, traj_data);
 		fclose(file);
 	}
 }
@@ -206,6 +209,8 @@ void panel_insert_test(GridPanel& grid_panel, TrajData& traj_data) {
   time(&insert_end);
 	printf("insert cost time : %lf\n", difftime(insert_end, insert_begin));
 }
+
+
 
 void output_traj(const Trajectory& traj, std::string& file_name) {
 //	printf("output traj %s\n", file_name.c_str());
@@ -238,7 +243,7 @@ void file_read_speed() {
 	time(&read_end);
 	printf("total cost time : %lf\n", difftime(read_end, read_begin));
 }
-
+/*
 void DistSimplify() {
   for (int i = 0; i < FILE_NUM; i++) {
 			string file_ori = filter_file_paths[i];
@@ -271,7 +276,7 @@ void DistSimplify() {
 			fclose(out_file);
   }
 }
-
+*/
 void output_sim(unordered_map<int, unordered_map<int, double>>& sim_map, string& file_path) {
 	FILE *file = fopen(file_path.c_str(), "wb");
 	for(unordered_map<int, unordered_map<int, double>>::iterator itor = sim_map.begin(); itor != sim_map.end(); itor++) {

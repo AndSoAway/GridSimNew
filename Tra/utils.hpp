@@ -27,27 +27,27 @@ typename container::iterator insert(container& arr, const T& val) {
 }
 
 template <class T>
-bool order_by_itor(const std::pair<const list<T>*, typename std::list<T>::const_iterator>& pair1, const std::pair<const list<T>*, typename std::list<T>::const_iterator>& pair2) {
+bool order_by_itor(const pair<typename list<T>::const_iterator, typename list<T>::const_iterator >& pair1, const pair<typename list<T>::const_iterator, typename list<T>::const_iterator>& pair2) {
 	return (*(pair1.second)) > (*(pair2.second));
 }
 
 template <class T>
-void MergeKList(const std::vector<const std::list<T>*>& neighbour_lists, std::list<T>& candidates) {
+void MergeKList(const vector<const list<T>*>& neighbour_lists, list<T>& candidates) {
 	if (neighbour_lists.empty())
 		return;
 
-	std::vector<pair<const std::list<T>*, typename std::list<T>::const_iterator>> heap;
+	std::vector<pair<typename list<T>::const_iterator, typename std::list<T>::const_iterator>> heap;
 	for (int i = 0; i < neighbour_lists.size(); i++) {
 		const std::list<T>* p_list = neighbour_lists[i];
 		if (!p_list->empty())	
-			heap.push_back(std::make_pair(neighbour_lists[i], neighbour_lists[i]->cbegin()));
+			heap.push_back(std::make_pair(neighbour_lists[i]->cend(), neighbour_lists[i]->cbegin()));
 	}
 	
 	std::make_heap(heap.begin(), heap.end(), order_by_itor<T>);
 	T pre = NAN;
 	while (!heap.empty()) {
 		std::pop_heap(heap.begin(), heap.end(), order_by_itor<T>);
-		pair<const list<T>*, typename list<T>::const_iterator> min = heap.back();
+		pair<typename list<T>::const_iterator, typename list<T>::const_iterator> min = heap.back();
 		heap.pop_back();
 		T min_val = *(min.second);
 		if (min_val != pre) {
@@ -55,7 +55,7 @@ void MergeKList(const std::vector<const std::list<T>*>& neighbour_lists, std::li
 			pre = min_val;
 		}
 		min.second++;
-		if (min.second != min.first->cend()) {
+		if (min.second != min.first) {
 			heap.push_back(min);
 			push_heap(heap.begin(), heap.end(), order_by_itor<T>);
 		}	

@@ -12,7 +12,7 @@ TrajectoryHelper* TrajectoryHelper::GetHelperInstance() {
     return &TrajectoryHelper::trajectory_helper;
 }
 
-void TrajectoryHelper::ExtractTrajectory(FILE* stream, vector<Trajectory>& tras) {
+void TrajectoryHelper::ExtractTrajectory(FILE* stream, TrajData& traj_data) {
   Trajectory *p_tra = new Trajectory();
 //	printf("tra's id: %d\n", p_tra->id());
   SamplePoint pre_point, cur_point;
@@ -29,7 +29,7 @@ void TrajectoryHelper::ExtractTrajectory(FILE* stream, vector<Trajectory>& tras)
 	while (fscanfPoint(stream, cur_point) > 0) {
     if (abs(difftime(cur_point.timestamp(), pre_point.timestamp())) > TIMEINTERVAL) { //|| p_tra->point_size() >= MAXPOINTSIZE) { 
       if (p_tra->point_size() >= MINPOINTSIZE) {
-        tras.push_back(*p_tra);
+        traj_data.push_back(*p_tra);
       }
       delete p_tra;
       p_tra = new Trajectory();
@@ -40,7 +40,7 @@ void TrajectoryHelper::ExtractTrajectory(FILE* stream, vector<Trajectory>& tras)
   }
   
   if (p_tra->point_size() >= MINPOINTSIZE) {
-    tras.push_back(*p_tra);
+    traj_data.push_back(*p_tra);
   }
   delete p_tra;
 } 

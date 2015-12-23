@@ -2,6 +2,7 @@
 #include "panel_insert_test.h"
 #include "log.h"
 #include "../Strategy/binary_strategy.h"
+#include "../Tra/traj_data.h"
 using namespace std;
 
 void Join(TrajData&, GridPanel&, unordered_map<int, list<int>>& can_map, unordered_map<int, unordered_map<int, double>>& sim_map);
@@ -15,8 +16,8 @@ void StoreTrajs(TrajData&);
 
 void ReadAndProcess();
 
-bool CompareTraj(const Trajectory& traj1, const Trajectory& traj2) {
-		return traj1.point_list().size() > traj2.point_list().size();
+bool order_by_size(const pair<int, int>& left, const pair<int, int>& rhs) {
+		return left.second > rhs.second;
 }
 
 int main() {
@@ -25,28 +26,32 @@ int main() {
 
 void ReadAndProcess() {
 	TrajData traj_data;
-	GridPanel grid_panel(BJMAP, WIDTH, HEIGHT); 
+	GridPanel grid_panel(BJMAP, WIDTH, HEIGHT, &traj_data); 
 
 	clock_t read_cost;
 	read_cost = clock();
 	read_traj(traj_data);
 	read_cost = clock() - read_cost;
-	int point_size = grid_panel.PointSize();
+	int point_size =0 ;// grid_panel.PointSize();
 
 	string readInfo = "read trajs: " + to_string(traj_data.trajs.size()) + ", cost time " + to_string((double)read_cost / CLOCKS_PER_SEC);
 	Log::log(0, readInfo);
 	printf("read trajs: %ld, point size %d, cost time %lf\n", traj_data.trajs.size(), point_size, (double)read_cost / CLOCKS_PER_SEC);
 
+	StoreTrajs(traj_data);
 	clock_t sort_cost = clock();
-	sort(traj_data.trajs.begin(), traj_data.trajs.end(), CompareTraj);
+	sort(traj_data.traj_index_point_count.begin(), traj_data.traj_index_point_count.end(), order_by_size);
 	sort_cost = clock() - sort_cost;
 	printf("Sort needs %lf\n", (double)sort_cost / CLOCKS_PER_SEC);
-	int trajs_size = traj_data.trajs.size();
-	for (int i = 0; i < trajs_size; i++) {
-		traj_data.trajs[i].set_id(i + 1);
-		//printf("%ld\n", traj_data.trajs[i].point_list().size());
+	
+	int traj_size = traj_data.trajs.size();
+	for (int i = 0; i < traj_size; i++) {
+		int index = traj_data.traj_index_point_count[i].first;
+		traj_data.trajs[index].set_id(i + 1);
+		traj_data.traj_id_index[i + 1] = index;	
 	}
-//	StoreTrajs(traj_data);
+
+	StoreTrajs(traj_data);
 //	FindGroundTruth(traj_data, grid_panel);
 	unordered_map<int, list<int>> can_map;
 	unordered_map<int, unordered_map<int, double>> sim_map;
@@ -55,16 +60,21 @@ void ReadAndProcess() {
 //	OutputTruth(sim_map, grid_panel);
 }
 
+
 void StoreTrajs(TrajData& traj_data) {
 	string dir = "trajfile/";
 	vector<Trajectory>& trajs = traj_data.trajs;
-	for (vector<Trajectory>::iterator itor = trajs.begin(); itor != trajs.end(); itor++) {
-		int id = itor->id();
+	int size = trajs.size();
+	for (int i = 0; i < size; i++) {
+		const Trajectory& traj = trajs[i];
+		int id = traj.id();
 		string file_path = dir + to_string(id) + ".csv";
-		output_traj(*itor, file_path);
+		output_traj(traj, file_path);
 	}
 }
 
+
+/*
 void OutputTruth(unordered_map<int, unordered_map<int, double>>& sim_map, GridPanel& grid_panel) {
 	string file_path = "res_csv/res/output_res_traj.csv";
 	string file_ori = "res_csv/res/output_ori.csv";
@@ -101,7 +111,9 @@ void OutputTruth(unordered_map<int, unordered_map<int, double>>& sim_map, GridPa
 	}
 }
 
+*/
 
+/*
 void FindGroundTruth(unordered_map<int, list<int>>& can_map, GridPanel& grid_panel) {
  	string file_path = "traj_csv/can/output_can_traj.csv";
 	string file_ori = "traj_csv/can/output_ori.csv";
@@ -134,27 +146,27 @@ void FindGroundTruth(unordered_map<int, list<int>>& can_map, GridPanel& grid_pan
 		}
 	}
 }
+*/
 
-
-
+/*
 void FindGroundTruth(TrajData& traj_data, GridPanel& grid_panel) {
-/*	clock_t insert_cost = clock();
+/ *	clock_t insert_cost = clock();
 	grid_panel.InsertTrajectory(traj_data.trajs);
 	insert_cost = clock() - insert_cost;
 	double insert_time = insert_cost / CLOCKS_PER_SEC;
 	int traj_size = traj_data.trajs.size();
 	printf("Trajs count: %d, Insert cost: %lf, per traj : %lf\n", traj_size, insert_time, insert_time / traj_size);
-*/
+* /
 	printf("Begin output traj\n");
 	Log::log(0, "Begin output traj");
 	get_candidate_output(traj_data, grid_panel);
 	Log::log(0, "End out traj");
 }
-
+*/
 void Join(TrajData& traj_data, GridPanel& grid_panel, unordered_map<int, list<int>>& can_map, unordered_map<int, unordered_map<int, double>>& sim_map) {	
 	Log::log(0, "Begin Join\n");
 	clock_t join_cost = clock();
-	JoinAndCandidate(grid_panel, traj_data.trajs, can_map);
+	JoinAndCandidate(grid_panel, traj_data, can_map);
 	join_cost = clock() - join_cost;
 	double total_cost = join_cost / CLOCKS_PER_SEC;
 	double per_cost = total_cost / traj_data.trajs.size();

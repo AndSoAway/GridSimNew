@@ -4,13 +4,14 @@
 #include <cstdio>
 #include "trajectory.h"
 #include "sample_point.h"
+#include "traj_data.h"
 #define  kLineLength 100
 
 class TrajectoryHelper {
 public:
   static TrajectoryHelper* GetHelperInstance();
 
-  void ExtractTrajectory(FILE* stream, std::vector<Trajectory>& tras);
+  void ExtractTrajectory(FILE* stream, TrajData& traj_data);
 
 private:
   TrajectoryHelper() { }

@@ -4,8 +4,8 @@ CM = -std=c++0x -c -Wall
 BOOST = 
 TRA_DIR = ../Tra
 
-OBJS =  traj.o sample_point.o traj_helper.o utils.o panel_insert.o grid_panel.o panel.o verify.o rectangle.o geo_util.o panel_insert_test.o bi_stra.o strategy.o sp_stra.o ep_stra.o ep_ascm_stra.o snp_stra.o tp_stra.o kp_stra.o
-speed_panel_insert_main: $(OBJS) file_path.h 
+OBJS =  traj.o sample_point.o traj_helper.o utils.o panel_insert.o grid_panel.o panel.o verify.o rectangle.o geo_util.o panel_insert_test.o strategy.o min_dis_stra.o kp_stra.o
+min_dis_panel_insert_main: $(OBJS) file_path.h 
 	$(CC) -g -o $@ $(OBJS) $(BOOST)
 	rm -rf *.o
 
@@ -61,6 +61,9 @@ ep_ascm_stra.o: ../Strategy/end_ascommon_strategy.cc ../Strategy/end_ascommon_st
 	$(CC) $(CM) -o $@ $<
 
 snp_stra.o: ../Strategy/single_point_strategy.cc ../Strategy/single_point_strategy.h
+	$(CC) $(CM) -o $@ $<
+
+min_dis_stra.o: ../Strategy/min_dis_strategy.cc ../Strategy/min_dis_strategy.h
 	$(CC) $(CM) -o $@ $<
 
 tp_stra.o: ../Strategy/two_point_strategy.cc ../Strategy/two_point_strategy.h
