@@ -17,9 +17,9 @@ using namespace std;
 #define MIN_DIST 20
 
 int VerifySim(GridPanel& grid_panel, unordered_map<int, list<int> >& can_map, unordered_map<int, unordered_map<int, double>>& sim_map) {
-	int pair_count = 0;
-	int success_pair_count = 0;
-	clock_t verify_clock  = 0;
+	long long pair_count = 0;
+	long long success_pair_count = 0;
+	clock_t verify_clock  = clock();
 	time_t verify_begin = time(NULL);;
 	time_t verify_end = time(NULL);
 	for(unordered_map<int, list<int> >::iterator itor = can_map.begin(); itor != can_map.end(); itor++) {
@@ -30,37 +30,39 @@ int VerifySim(GridPanel& grid_panel, unordered_map<int, list<int> >& can_map, un
 			Trajectory& first_traj = grid_panel.getTraj(first_id);
 			Trajectory& second_traj = grid_panel.getTraj(second_id);
 
-			clock_t verify_cur = clock();
+//			clock_t verify_cur = clock();
 			double sim = verify(first_traj, second_traj, SIMTHRESHOLD);
-			verify_cur = clock() - verify_cur;
-			verify_clock += verify_cur;
+//			verify_cur = clock() - verify_cur;
+//			verify_clock += verify_cur;
 			
 			sim_map[first_id][second_id] = sim;
-			if (sim >= 0 && sim <= 1.0)
+			if (sim >= 0 && sim <= SIMTHRESHOLD)
 				success_pair_count++;
 			pair_count ++;
-			if (pair_count % 10000 == 0) {
-				verify_end = time(NULL);
-				string verifyInfo = "Verfiy tra count " + to_string(pair_count) + ", verify clock: " + to_string((double)verify_clock / CLOCKS_PER_SEC) + ", success_pair_count: " + to_string(success_pair_count) + ", time interval: " + to_string(verify_end  - verify_begin);
-				Log::log(0, verifyInfo);
-				printf("%s\n", verifyInfo.c_str());
-				verify_clock = 0;
-				verify_begin = time(NULL);		
-			}
+//			if (pair_count % 10000 == 0) {
+//				verify_end = time(NULL);
+//				string verifyInfo = "Verfiy tra count " + to_string(pair_count) + ", verify clock: " + to_string((double)verify_clock / CLOCKS_PER_SEC) + ", success_pair_count: " + to_string(success_pair_count) + ", time interval: " + to_string(verify_end  - verify_begin);
+//				Log::log(0, verifyInfo);
+//				printf("%s\n", verifyInfo.c_str());
+//				verify_clock = 0;
+//				verify_begin = time(NULL);		
+//			}
 		}
 	}
 
-	string verifyInfo = "total pair count " + to_string(pair_count) + ", success pair count " + to_string(success_pair_count);
+	verify_end = time(NULL);
+	verify_clock = clock() - verify_clock;
+	string verifyInfo = "Verfiy tra count " + to_string(pair_count) + ", verify clock: " + to_string((double)verify_clock / CLOCKS_PER_SEC) + ", success_pair_count: " + to_string(success_pair_count) + ", time interval: " + to_string(verify_end  - verify_begin);
 	Log::log(0, verifyInfo);
-	printf("total pair count %d, success pair count %d\n", pair_count, success_pair_count);
+	printf("%s\n", verifyInfo.c_str());
 	return pair_count;
 }
 
 void JoinAndCandidate(GridPanel& grid_panel, TrajData& traj_data, unordered_map<int, list<int> >& can_map) {
-	int count = 0;
+	long long count = 0;
 	clock_t query_time = 0;
 	clock_t insert_time = 0;	
-	int total_can_pair = 0; 
+	long long total_can_pair = 0; 
 	time_t begin_ts = time(NULL);
 	time_t end_ts = time(NULL);
 	int size = traj_data.traj_index_point_count.size();
@@ -68,17 +70,17 @@ void JoinAndCandidate(GridPanel& grid_panel, TrajData& traj_data, unordered_map<
 		int traj_index = traj_data.traj_index_point_count[i].first;
 		Trajectory &traj = traj_data.trajs[traj_index];
 		count ++;
-		if (count % 10000 == 0) {
-			end_ts = time(NULL);
+//		if (count % 10000 == 0) {
+//			end_ts = time(NULL);
 				
-			string processInfo = "Joined tra count " + to_string(count) + ", query_time: " + to_string((double)query_time / CLOCKS_PER_SEC) + ", insert_time: " + to_string((double)insert_time / CLOCKS_PER_SEC) + ", time_interval "+ to_string(end_ts - begin_ts) + ", new pair count: " + to_string(total_can_pair);;
-			Log::log(0, processInfo);	
-			printf("%s\n", processInfo.c_str());
-			query_time = 0;
-			insert_time = 0;
-			total_can_pair = 0;
-			begin_ts = time(NULL);
-		}	
+//			string processInfo = "Joined tra count " + to_string(count) + ", query_time: " + to_string((double)query_time / CLOCKS_PER_SEC) + ", insert_time: " + to_string((double)insert_time / CLOCKS_PER_SEC) + ", time_interval "+ to_string(end_ts - begin_ts) + ", new pair count: " + to_string(total_can_pair);;
+//			Log::log(0, processInfo);	
+//			printf("%s\n", processInfo.c_str());
+//			query_time = 0;
+//			insert_time = 0;
+//			total_can_pair = 0;
+//			begin_ts = time(NULL);
+//		}	
 		clock_t tmp_query = clock();
 		int cur_size = GetCandidate(grid_panel, traj, can_map);
 		tmp_query = clock() - tmp_query;
@@ -91,6 +93,8 @@ void JoinAndCandidate(GridPanel& grid_panel, TrajData& traj_data, unordered_map<
 		tmp_insert = clock() - tmp_insert;
 		insert_time += tmp_insert;
 	}
+	end_ts = time(NULL);
+	string processInfo = "Joined tra count " + to_string(count) + ", query_time: " + to_string((double)query_time / CLOCKS_PER_SEC) + ", insert_time: " + to_string((double)insert_time / CLOCKS_PER_SEC) + ", time_interval "+ to_string(end_ts - begin_ts) + ", new pair count: " + to_string(total_can_pair);;
 }
 
 int GetCandidate(GridPanel& grid_panel, Trajectory& traj, unordered_map<int, list<int>>& can_map) {	
@@ -106,6 +110,7 @@ int GetCandidate(GridPanel& grid_panel, Trajectory& traj, unordered_map<int, lis
 	//KPointStrategy strategy(3);
 //	MinDisStrategy strategy(3, SIMTHRESHOLD);
 	
+	traj.CalPointInfo(&grid_panel, DMAX);	
 	grid_panel.FindCandidates(strategy, traj, DMAX, candidates);
 	//if (!candidates.empty())
 		//printf("id %d can size %ld\n", id, candidates.size());

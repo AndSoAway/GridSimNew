@@ -10,7 +10,7 @@ bool order_second_des(const pair<int, double>& lft, const pair<int, double>& rhs
 }
 
 void MinDisStrategy::FindCandidateTrajs(const GridPanel* grid_panel, Trajectory& traj, double dis, std::list<int>& candidates) {
-	traj.CalPointInfo(grid_panel, dis);
+//	traj.CalPointInfo(grid_panel, dis);
 	vector<PointInfo>& point_info = traj.pointinfo_list();
 	int point_info_size = point_info.size();
 	double sim_dis = 2 * (1 - sim_threshold_) * point_info_size;

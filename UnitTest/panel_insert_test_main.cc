@@ -38,7 +38,6 @@ void ReadAndProcess() {
 	Log::log(0, readInfo);
 	printf("read trajs: %ld, point size %d, cost time %lf\n", traj_data.trajs.size(), point_size, (double)read_cost / CLOCKS_PER_SEC);
 
-	StoreTrajs(traj_data);
 	clock_t sort_cost = clock();
 	sort(traj_data.traj_index_point_count.begin(), traj_data.traj_index_point_count.end(), order_by_size);
 	sort_cost = clock() - sort_cost;
@@ -51,7 +50,7 @@ void ReadAndProcess() {
 		traj_data.traj_id_index[i + 1] = index;	
 	}
 
-	StoreTrajs(traj_data);
+//	StoreTrajs(traj_data);
 //	FindGroundTruth(traj_data, grid_panel);
 	unordered_map<int, list<int>> can_map;
 	unordered_map<int, unordered_map<int, double>> sim_map;
@@ -177,17 +176,17 @@ void Join(TrajData& traj_data, GridPanel& grid_panel, unordered_map<int, list<in
 
 	Log::log(0, "begin verify\n");
 	clock_t sim_cost = clock();
-	int pair_count = VerifySim(grid_panel, can_map, sim_map);
+	long long pair_count = VerifySim(grid_panel, can_map, sim_map);
 	sim_cost = clock() - sim_cost;
 	double sim_total = (double)sim_cost / CLOCKS_PER_SEC;
 	double sim_per = sim_total / pair_count;
 	
 	string verifyInfo = "calculate sim time : " + to_string(sim_cost) + ", seconds : " + to_string(sim_total) + ", pair_count : " + to_string(pair_count) + ", per pair needs " + to_string(sim_per);
 	Log::log(0, verifyInfo);
-	printf("calculate sim : %ld, seconds: %lf, pair_count: %d, per pair needs %lf\n", sim_cost, sim_total, pair_count, sim_per);
+	printf("%s\n", verifyInfo.c_str());
 
-	Log::log(0, "begin output res of sim");
-	string file_path = "sim_res.csv";
+//	Log::log(0, "begin output res of sim");
+//	string file_path = "sim_res.csv";
 //	output_sim(sim_map, file_path);
 }
 
