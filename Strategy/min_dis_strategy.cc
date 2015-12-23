@@ -30,15 +30,15 @@ void MinDisStrategy::FindCandidateTrajs(const GridPanel* grid_panel, Trajectory&
 	}
 
 	if (sum_min_dis < dis) {
-		vector<const list<int>*> top_k_lists;
+//		vector<const list<int>*> top_k_lists;
 		for (int i = 0; i < top_k; i++) {
 			int index = index_min[i].first;
 			pair<int, int>& grid_index = point_info[index].grid_index_;
 			const list<int>& tra_list = grid_panel->panel().GetTrajsInGrid(grid_index, false);
-			top_k_lists.push_back(&tra_list);
-			//TrajMergeUnion(candidates, tra_list);
+//			top_k_lists.push_back(&tra_list);
+			TrajMergeUnion(candidates, tra_list);
 		}
-		MergeKList(top_k_lists, candidates);	
+//		MergeKList(top_k_lists, candidates);	
 	}	
 
 //	printf("top_k is %d\n", top_k);

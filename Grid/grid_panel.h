@@ -9,6 +9,7 @@
 #include "rectangle.h"
 #include "../Tra/trajectory.h"
 #include "../Strategy/strategy.h"
+#include "../Tra/traj_data.h"
 
 class Strategy;
 
@@ -16,7 +17,7 @@ class GridPanel {
 public:
   GridPanel() { }
 
-  GridPanel(const Rectangle& rec, double width, double height) {
+  GridPanel(const Rectangle& rec, double width, double height, TrajData* p_traj_data=NULL) :p_traj_data_(p_traj_data){
     panel_ = Panel(rec, width, height);
   }
 
@@ -32,9 +33,9 @@ public:
   
   int PointSize() const;
 
-  void PrintPanel() const ;
+//  void PrintPanel() const ;
 
-  int TrajSize() const { return trajs_.size(); }
+  //int TrajSize() const { return trajs_.size(); }
 
   const Trajectory& getTraj(int tra_id) const;
 	
@@ -47,6 +48,7 @@ private:
   void traj_filter(std::set<int>& father_trajs, const std::set<int>& child_trajs) const;
 
   Panel panel_;
-  std::unordered_map<int, Trajectory> trajs_;
+  //std::unordered_map<int, Trajectory*> trajs_;
+  TrajData *p_traj_data_;  
 };
 #endif
