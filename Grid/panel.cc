@@ -127,7 +127,7 @@ void Panel::InsertSegment(int tra_id, const PointInfo& begin, const PointInfo& e
 			if (rect.IntersectSegment(begin.point(), end.point())) {
 				list<int>& tra_id_list = point_traj_list_[x][y];
 				//insert(tra_id_list, tra_id);
-				if (tra_id_list.empty() || tra_id_list.front() != tra_id)
+				if (tra_id_list.empty() || tra_id_list.back() != tra_id)
 					tra_id_list.insert(tra_id_list.end(), tra_id);
 			} 
 		}
@@ -138,14 +138,14 @@ void Panel::InsertSegment(int tra_id, const PointInfo& begin, const PointInfo& e
 void Panel::InsertPoint(int x_grid_index, int y_grid_index, int tra_id) {
 	list<int>& tra_id_list = point_traj_list_[x_grid_index][y_grid_index];
 //	printf("Insert <%d, %d> %d\n", x_grid_index, y_grid_index, tra_id);
-	if (tra_id_list.empty() || tra_id_list.front() != tra_id) {
+	if (tra_id_list.empty() || tra_id_list.back() != tra_id) {
 		tra_id_list.insert(tra_id_list.end(), tra_id);
 	}	
 	
 	for (int around_x = x_grid_index - 1; around_x <= x_grid_index + 1; ++around_x) {
 		for (int around_y = y_grid_index -1; around_y <= y_grid_index + 1; ++around_y) {
 			list<int>& around_id_list = around_traj_list_[around_x][around_y];
-			if (around_id_list.empty() || around_id_list.front() != tra_id) {
+			if (around_id_list.empty() || around_id_list.back() != tra_id) {
 				around_id_list.insert(around_id_list.end(), tra_id);
 			}
 		}
