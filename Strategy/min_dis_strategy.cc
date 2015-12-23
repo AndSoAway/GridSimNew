@@ -13,6 +13,7 @@ void MinDisStrategy::FindCandidateTrajs(const GridPanel* grid_panel, Trajectory&
 	traj.CalPointInfo(grid_panel, dis);
 	vector<PointInfo>& point_info = traj.pointinfo_list();
 	int point_info_size = point_info.size();
+	double sim_dis = 2 * (1 - sim_threshold_) * point_info_size;
 
 	vector<pair<int, double>> index_min;
 	for (int i = 0; i < point_info_size; i++) {
@@ -23,13 +24,13 @@ void MinDisStrategy::FindCandidateTrajs(const GridPanel* grid_panel, Trajectory&
 	
 	double sum_min_dis = 0;
 	int top_k = 0;
-	for (int i = 0; i < point_info_size && sum_min_dis < dis; ++i) {
+	for (int i = 0; i < point_info_size && sum_min_dis < sim_dis; ++i) {
 	//	printf("min_dis_ %lf, sum_min_dis %lf\n", itor->min_dis_, sum_min_dis);
 		sum_min_dis += index_min[i].second;
 		top_k++;
 	}
 
-	if (sum_min_dis < dis) {
+	if (sum_min_dis < sim_dis) {
 //		vector<const list<int>*> top_k_lists;
 		for (int i = 0; i < top_k; i++) {
 			int index = index_min[i].first;

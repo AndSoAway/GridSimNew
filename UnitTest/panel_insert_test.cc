@@ -104,7 +104,8 @@ int GetCandidate(GridPanel& grid_panel, Trajectory& traj, unordered_map<int, lis
 	//SinglePointStrategy strategy;
 	//TwoPointStrategy strategy;
 	//KPointStrategy strategy(3);
-	MinDisStrategy strategy(3);
+	MinDisStrategy strategy(3, SIMTHRESHOLD);
+	
 	grid_panel.FindCandidates(strategy, traj, DMAX, candidates);
 	//if (!candidates.empty())
 		//printf("id %d can size %ld\n", id, candidates.size());
