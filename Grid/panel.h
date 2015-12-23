@@ -29,6 +29,7 @@ public:
 //	typedef std::unordered_map<int, std::unordered_map<int, std::set<int>>> trajgridset;
 //	typedef std::unordered_map<int, std::set<int>> trajgrid;
 //	typedef std::unordered_map<int, std::unordered_map<int, std::set<int>>> trajInfoGridSet;
+	typedef std::unordered_map<int, std::list<int>> gridlist;
 	typedef std::unordered_map<int, std::unordered_map<int, std::list<int>>> trajgridlist;
 	typedef std::unordered_map<int, std::unordered_map<int, int>> trajgridcount;
 
@@ -56,6 +57,7 @@ public:
 	//const std::vector<SamplePoint>& GetPointsInGrid(const std::pair<int, int>&) const;
 
 	const std::list<int>& GetTrajsInGrid(const std::pair<int, int>&, bool is_end = false) const;
+	const std::list<int>& GetTrajsAroundGrid(const std::pair<int, int>& grid_index) const;
 
 	int GetAroundTrajCount(const std::pair<int, int>& grid_index) const;
 
@@ -78,8 +80,9 @@ private:
 	double height_;
 //	gridset grid_set_;
 	trajgridlist point_traj_list_;
+	trajgridlist around_traj_list_;
 //	trajgridlist end_traj_list_;
-	trajgridcount all_traj_count_;
+//	trajgridcount all_traj_count_;
 //	trajInfoGridSet trajinfo_grid_set_;
 		//trajgridlist seg_traj_list_;
 //	static const std::vector<SamplePoint> empty_point_;

@@ -55,8 +55,7 @@ void MinDisStrategy::FindCandidateTrajs(const GridPanel* grid_panel, Trajectory&
 	for (int index = 0; index < k_ && index < point_size; ++index) {
 		int chose_index = point_grid[index].first;
 		const PointInfo &chose_info = point_info[chose_index];
-		list<int> sec_can;
-		GetCandidateTrajs(grid_panel, chose_info, sec_can);
+		const list<int>& sec_can = grid_panel->panel().GetTrajsAroundGrid(chose_info.grid_index_);
 //		printf("%dth point, ground trajs %d\n", index + 1, sec_can.size());		
 		list<int> res;
 		TrajMergeJoin(candidates, sec_can, res);
@@ -65,11 +64,3 @@ void MinDisStrategy::FindCandidateTrajs(const GridPanel* grid_panel, Trajectory&
 	}	
 }
 
-void MinDisStrategy::GetCandidateTrajs(const GridPanel* grid_panel, const PointInfo& point_info, list<int>& candidates) {
-	const vector<pair<int, int>>& grid_index = point_info.neighbour_grid_;
-	int grid_index_size = grid_index.size();
-	for(int i = 0; i < grid_index_size; ++i) {
-		const list<int>& trajs = grid_panel->panel().GetTrajsInGrid(grid_index[i], false);
-		TrajMergeUnion(candidates, trajs);
-	}
-}
