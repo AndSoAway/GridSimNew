@@ -1,11 +1,18 @@
 #include <algorithm>
 #include "panel_insert_test.h"
 #include "log.h"
-#include "../Strategy/binary_strategy.h"
 #include "../Tra/traj_data.h"
+#include "../Strategy/binary_strategy.h"
+#include "../Strategy/special_point_strategy.h"
+#include "../Strategy/end_point_strategy.h"
+#include "../Strategy/end_ascommon_strategy.h"
+#include "../Strategy/single_point_strategy.h"
+#include "../Strategy/two_point_strategy.h"
+#include "../Strategy/k_point_strategy.h"
+#include "../Strategy/min_dis_strategy.h"
 using namespace std;
 
-void Join(TrajData&, GridPanel&, unordered_map<int, list<int>>& can_map, unordered_map<int, unordered_map<int, double>>& sim_map);
+void Join(TrajData&, GridPanel&, Strategy& strategy, unordered_map<int, list<int>>& can_map, unordered_map<int, unordered_map<int, double>>& sim_map);
 
 void FindGroundTruth(TrajData&, GridPanel&);
 void FindGroundTruth(unordered_map<int, list<int>>& can_map, GridPanel&);
@@ -54,10 +61,19 @@ void ReadAndProcess() {
 //	FindGroundTruth(traj_data, grid_panel);
 	unordered_map<int, list<int>> can_map;
 	unordered_map<int, unordered_map<int, double>> sim_map;
-	string joinInfo = "GridSide: " + to_string(DISUNIT) + ", DMAX: " + to_string(DMAX) + ", threshold: " + to_string(SIMTHRESHOLD);
-	Log:;log(0, joinInfo);
+
+	//BinaryStrategy binary_strategy(0, traj.point_list().size() - 1);	
+	//SpecialPointStrategy strategy;
+	//EndPointStrategy strategy;
+	//EndAsCommonStrategy strategy;
+	SinglePointStrategy strategy;
+	//TwoPointStrategy strategy;
+	//KPointStrategy strategy(3);
+//	MinDisStrategy strategy(3, SIMTHRESHOLD);
+	string joinInfo = "GridSide: " + to_string(DISUNIT) + ", DMAX: " + to_string(DMAX) + ", threshold: " + to_string(SIMTHRESHOLD) + ", Strategy: " + strategy.name();
+	Log::log(0, joinInfo);
 	printf("%s\n", joinInfo.c_str());
-	Join(traj_data, grid_panel, can_map, sim_map);
+	Join(traj_data, grid_panel, strategy, can_map, sim_map);
 //	FindGroundTruth(can_map, grid_panel);
 //	OutputTruth(sim_map, grid_panel);
 }
@@ -165,10 +181,12 @@ void FindGroundTruth(TrajData& traj_data, GridPanel& grid_panel) {
 	Log::log(0, "End out traj");
 }
 */
-void Join(TrajData& traj_data, GridPanel& grid_panel, unordered_map<int, list<int>>& can_map, unordered_map<int, unordered_map<int, double>>& sim_map) {	
+void Join(TrajData& traj_data, GridPanel& grid_panel, Strategy& strategy, unordered_map<int, list<int>>& can_map, unordered_map<int, unordered_map<int, double>>& sim_map) {	
 	Log::log(0, "Begin Join\n");
 	clock_t join_cost = clock();
-	JoinAndCandidate(grid_panel, traj_data, can_map);
+
+	JoinAndCandidate(grid_panel, strategy, traj_data, can_map);
+
 	join_cost = clock() - join_cost;
 	double total_cost = join_cost / CLOCKS_PER_SEC;
 	double per_cost = total_cost / traj_data.trajs.size();
@@ -179,7 +197,9 @@ void Join(TrajData& traj_data, GridPanel& grid_panel, unordered_map<int, list<in
 
 	Log::log(0, "begin verify\n");
 	clock_t sim_cost = clock();
+
 	long long pair_count = VerifySim(grid_panel, can_map, sim_map);
+
 	sim_cost = clock() - sim_cost;
 	double sim_total = (double)sim_cost / CLOCKS_PER_SEC;
 	double sim_per = sim_total / pair_count;

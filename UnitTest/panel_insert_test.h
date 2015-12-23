@@ -33,12 +33,12 @@ void output_traj(const Trajectory& traj, std::string& file_name);
 
 void filterFile();
 
-void JoinAndCandidate(GridPanel& grid_panel, TrajData& traj_data, std::unordered_map<int, std::list<int> >& can_map);
+void JoinAndCandidate(GridPanel& grid_panel, Strategy& strategy, TrajData& traj_data, std::unordered_map<int, std::list<int> >& can_map);
 
 int VerifySim(GridPanel& grid_panel, std::unordered_map<int, std::list<int>>& can_map, std::unordered_map<int, std::unordered_map<int, double>>& sim_map);
 
 
-int GetCandidate(GridPanel& grid_panel, Trajectory& traj, std::unordered_map<int, std::list<int>>& can_map);	
+int GetCandidate(GridPanel& grid_panel, Strategy& strategy, Trajectory& traj, std::unordered_map<int, std::list<int>>& can_map);	
 
 //void DistSimplify();
 void output_sim(std::unordered_map<int, std::unordered_map<int, double> >&, std::string& file);

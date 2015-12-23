@@ -8,7 +8,9 @@ public:
 	SinglePointStrategy() { }
 	
 	virtual void FindCandidateTrajs(const GridPanel* grid_panel, const Trajectory& traj, double dis, std::list<int>& candidates);
-	
+
+	virtual std::string name() { return "SinglePointStrategy\n"; }	
+
 	~SinglePointStrategy() {}
 private:
 };

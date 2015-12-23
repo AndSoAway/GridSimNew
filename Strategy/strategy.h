@@ -2,6 +2,7 @@
 #define STRATEGY_STRATEGY_H
 #include <vector>
 #include <list>
+#include <string>
 
 #include "../Grid/grid_panel.h"
 
@@ -20,6 +21,7 @@ public:
 
 /*	virtual void GetCandidateTrajs(const GridPanel* grid_panel, const SamplePoint& point, double dis, std::list<int>& candidates, bool is_end = false);
 */
+	virtual std::string name() { return "base strategy\n"; }
 	virtual ~Strategy() { }
 protected:
 /*	virtual int GetTotalTrajCount(const GridPanel* grid_panel, const SamplePoint& point, double dis, bool is_end);

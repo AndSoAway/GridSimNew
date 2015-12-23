@@ -1,14 +1,6 @@
 #include "panel_insert_test.h"
 #include "file_path.h"
 #include "log.h"
-#include "../Strategy/binary_strategy.h"
-#include "../Strategy/special_point_strategy.h"
-#include "../Strategy/end_point_strategy.h"
-#include "../Strategy/end_ascommon_strategy.h"
-#include "../Strategy/single_point_strategy.h"
-#include "../Strategy/two_point_strategy.h"
-#include "../Strategy/k_point_strategy.h"
-#include "../Strategy/min_dis_strategy.h"
 
 using namespace std;
 
@@ -58,7 +50,7 @@ int VerifySim(GridPanel& grid_panel, unordered_map<int, list<int> >& can_map, un
 	return pair_count;
 }
 
-void JoinAndCandidate(GridPanel& grid_panel, TrajData& traj_data, unordered_map<int, list<int> >& can_map) {
+void JoinAndCandidate(GridPanel& grid_panel, Strategy& strategy, TrajData& traj_data, unordered_map<int, list<int> >& can_map) {
 	long long count = 0;
 	clock_t query_time = 0;
 	clock_t insert_time = 0;	
@@ -82,7 +74,7 @@ void JoinAndCandidate(GridPanel& grid_panel, TrajData& traj_data, unordered_map<
 //			begin_ts = time(NULL);
 //		}	
 		clock_t tmp_query = clock();
-		int cur_size = GetCandidate(grid_panel, traj, can_map);
+		int cur_size = GetCandidate(grid_panel, strategy, traj, can_map);
 		tmp_query = clock() - tmp_query;
 		query_time += tmp_query;
 
@@ -97,19 +89,10 @@ void JoinAndCandidate(GridPanel& grid_panel, TrajData& traj_data, unordered_map<
 	string processInfo = "Joined tra count " + to_string(count) + ", query_time: " + to_string((double)query_time / CLOCKS_PER_SEC) + ", insert_time: " + to_string((double)insert_time / CLOCKS_PER_SEC) + ", time_interval "+ to_string(end_ts - begin_ts) + ", new pair count: " + to_string(total_can_pair);;
 }
 
-int GetCandidate(GridPanel& grid_panel, Trajectory& traj, unordered_map<int, list<int>>& can_map) {	
+int GetCandidate(GridPanel& grid_panel, Strategy& strategy, Trajectory& traj, unordered_map<int, list<int>>& can_map) {	
 	list<int> candidates;
 	int id = traj.id();
 	//printf("Test traj id %d, point size %ld, Dmax %d\n", id, traj.point_list().size(), DISUNIT);
-	//BinaryStrategy binary_strategy(0, traj.point_list().size() - 1);	
-	//SpecialPointStrategy strategy;
-	//EndPointStrategy strategy;
-	//EndAsCommonStrategy strategy;
-	SinglePointStrategy strategy;
-	//TwoPointStrategy strategy;
-	//KPointStrategy strategy(3);
-//	MinDisStrategy strategy(3, SIMTHRESHOLD);
-	
 	traj.CalPointInfo(&grid_panel, DMAX);	
 	grid_panel.FindCandidates(strategy, traj, DMAX, candidates);
 	//if (!candidates.empty())
