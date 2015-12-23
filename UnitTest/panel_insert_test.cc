@@ -185,7 +185,9 @@ void read_traj(TrajData& traj_data) {
 
 //  for (int i = 0;  i < FILE_NUM; i++) {
 		FILE* file = fopen(filter_file_paths[i], "rb");
-		printf("read %s\n", filter_file_paths[i]);
+		string readInfo = string("read ") + filter_file_paths[i];
+		Log::log(0, readInfo);
+		printf("%s\n", readInfo.c_str());
 		trajHelper->ExtractTrajectory(file, traj_data);
 		fclose(file);
 	}
