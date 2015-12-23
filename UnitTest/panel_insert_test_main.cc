@@ -54,6 +54,9 @@ void ReadAndProcess() {
 //	FindGroundTruth(traj_data, grid_panel);
 	unordered_map<int, list<int>> can_map;
 	unordered_map<int, unordered_map<int, double>> sim_map;
+	string joinInfo = "GridSide: " + to_string(DISUNIT) + ", DMAX: " + to_string(DMAX) + ", threshold: " + to_string(SIMTHRESHOLD);
+	Log:;log(0, joinInfo);
+	printf("%s\n", joinInfo.c_str());
 	Join(traj_data, grid_panel, can_map, sim_map);
 //	FindGroundTruth(can_map, grid_panel);
 //	OutputTruth(sim_map, grid_panel);
