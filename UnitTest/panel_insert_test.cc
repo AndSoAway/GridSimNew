@@ -54,6 +54,10 @@ void JoinAndCandidate(GridPanel& grid_panel, Strategy& strategy, TrajData& traj_
 	long long count = 0;
 	clock_t query_time = 0;
 	clock_t insert_time = 0;	
+
+	clock_t total_query_time = 0;
+	clock_t total_insert_time = 0;
+
 	long long total_can_pair = 0; 
 	time_t begin_ts = time(NULL);
 	time_t end_ts = time(NULL);
@@ -62,21 +66,22 @@ void JoinAndCandidate(GridPanel& grid_panel, Strategy& strategy, TrajData& traj_
 		int traj_index = traj_data.traj_index_point_count[i].first;
 		Trajectory &traj = traj_data.trajs[traj_index];
 		count ++;
-//		if (count % 10000 == 0) {
-//			end_ts = time(NULL);
+		if (count % 10000 == 0) {
+			end_ts = time(NULL);
 				
-//			string processInfo = "Joined tra count " + to_string(count) + ", query_time: " + to_string((double)query_time / CLOCKS_PER_SEC) + ", insert_time: " + to_string((double)insert_time / CLOCKS_PER_SEC) + ", time_interval "+ to_string(end_ts - begin_ts) + ", new pair count: " + to_string(total_can_pair);;
-//			Log::log(0, processInfo);	
-//			printf("%s\n", processInfo.c_str());
-//			query_time = 0;
-//			insert_time = 0;
-//			total_can_pair = 0;
-//			begin_ts = time(NULL);
-//		}	
+			string processInfo = "Joined tra count " + to_string(count) + ", query_time: " + to_string((double)query_time / CLOCKS_PER_SEC) + ", insert_time: " + to_string((double)insert_time / CLOCKS_PER_SEC) + ", time_interval "+ to_string(end_ts - begin_ts) + ", new pair count: " + to_string(total_can_pair);;
+			Log::log(0, processInfo);	
+			printf("%s\n", processInfo.c_str());
+			query_time = 0;
+			insert_time = 0;
+			total_can_pair = 0;
+			begin_ts = time(NULL);
+		}	
 		clock_t tmp_query = clock();
 		int cur_size = GetCandidate(grid_panel, strategy, traj, can_map);
 		tmp_query = clock() - tmp_query;
 		query_time += tmp_query;
+		total_query_time += tmp_query;
 
 		total_can_pair += cur_size;
 
@@ -84,9 +89,10 @@ void JoinAndCandidate(GridPanel& grid_panel, Strategy& strategy, TrajData& traj_
 		grid_panel.InsertTrajectory(traj);
 		tmp_insert = clock() - tmp_insert;
 		insert_time += tmp_insert;
+		total_insert_time += tmp_insert;
 	}
 	end_ts = time(NULL);
-	string processInfo = "Joined tra count " + to_string(count) + ", query_time: " + to_string((double)query_time / CLOCKS_PER_SEC) + ", insert_time: " + to_string((double)insert_time / CLOCKS_PER_SEC) + ", time_interval "+ to_string(end_ts - begin_ts) + ", new pair count: " + to_string(total_can_pair);;
+	string processInfo = "Joined tra count " + to_string(count) + ", query_time: " + to_string((double)total_query_time / CLOCKS_PER_SEC) + ", insert_time: " + to_string((double)total_insert_time / CLOCKS_PER_SEC) + ", time_interval "+ to_string(end_ts - begin_ts) + ", new pair count: " + to_string(total_can_pair);;
 }
 
 int GetCandidate(GridPanel& grid_panel, Strategy& strategy, Trajectory& traj, unordered_map<int, list<int>>& can_map) {	
