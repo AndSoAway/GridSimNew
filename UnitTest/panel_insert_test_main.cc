@@ -34,7 +34,7 @@ void ReadAndProcess() {
 	read_cost = clock() - read_cost;
 	int point_size =0 ;// grid_panel.PointSize();
 
-	string readInfo = "read trajs: " + to_string(traj_data.trajs.size()) + ", cost time " + to_string((double)read_cost / CLOCKS_PER_SEC);
+	string readInfo = "read trajs: " + to_string((int)traj_data.trajs.size()) + ", cost time " + to_string((double)read_cost / CLOCKS_PER_SEC);
 	Log::log(0, readInfo);
 	printf("read trajs: %ld, point size %d, cost time %lf\n", traj_data.trajs.size(), point_size, (double)read_cost / CLOCKS_PER_SEC);
 

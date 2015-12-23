@@ -101,10 +101,10 @@ int GetCandidate(GridPanel& grid_panel, Trajectory& traj, unordered_map<int, lis
 	//SpecialPointStrategy strategy;
 	//EndPointStrategy strategy;
 	//EndAsCommonStrategy strategy;
-	//SinglePointStrategy strategy;
+	SinglePointStrategy strategy;
 	//TwoPointStrategy strategy;
 	//KPointStrategy strategy(3);
-	MinDisStrategy strategy(3, SIMTHRESHOLD);
+//	MinDisStrategy strategy(3, SIMTHRESHOLD);
 	
 	grid_panel.FindCandidates(strategy, traj, DMAX, candidates);
 	//if (!candidates.empty())

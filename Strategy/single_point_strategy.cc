@@ -21,7 +21,9 @@ void SinglePointStrategy::FindCandidateTrajs(const GridPanel* grid_panel, const 
 	for (int i = 0; i < point_size; i++) {
 		const SamplePoint& point = point_list[i];
  		//clock_t get_cost = clock();
-		int traj_size = GetTotalTrajCount(grid_panel, point, dis, false); 
+		//int traj_size = GetTotalTrajCount(grid_panel, point, dis, false); 
+		pair<int, int> grid_index = grid_panel->panel().GetGrid(point);
+		int traj_size = grid_panel->panel().GetAroundTrajCount(grid_index);
 		//get_cost = clock() - get_cost;
 		//string get_size = "Get One needs " + to_string(TOMS(get_cost));
 		//Log::log(1, get_size);
@@ -39,11 +41,12 @@ void SinglePointStrategy::FindCandidateTrajs(const GridPanel* grid_panel, const 
 	int chose_index = point_grid[0].first;
 	const SamplePoint& chose_point = point_list[chose_index];
 
-    	clock_t get_can = clock();
-	GetCandidateTrajs(grid_panel, chose_point, dis, candidates);
-    	get_can = clock() - get_can;
+	pair<int, int> grid_index = grid_panel->panel().GetGrid(chose_point);
+    clock_t get_can = clock();
+	candidates = grid_panel->panel().GetTrajsAroundGrid(grid_index);
+    get_can = clock() - get_can;
 	int can_size = candidates.size();
-    	string getCanInfo = "Can " + to_string(can_size) + " time: " + to_string((double)get_can / CLOCKS_PER_SEC) + ", "; 
+    string getCanInfo = "Can " + to_string(can_size) + " time: " + to_string((double)get_can / CLOCKS_PER_SEC) + ", "; 
  	Log::log(1, getCanInfo);
 
 //	total = clock() - total;

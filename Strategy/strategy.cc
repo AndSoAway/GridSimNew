@@ -55,7 +55,7 @@ void Strategy::TrajMergeUnion(list<int>& father_trajs, const std::list<int>& chi
 				cur_itor++;
 			}	
 }
-
+/*
 void Strategy::GetCandidateTrajs(const GridPanel* grid_panel, const SamplePoint& point, double dis, list<int>& candidates, bool is_end) {
 	//clock_t get_grid = clock();
 	double x_dif = CONVERT_TO_X(dis);
@@ -84,6 +84,7 @@ void Strategy::GetCandidateTrajs(const GridPanel* grid_panel, const SamplePoint&
 			//point_sum += grid_panel->panel().GetPointsInGrid(grid_index).size();
 		}
 	}
+	*/
 //	get_grid = clock() - get_grid;
 //	string info = "Get " + to_string(grid_sum) + " Grid : " + to_string((double)get_grid / CLOCKS_PER_SEC * 1000); 
 //	Log::log(1, info);
@@ -93,18 +94,18 @@ void Strategy::GetCandidateTrajs(const GridPanel* grid_panel, const SamplePoint&
 //	unionInfo += "Total traj " + to_string(total_size) + " time: " + to_string((double)cur / CLOCKS_PER_SEC * 1000);
  //	Log::log(1, unionInfo);
 //	printf("Get can_trajs %ld, point size %d\n", candidates.size(), point_sum);
-}
+//}
 
 void Strategy::FindCandidateTrajs(const GridPanel* grid_panel, Trajectory& traj, double dis, std::list<int>& candidates) {
 	const Trajectory& con_traj = traj;
 	FindCandidateTrajs(grid_panel, con_traj, dis, candidates);
 }
-
+/*
 int Strategy::GetTotalTrajCount(const GridPanel* grid_panel, const SamplePoint& point, double dis, bool is_end) {
 	pair<int, int> grid_index = grid_panel->panel().GetGrid(point);
 	return grid_panel->panel().GetAroundTrajCount(grid_index);
 }
-
+*/
 /*
 int Strategy::GetTotalTrajCount(const GridPanel* grid_panel, const SamplePoint& point, double dis, bool is_end) {
 //	clock_t cal_time = clock();
