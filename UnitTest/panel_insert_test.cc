@@ -92,7 +92,9 @@ void JoinAndCandidate(GridPanel& grid_panel, Strategy& strategy, TrajData& traj_
 		total_insert_time += tmp_insert;
 	}
 	end_ts = time(NULL);
-	string processInfo = "Joined tra count " + to_string(count) + ", query_time: " + to_string((double)total_query_time / CLOCKS_PER_SEC) + ", insert_time: " + to_string((double)total_insert_time / CLOCKS_PER_SEC) + ", time_interval "+ to_string(end_ts - begin_ts) + ", new pair count: " + to_string(total_can_pair);;
+	string processInfo = "Joined tra count " + to_string(count) + ", query_time: " + to_string((double)total_query_time / CLOCKS_PER_SEC) + ", insert_time: " + to_string((double)total_insert_time / CLOCKS_PER_SEC) + ", time_interval "+ to_string(end_ts - begin_ts) + ", new pair count: " + to_string(total_can_pair);
+	Log:log(0, processInfo);
+	printf("%s\n", processInfo.c_str());
 }
 
 int GetCandidate(GridPanel& grid_panel, Strategy& strategy, Trajectory& traj, unordered_map<int, list<int>>& can_map) {	
