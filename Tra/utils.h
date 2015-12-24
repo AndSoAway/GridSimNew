@@ -31,4 +31,8 @@ double disSample(const Point&, const Point&);
 
 void filterLoaded(FILE* stream, const std::string& file_name);
 bool order_by_count(std::pair<int, int> count1, std::pair<int, int> count2);
+
+double minDistance(const SamplePoint& point, const Trajectory& tra);
+
+double minDistance(const SamplePoint& point, const SamplePoint& begin, const SamplePoint& end);
 #endif

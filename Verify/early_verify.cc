@@ -1,7 +1,7 @@
 #include <vector>
 #include <climits>
 #include <cmath>
-#include "verify.h"
+#include "early_verify.h"
 #include "../Tra/trajectory.h"
 #include "../Tra/sample_point.h"
 #include "../Tra/utils.h"
@@ -9,7 +9,7 @@
 
 using namespace std;
 
-double verify(const Trajectory& target, const Trajectory& candidate, double threshold) {
+double EarlyVerify::verify(const GridPanel* grid_panel, const Trajectory& target, const Trajectory& candidate, double threshold) {
 	//double tr2can_min_dist = 0;
 	//double can2tr_min_dist = 0;
 	double total_min_dist = 0;
@@ -46,40 +46,4 @@ double verify(const Trajectory& target, const Trajectory& candidate, double thre
 //	printf("DISUNIT %d, n %d, m %d\n", DISUNIT, n, m);
 //	printf("get sim %lf\n", sim);
 	return sim;
-}
-
-double minDistance(const SamplePoint& point, const Trajectory& tra) {
-	double min_dis = double(ULONG_MAX); 
-	const vector<PointInfo>& point_list = tra.point_list();
-	int point_size = point_list.size();
-	for (int index = 1; index < point_size; index++) {
-		double cur_dis = minDistance(point, point_list.at(index), point_list.at(index - 1));
-		if (cur_dis < min_dis) {
-			min_dis = cur_dis;
-		}
-	} 
-	return min_dis;
-}
-
-double minDistance(const SamplePoint& point, const SamplePoint& begin, const SamplePoint& end) {
-	double a = disSample(point, begin);
-	double b = disSample(point, end);	
-	double c = disSample(begin, end);
-
-	if (abs(a + b - c) < PRECISE) 
-		return 0;
-
-	if (c < PRECISE)
-		return a;
-
-	if (b * b >= a * a + c * c)
-		return a;
-
-	if (a * a >= b * b + c * c)
-		return b;
-
-	double cir = (a + b + c) / 2;
-	double area = sqrt(cir * (cir - a) * (cir - b) * (cir - c));
-  double res =  a * area / c;
-	return res;
 }

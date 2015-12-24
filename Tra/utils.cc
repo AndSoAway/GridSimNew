@@ -148,3 +148,39 @@ void filterLoaded(FILE* stream, const string& file_name) {
 bool order_by_count(pair<int, int> count1, pair<int, int> count2) {
 	return count1.second < count2.second;
 }
+
+double minDistance(const SamplePoint& point, const Trajectory& tra) {
+	double min_dis = double(ULONG_MAX); 
+	const vector<PointInfo>& point_list = tra.point_list();
+	int point_size = point_list.size();
+	for (int index = 1; index < point_size; index++) {
+		double cur_dis = minDistance(point, point_list.at(index), point_list.at(index - 1));
+		if (cur_dis < min_dis) {
+			min_dis = cur_dis;
+		}
+	} 
+	return min_dis;
+}
+
+double minDistance(const SamplePoint& point, const SamplePoint& begin, const SamplePoint& end) {
+	double a = disSample(point, begin);
+	double b = disSample(point, end);	
+	double c = disSample(begin, end);
+
+	if (abs(a + b - c) < PRECISE) 
+		return 0;
+
+	if (c < PRECISE)
+		return a;
+
+	if (b * b >= a * a + c * c)
+		return a;
+
+	if (a * a >= b * b + c * c)
+		return b;
+
+	double cir = (a + b + c) / 2;
+	double area = sqrt(cir * (cir - a) * (cir - b) * (cir - c));
+  double res =  a * area / c;
+	return res;
+}
