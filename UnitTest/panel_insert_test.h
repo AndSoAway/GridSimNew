@@ -35,7 +35,7 @@ void filterFile();
 
 void JoinAndCandidate(GridPanel& grid_panel, Strategy& strategy, TrajData& traj_data, std::unordered_map<int, std::list<int> >& can_map);
 
-int VerifySim(GridPanel& grid_panel, std::unordered_map<int, std::list<int>>& can_map, std::unordered_map<int, std::unordered_map<int, double>>& sim_map);
+int VerifySim(GridPanel& grid_panel, BaseVerify& vrf_method, std::unordered_map<int, std::list<int>>& can_map, std::unordered_map<int, std::unordered_map<int, double>>& sim_map);
 
 
 int GetCandidate(GridPanel& grid_panel, Strategy& strategy, Trajectory& traj, std::unordered_map<int, std::list<int>>& can_map);	

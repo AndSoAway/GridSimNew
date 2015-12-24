@@ -10,9 +10,15 @@
 #include "../Strategy/two_point_strategy.h"
 #include "../Strategy/k_point_strategy.h"
 #include "../Strategy/min_dis_strategy.h"
+#include "../Verify/verify.h"
+#include "../Verify/simple_verify.h"
+#include "../Verify/early_verify.h"
+
 using namespace std;
 
 void Join(TrajData&, GridPanel&, Strategy& strategy, unordered_map<int, list<int>>& can_map, unordered_map<int, unordered_map<int, double>>& sim_map);
+
+void Verify(GridPanel& grid_panel, BaseVerify& vrf_method, unordered_map<int, list<int>>& can_map, unordered_map<int, unordered_map<int, double>>& sim_map);
 
 void FindGroundTruth(TrajData&, GridPanel&);
 void FindGroundTruth(unordered_map<int, list<int>>& can_map, GridPanel&);
@@ -59,8 +65,6 @@ void ReadAndProcess() {
 		traj_data.traj_id_index[i + 1] = index;	
 	}
 
-//	StoreTrajs(traj_data);
-//	FindGroundTruth(traj_data, grid_panel);
 	unordered_map<int, list<int>> can_map;
 	unordered_map<int, unordered_map<int, double>> sim_map;
 
@@ -76,8 +80,6 @@ void ReadAndProcess() {
 	Log::log(0, joinInfo);
 	printf("%s\n", joinInfo.c_str());
 	Join(traj_data, grid_panel, strategy, can_map, sim_map);
-//	FindGroundTruth(can_map, grid_panel);
-//	OutputTruth(sim_map, grid_panel);
 }
 
 
@@ -197,10 +199,20 @@ void Join(TrajData& traj_data, GridPanel& grid_panel, Strategy& strategy, unorde
 	Log::log(0, joinInfo);
 	printf("join cost: %lf, per traj needs %lf\n", total_cost, per_cost);
 
-	Log::log(0, "begin verify\n");
+	SimpleVerify vrf_simple;
+	EarlyVerify vrf_early; 	
+	Verify(grid_panel, vrf_simple, can_map, sim_map);
+	Verify(grid_panel, vrf_early, can_map, sim_map);
+	
+}
+
+void Verify(GridPanel& grid_panel, BaseVerify& vrf_method, unordered_map<int, list<int>>& can_map, unordered_map<int, unordered_map<int, double>>& sim_map) {
+	string begin_verify = "begin verify " + vrf_method.name();
+	Log::log(0, begin_verify);
+	printf("%s\n", begin_verify.c_str());
 	clock_t sim_cost = clock();
 
-	long long pair_count = VerifySim(grid_panel, can_map, sim_map);
+	long long pair_count = VerifySim(grid_panel, vrf_method, can_map, sim_map);
 
 	sim_cost = clock() - sim_cost;
 	double sim_total = (double)sim_cost / CLOCKS_PER_SEC;
@@ -209,9 +221,4 @@ void Join(TrajData& traj_data, GridPanel& grid_panel, Strategy& strategy, unorde
 	string verifyInfo = "calculate sim time : " + to_string(sim_cost) + ", seconds : " + to_string(sim_total) + ", pair_count : " + to_string(pair_count) + ", per pair needs " + to_string(sim_per);
 	Log::log(0, verifyInfo);
 	printf("%s\n", verifyInfo.c_str());
-
-//	Log::log(0, "begin output res of sim");
-//	string file_path = "sim_res.csv";
-//	output_sim(sim_map, file_path);
 }
-
