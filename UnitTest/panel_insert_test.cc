@@ -1,3 +1,4 @@
+#include "../Verify/verify.h"
 #include "panel_insert_test.h"
 #include "file_path.h"
 #include "log.h"
@@ -8,7 +9,7 @@ using namespace std;
 #define MAXTRAJCOUNT 10
 #define MIN_DIST 20
 
-int VerifySim(GridPanel& grid_panel, unordered_map<int, list<int> >& can_map, unordered_map<int, unordered_map<int, double>>& sim_map) {
+int VerifySim(GridPanel& grid_panel, BaseVerify& vrf_method, unordered_map<int, list<int> >& can_map, unordered_map<int, unordered_map<int, double>>& sim_map) {
 	long long pair_count = 0;
 	long long success_pair_count = 0;
 	clock_t verify_clock  = clock();
@@ -23,12 +24,12 @@ int VerifySim(GridPanel& grid_panel, unordered_map<int, list<int> >& can_map, un
 			Trajectory& second_traj = grid_panel.getTraj(second_id);
 
 //			clock_t verify_cur = clock();
-			double sim = verify(first_traj, second_traj, SIMTHRESHOLD);
+			double sim = vrf_method.verify(grid_panel, first_traj, second_traj, SIMTHRESHOLD);
 //			verify_cur = clock() - verify_cur;
 //			verify_clock += verify_cur;
 			
 			sim_map[first_id][second_id] = sim;
-			if (sim >= 0 && sim <= SIMTHRESHOLD)
+			if (sim <= 1.0 && sim >= SIMTHRESHOLD)
 				success_pair_count++;
 			pair_count ++;
 //			if (pair_count % 10000 == 0) {
@@ -44,7 +45,7 @@ int VerifySim(GridPanel& grid_panel, unordered_map<int, list<int> >& can_map, un
 
 	verify_end = time(NULL);
 	verify_clock = clock() - verify_clock;
-	string verifyInfo = "Verfiy tra count " + to_string(pair_count) + ", verify clock: " + to_string((double)verify_clock / CLOCKS_PER_SEC) + ", success_pair_count: " + to_string(success_pair_count) + ", time interval: " + to_string(verify_end  - verify_begin);
+	string verifyInfo = "Verfiy tra count " + to_string(pair_count) + ", verify clock: " + to_string((double)verify_clock / CLOCKS_PER_SEC) + ", success_pair_count: " + to_string(success_pair_count) + ", time interval: " + to_string(verify_end  - verify_begin) + ", per tra: " + to_string((verify_end - verify_begin) / pair_count);
 	Log::log(0, verifyInfo);
 	printf("%s\n", verifyInfo.c_str());
 	return pair_count;

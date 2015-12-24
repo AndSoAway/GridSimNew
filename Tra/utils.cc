@@ -1,5 +1,7 @@
 #include "utils.h"
 #include <cmath>
+#include <climits>
+#include "trajectory.h"
 
 #define TORADIAN(x) ((x) * PI / 180.0 )
 

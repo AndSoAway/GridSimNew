@@ -9,7 +9,7 @@
 
 using namespace std;
 
-double SimpleVerify::verify(const GridPanel* grid_panel, const Trajectory& target, const Trajectory& candidate, double threshold) {
+double SimpleVerify::verify(GridPanel& grid_panel, const Trajectory& target, const Trajectory& candidate, double threshold) {
 	//double tr2can_min_dist = 0;
 	//double can2tr_min_dist = 0;
 	double total_min_dist = 0;

@@ -11,6 +11,8 @@
 
 class SamplePoint;
 
+class Trajectory;
+
 void split(const std::string&, std::vector<std::string>&, const std::string&);
 
 void strToTime(const std::string& date_str, time_t& time);
