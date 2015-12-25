@@ -92,6 +92,7 @@ public:
 	double min_dis_;
 	double x_len;
 	double y_len;
+	int around_traj_size_;
 	std::vector<std::pair<int, int>> neighbour_grid_;
 };
 

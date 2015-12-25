@@ -13,7 +13,7 @@ void MinDisStrategy::FindCandidateTrajs(const GridPanel* grid_panel, Trajectory&
 //	traj.CalPointInfo(grid_panel, dis);
 	vector<PointInfo>& point_info = traj.pointinfo_list();
 	int point_info_size = point_info.size();
-	double sim_dis = 2 * (1 - sim_threshold_) * point_info_size;
+	double sim_dis = 2 * (1 - sim_threshold_) * point_info_size * DMAX; 
 
 	vector<pair<int, double>> index_min;
 	for (int i = 0; i < point_info_size; i++) {
@@ -47,7 +47,7 @@ void MinDisStrategy::FindCandidateTrajs(const GridPanel* grid_panel, Trajectory&
 	vector<pair<int, int>> point_grid;
 	int point_size = point_info.size();
 	for (int i = 0; i < point_size; ++i) {
-		int traj_size = grid_panel->panel().GetTrajCountInGrid(point_info[i].grid_index_); 
+		int traj_size = point_info[i].around_traj_size_; 
 		point_grid.push_back(make_pair(i, traj_size));
 	}	
 	sort(point_grid.begin(), point_grid.end(), order_by_count);
@@ -62,5 +62,6 @@ void MinDisStrategy::FindCandidateTrajs(const GridPanel* grid_panel, Trajectory&
 		candidates.swap(res);
 //		printf("Join %dth point, candidates %d\n", index + 1, candidates.size());
 	}	
+
 }
 
