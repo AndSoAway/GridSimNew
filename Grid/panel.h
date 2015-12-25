@@ -18,6 +18,22 @@ struct TrajInfo{
 	bool is_end;
 };
 
+struct GridInfo {
+public:
+	int tra_id_;
+	int point_id_;
+};
+
+struct RelationInfo {
+	RelationInfo(): leftBottom(0), leftUpper(0), rightBottom(0), rightUpper(0) {
+	}
+	
+	int leftBottom;
+	int leftUpper;
+	int rightBottom;
+	int rightUpper; 
+};
+
 class Panel{
 public:
 	Panel():width_(0), height_(0) { }
@@ -32,6 +48,7 @@ public:
 	typedef std::unordered_map<int, std::list<int>> gridlist;
 	typedef std::unordered_map<int, std::unordered_map<int, std::list<int>>> trajgridlist;
 	typedef std::unordered_map<int, std::unordered_map<int, int>> trajgridcount;
+	typedef std::unordered_map<int, std::unordered_map<int, RelationInfo>> relationgridlist;
 
 	void InsertTrajectory(const Trajectory& traj);
 
@@ -63,6 +80,7 @@ public:
 
 	int GetTrajCountInGrid(const std::pair<int, int>& grid_index, bool is_end = false) const ;
 
+	const RelationInfo& GetRelationInfo(const std::pair<int, int>& grid_index) const;
 //	const std::list<int>& GetEndTrajsInGrid(const std::pair<int, int>& grid_index) const;
 
 //	bool IsContainPoint(const std::pair<int, int>&) const;
@@ -75,16 +93,19 @@ private:
 	inline double GetXLen(double) const;
 	inline double GetYLen(double) const;
 
+	void UpdateRelation(int, int, PointInfo&);
+
 	Rectangle rectangle_;
 	double width_;
 	double height_;
 //	gridset grid_set_;
 	trajgridlist point_traj_list_;
 	trajgridlist around_traj_list_;
+	reltationgridlist point_traj_list_;
 //	trajgridlist end_traj_list_;
 //	trajgridcount all_traj_count_;
 //	trajInfoGridSet trajinfo_grid_set_;
-		//trajgridlist seg_traj_list_;
+	//trajgridlist seg_traj_list_;
 //	static const std::vector<SamplePoint> empty_point_;
 	static const std::list<int> empty_list_;
 };

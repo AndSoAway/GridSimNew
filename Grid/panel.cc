@@ -135,12 +135,13 @@ void Panel::InsertSegment(int tra_id, const PointInfo& begin, const PointInfo& e
 */
 }
 
-void Panel::InsertPoint(int x_grid_index, int y_grid_index, int tra_id) {
+void Panel::InsertPoint(int x_grid_index, int y_grid_index, int tra_id, PointInfo& begin, PointInfo& end) {
 	list<int>& tra_id_list = point_traj_list_[x_grid_index][y_grid_index];
 //	printf("Insert <%d, %d> %d\n", x_grid_index, y_grid_index, tra_id);
 	if (tra_id_list.empty() || tra_id_list.back() != tra_id) {
 		tra_id_list.insert(tra_id_list.end(), tra_id);
-	}	
+		UpdateRelation(x_grid_index, y_grid_index, end);
+	}
 	
 	for (int around_x = x_grid_index - 1; around_x <= x_grid_index + 1; ++around_x) {
 		for (int around_y = y_grid_index -1; around_y <= y_grid_index + 1; ++around_y) {
@@ -150,6 +151,28 @@ void Panel::InsertPoint(int x_grid_index, int y_grid_index, int tra_id) {
 			}
 		}
 	}
+}
+
+void Panel::UpdateRelation(int x_grid_index, int y_grid_index, PointInfo& end) {
+	RelationInfo& relation = relationgridlist[x_grid_index][y_grid_index];
+	pair<int, int>& next_grid = end.grid_index_;
+	int next_x_ = next_grid.first;
+	int next_y_ = next_grid.second;
+
+	int dif_x = next_x_ - x_grid_index;
+	int dif_y = next_y_ - y_grid_index;
+	if (dif_x == 0 && dif_y == 0)
+		return;
+
+	if (dif_x > 0 && dif_y >= 0) 
+		++relation.rightUpper;
+	else if (dif_x <= 0 && dif_y > 0) 
+		++relation.leftUpper;
+	else if (dif_x < 0 && dif_y <= 0) 
+		++relation.leftBottom;
+	else if (dif_x >= 0 dif_y < 0)
+		++relation.rightBottom;
+	return;
 }
 
 int Panel::GetXIndex(double lon) const {
@@ -285,6 +308,16 @@ const std::list<int>& Panel::GetTrajsAroundGrid(const std::pair<int, int>& grid_
 		}
 	}	
 	return Panel::empty_list_;
+}
+
+const RelationInfo* GetRelationInfo(const std::pair<int, int>& grid_index) const {
+	relationgridlist::const_iterator itor = point_traj_list_.find(grid_index.first);
+	if (itor != point_traj_list_.end()) {
+		unordered_map<int, RelationInfo>::const_iterator a_itor = itor->second.find(grid_index.second);
+		if (a_itor != itor->second.end())
+			return &(*a_itor->second);
+	}
+	return NULL;
 }
 
 int Panel::GetTrajCountInGrid(const pair<int, int>& grid_index, bool is_end) const {
