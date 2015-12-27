@@ -10,9 +10,11 @@
 #include "../Strategy/two_point_strategy.h"
 #include "../Strategy/k_point_strategy.h"
 #include "../Strategy/min_dis_strategy.h"
+#include "../Strategy/all_point_strategy.h"
 #include "../Verify/verify.h"
 #include "../Verify/simple_verify.h"
 #include "../Verify/early_verify.h"
+#include "../Verify/signature_verify.h"
 
 using namespace std;
 
@@ -72,10 +74,11 @@ void ReadAndProcess() {
 	//SpecialPointStrategy strategy;
 	//EndPointStrategy strategy;
 	//EndAsCommonStrategy strategy;
-	SinglePointStrategy strategy;
+	//SinglePointStrategy strategy;
 	//TwoPointStrategy strategy;
 	//KPointStrategy strategy(3);
 //	MinDisStrategy strategy(3, SIMTHRESHOLD);
+	AllPointStrategy strategy;
 	string joinInfo = "GridSide: " + to_string(DISUNIT) + ", DMAX: " + to_string(DMAX) + ", threshold: " + to_string(SIMTHRESHOLD) + ", Strategy: " + strategy.name();
 	Log::log(0, joinInfo);
 	printf("%s\n", joinInfo.c_str());
@@ -201,8 +204,10 @@ void Join(TrajData& traj_data, GridPanel& grid_panel, Strategy& strategy, unorde
 
 	SimpleVerify vrf_simple;
 	EarlyVerify vrf_early; 	
-	Verify(grid_panel, vrf_simple, can_map, sim_map);
-	Verify(grid_panel, vrf_early, can_map, sim_map);
+	SignatureVerify vrf_signature;
+//	Verify(grid_panel, vrf_simple, can_map, sim_map);
+//	Verify(grid_panel, vrf_early, can_map, sim_map);
+	Verify(grid_panel, vrf_signature, can_map, sim_map);
 	
 }
 
