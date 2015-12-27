@@ -11,8 +11,8 @@
 
 //distance unit 500m
 //#define DISUNIT 500
-#define DISUNIT 100
-#define DMAX 100
+#define DISUNIT 500
+#define DMAX 500
 
 #define BJMAXY 41.083332 
 #define BJMAXX 117.5
@@ -53,7 +53,7 @@
 
 //-----verify-----
 #define OVERMINDIS -10000
-#define SIMTHRESHOLD 0
+#define SIMTHRESHOLD 0.7
 
 const  Point left_bottom(BJMINX * ENLARGE, BJMINY * ENLARGE);  
 const  Point right_upper(BJMAXX * ENLARGE, BJMAXY * ENLARGE);

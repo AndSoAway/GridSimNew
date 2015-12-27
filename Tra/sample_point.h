@@ -88,6 +88,7 @@ public:
 	PointInfo& operator=(const SamplePoint& samplePoint);
 
 	int total_traj_count_;
+	int index_;
 	std::pair<int, int> grid_index_;
 	double min_dis_;
 	double x_len;

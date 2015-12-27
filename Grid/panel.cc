@@ -91,6 +91,7 @@ void Panel::InsertSegment(int tra_id, const PointInfo& begin, const PointInfo& e
 	if (x1_grid_index == x2_grid_index) {
 		for (int y_grid_index = y1_grid_index; (y2_grid_index - y_grid_index) * step.second >= 0; y_grid_index += step.second) {
 			InsertPoint(x1_grid_index, y_grid_index, tra_id);
+			InsertSegment(x1_grid_index, y_grid_index, tra_id, begin, end);
 		}
 	} else {
 		double slope = delta_y / delta_x;
@@ -104,6 +105,7 @@ void Panel::InsertSegment(int tra_id, const PointInfo& begin, const PointInfo& e
 			int next_y_grid_index = (int)y_cor;
 			while ((next_y_grid_index - y_grid_index) * step.second >= 0) {
 				InsertPoint(x_grid_index, y_grid_index, tra_id);
+				InsertSegment(x_grid_index, y_grid_index, tra_id, begin, end);
 				y_grid_index += step.second;
 			}
 			y_grid_index = next_y_grid_index;
@@ -111,6 +113,7 @@ void Panel::InsertSegment(int tra_id, const PointInfo& begin, const PointInfo& e
 		}
 		while ((y2_grid_index - y_grid_index) * step.second >= 0) {
 			InsertPoint(x_grid_index, y_grid_index, tra_id);
+			InsertSegment(x_grid_index, y_grid_index, tra_id, begin, end);
 			y_grid_index += step.second;
 		}
 	}
@@ -150,6 +153,12 @@ void Panel::InsertPoint(int x_grid_index, int y_grid_index, int tra_id) {
 			}
 		}
 	}
+}
+
+void Panel::InsertSegment(int x_grid_index, int y_grid_index, int tra_id, const PointInfo& begin, const PointInfo& end) {
+	trasegment& grid_segments = point_segment_map_[x_grid_index][y_grid_index];
+	segmentset& tra_segments = grid_segments[tra_id];
+	tra_segments.insert(make_pair(begin.index_, end.index_));
 }
 
 int Panel::GetXIndex(double lon) const {
@@ -265,6 +274,16 @@ const std::list<int>& Panel::GetTrajsInGrid(const pair<int, int>& grid_index, bo
 	return Panel::empty_list_;
 }
 */
+
+Panel::segmentset& Panel::GetSegmentsInGrid(const pair<int, int>& grid_index, int tra_id) {
+	int x_grid_index = grid_index.first;
+	int y_grid_index = grid_index.second;
+	trasegment& grid_segments = point_segment_map_[x_grid_index][y_grid_index];
+	segmentset& tra_segments = grid_segments[tra_id];
+	return tra_segments;
+}
+
+
 int Panel::GetAroundTrajCount(const std::pair<int, int>& grid_index) const {
 	trajgridlist::const_iterator itor = around_traj_list_.find(grid_index.first);
 	if (itor != around_traj_list_.end()) {
