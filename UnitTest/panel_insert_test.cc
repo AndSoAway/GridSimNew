@@ -29,19 +29,19 @@ int VerifySim(GridPanel& grid_panel, BaseVerify& vrf_method, unordered_map<int, 
 //			verify_cur = clock() - verify_cur;
 //			verify_clock += verify_cur;
 			
-			printf("verify id %d, sim %lf\n", first_id, sim);
+//			printf("verify id %d, sim %lf\n", first_id, sim);
 			sim_map[first_id][second_id] = sim;
 			if (sim <= 1.0 && sim >= SIMTHRESHOLD)
 				success_pair_count++;
 			pair_count ++;
-			if (pair_count % 10000 == 0) {
+//			if (pair_count % 10000 == 0) {
 //				verify_end = time(NULL);
-				string verifyInfo = "Verfiy tra count " + to_string(pair_count) + ", verify clock: " + to_string((double)verify_clock / CLOCKS_PER_SEC) + ", success_pair_count: " + to_string(success_pair_count) + ", time interval: " + to_string(verify_end  - verify_begin);
+//				string verifyInfo = "Verfiy tra count " + to_string(pair_count) + ", verify clock: " + to_string((double)verify_clock / CLOCKS_PER_SEC) + ", success_pair_count: " + to_string(success_pair_count) + ", time interval: " + to_string(verify_end  - verify_begin);
 //				Log::log(0, verifyInfo);
-				printf("%s\n", verifyInfo.c_str());
+//				printf("%s\n", verifyInfo.c_str());
 //				verify_clock = 0;
 //				verify_begin = time(NULL);		
-			}
+//			}
 		}
 	}
 

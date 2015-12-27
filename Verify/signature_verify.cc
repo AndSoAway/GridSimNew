@@ -39,7 +39,7 @@ double SignatureVerify::verify(GridPanel& grid_panel, const Trajectory& target, 
 	}
 
 //	printf("candidate has segment in target\n");
-	printf("total_min_dist %lf, thres_dis %lf\n", total_min_dist, thres_dis);
+//	printf("total_min_dist %lf, thres_dis %lf\n", total_min_dist, thres_dis);
 	if (total_min_dist > thres_dis) {
 //		printf("total %lf, over thres_dis %lf\n", total_min_dist, thres_dis);
 		return OVERMINDIS;
