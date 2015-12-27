@@ -2,6 +2,7 @@
 #define CRRL_STRATEGY_H
 #include <list>
 #include <string>
+#include <utility>
 #include "strategy.h"
 
 class CorrelationStrategy : public Strategy {
@@ -10,5 +11,7 @@ public:
 
 	std::string name() { return "correlation strategy\n"; }
 
+private:
+	bool GetSameRegion(const std::pair<int, int>&, const std::pair<int, int>&, const RelationInfo*);
 };
 #endif

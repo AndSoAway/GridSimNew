@@ -11,8 +11,8 @@
 
 //distance unit 500m
 //#define DISUNIT 500
-#define DISUNIT 100
-#define DMAX 100
+#define DISUNIT 20
+#define DMAX 20
 
 #define BJMAXY 41.083332 
 #define BJMAXX 117.5
@@ -34,7 +34,7 @@
 //(LEFT_PRECISE + RIGHT_PRECISE) / 2
 #define HEIGHT 185188.635477
 
-//Enlarge by ENLARGE times
+//Enlarged by ENLARGE times
 #define BJYDIF 16666.64
 #define BJXDIF 21250
 
@@ -54,6 +54,9 @@
 //-----verify-----
 #define OVERMINDIS -10000
 #define SIMTHRESHOLD 0
+
+//----STRATEGY-------
+#define RELATIONTHRESHOLD 0.5
 
 const  Point left_bottom(BJMINX * ENLARGE, BJMINY * ENLARGE);  
 const  Point right_upper(BJMAXX * ENLARGE, BJMAXY * ENLARGE);

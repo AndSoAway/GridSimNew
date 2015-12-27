@@ -90,7 +90,7 @@ void Panel::InsertSegment(int tra_id, const PointInfo& begin, const PointInfo& e
 //	printf("begin <%d %d>\n end <%d %d> %d\n", x1_grid_index, y1_grid_index, x2_grid_index, y2_grid_index, tra_id);
 	if (x1_grid_index == x2_grid_index) {
 		for (int y_grid_index = y1_grid_index; (y2_grid_index - y_grid_index) * step.second >= 0; y_grid_index += step.second) {
-			InsertPoint(x1_grid_index, y_grid_index, tra_id);
+			InsertPoint(x1_grid_index, y_grid_index, tra_id, end);
 		}
 	} else {
 		double slope = delta_y / delta_x;
@@ -103,14 +103,14 @@ void Panel::InsertSegment(int tra_id, const PointInfo& begin, const PointInfo& e
 			double y_cor = slope * next_grid_index + intercept;
 			int next_y_grid_index = (int)y_cor;
 			while ((next_y_grid_index - y_grid_index) * step.second >= 0) {
-				InsertPoint(x_grid_index, y_grid_index, tra_id);
+				InsertPoint(x_grid_index, y_grid_index, tra_id, end);
 				y_grid_index += step.second;
 			}
 			y_grid_index = next_y_grid_index;
 			x_grid_index += step.first;
 		}
 		while ((y2_grid_index - y_grid_index) * step.second >= 0) {
-			InsertPoint(x_grid_index, y_grid_index, tra_id);
+			InsertPoint(x_grid_index, y_grid_index, tra_id, end);
 			y_grid_index += step.second;
 		}
 	}
@@ -135,7 +135,7 @@ void Panel::InsertSegment(int tra_id, const PointInfo& begin, const PointInfo& e
 */
 }
 
-void Panel::InsertPoint(int x_grid_index, int y_grid_index, int tra_id, PointInfo& begin, PointInfo& end) {
+void Panel::InsertPoint(int x_grid_index, int y_grid_index, int tra_id, const PointInfo& end) {
 	list<int>& tra_id_list = point_traj_list_[x_grid_index][y_grid_index];
 //	printf("Insert <%d, %d> %d\n", x_grid_index, y_grid_index, tra_id);
 	if (tra_id_list.empty() || tra_id_list.back() != tra_id) {
@@ -153,9 +153,9 @@ void Panel::InsertPoint(int x_grid_index, int y_grid_index, int tra_id, PointInf
 	}
 }
 
-void Panel::UpdateRelation(int x_grid_index, int y_grid_index, PointInfo& end) {
-	RelationInfo& relation = relationgridlist[x_grid_index][y_grid_index];
-	pair<int, int>& next_grid = end.grid_index_;
+void Panel::UpdateRelation(int x_grid_index, int y_grid_index, const PointInfo& end) {
+	RelationInfo& relation = relation_grid_[x_grid_index][y_grid_index];
+	const pair<int, int>& next_grid = end.grid_index_;
 	int next_x_ = next_grid.first;
 	int next_y_ = next_grid.second;
 
@@ -164,14 +164,8 @@ void Panel::UpdateRelation(int x_grid_index, int y_grid_index, PointInfo& end) {
 	if (dif_x == 0 && dif_y == 0)
 		return;
 
-	if (dif_x > 0 && dif_y >= 0) 
-		++relation.rightUpper;
-	else if (dif_x <= 0 && dif_y > 0) 
-		++relation.leftUpper;
-	else if (dif_x < 0 && dif_y <= 0) 
-		++relation.leftBottom;
-	else if (dif_x >= 0 dif_y < 0)
-		++relation.rightBottom;
+	int region_code = RegionHash(dif_x, dif_y);
+	relation.update(region_code);
 	return;
 }
 
@@ -310,12 +304,12 @@ const std::list<int>& Panel::GetTrajsAroundGrid(const std::pair<int, int>& grid_
 	return Panel::empty_list_;
 }
 
-const RelationInfo* GetRelationInfo(const std::pair<int, int>& grid_index) const {
-	relationgridlist::const_iterator itor = point_traj_list_.find(grid_index.first);
-	if (itor != point_traj_list_.end()) {
+const RelationInfo* Panel::GetRelationInfo(const std::pair<int, int>& grid_index) const {
+	relationgridlist::const_iterator itor = relation_grid_.find(grid_index.first);
+	if (itor != relation_grid_.end()) {
 		unordered_map<int, RelationInfo>::const_iterator a_itor = itor->second.find(grid_index.second);
 		if (a_itor != itor->second.end())
-			return &(*a_itor->second);
+			return &(a_itor->second);
 	}
 	return NULL;
 }
