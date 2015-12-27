@@ -68,5 +68,5 @@ void CorrelationStrategy::FindCandidateTrajs(const GridPanel* grid_panel, Trajec
 bool CorrelationStrategy::GetSameRegion(const pair<int, int>& cur_grid, const pair<int, int>& pre_grid, const RelationInfo* pre_relation_info) {
 	int region_code = RegionHash(cur_grid, pre_grid);
 	double percent = pre_relation_info->get_percent(region_code);
-	return (percent < RELATIONTHRESHOLD);	
+	return (percent >= RELATIONTHRESHOLD);	
 }
