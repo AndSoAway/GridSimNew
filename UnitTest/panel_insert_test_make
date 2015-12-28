@@ -4,7 +4,7 @@ CM = -std=c++11 -c -Wall
 BOOST = 
 TRA_DIR = ../Tra
 
-OBJS =  traj.o sample_point.o traj_helper.o utils.o panel_insert.o grid_panel.o panel.o sim_verify.o early_verify.o signature_verify.o rectangle.o geo_util.o panel_insert_test.o strategy.o min_dis_stra.o snp_stra.o all_stra.o 
+OBJS =  traj.o sample_point.o traj_helper.o utils.o panel_insert.o grid_panel.o panel.o sim_verify.o early_verify.o signature_verify.o expan_stra.o rectangle.o geo_util.o panel_insert_test.o strategy.o min_dis_stra.o snp_stra.o all_stra.o 
 min_dis_panel_insert_main: $(OBJS) file_path.h 
 	$(CC) -g -o $@ $(OBJS) $(BOOST)
 	rm -rf *.o
@@ -49,6 +49,9 @@ early_verify.o: ../Verify/early_verify.cc ../Verify/early_verify.h
 	$(CC) $(CM) -o $@ $<
 
 signature_verify.o: ../Verify/signature_verify.cc ../Verify/signature_verify.h
+	$(CC) $(CM) -o $@ $<
+
+expan_stra.o: ../Verify/expansion_verify.cc ../Verify/expansion_verify.h
 	$(CC) $(CM) -o $@ $<
 
 strategy.o: ../Strategy/strategy.cc ../Strategy/strategy.h
