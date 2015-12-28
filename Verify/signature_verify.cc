@@ -82,7 +82,7 @@ double SignatureVerify::GetMinDistance(const PointInfo& target, const Trajectory
 	
 	int begin = cur_seg.first;
 	int end = cur_seg.second;
-	int size = point_list.size();
+//	int size = point_list.size();
 //	printf("segment begin %d, end %d, tra size %d\n", begin, end, size);
 	double min_dis = DBL_MAX;
 	for (int i = begin; i < end; i++) {

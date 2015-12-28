@@ -191,7 +191,7 @@ void read_traj(TrajData& traj_data) {
   /*for (int i = 0;  i < FILE_NUM; i++) {
 		FILE* file = fopen(file_paths[i], "rb");*/
 
-  for (int i = 0; i < 1; i++) {
+  for (int i = 0; i < 2; i++) {
 //		FILE* file = fopen(test_files[i], "rb");
 
 //  for (int i = 0;  i < FILE_NUM; i++) {

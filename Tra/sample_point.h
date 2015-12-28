@@ -93,6 +93,8 @@ public:
 	double min_dis_;
 	double x_len;
 	double y_len;
+	double x_part;
+	double y_part;
 	int around_traj_size_;
 	std::vector<std::pair<int, int>> neighbour_grid_;
 };

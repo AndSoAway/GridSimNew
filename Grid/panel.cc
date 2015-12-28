@@ -188,6 +188,8 @@ void Panel::GetPointInfo(PointInfo& point_info, double dis) const {
 	double min_x = min(x_part, DISUNIT - x_part);
 	double min_y = min(y_part, DISUNIT - y_part);
 	point_info.min_dis_ = min(min_x, min_y);
+	point_info.x_part = x_part;
+	point_info.y_part = y_part;
 	
 	//printf("Grid<%d, %d>, x_len %lf, x_part %lf, y_part %lf, min_x %lf\n", grid_index.first, grid_index.second, x_len, x_part, y_part, min_x);
 	double x_dif = CONVERT_TO_X(dis);
