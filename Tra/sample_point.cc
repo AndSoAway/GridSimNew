@@ -35,7 +35,7 @@ void SamplePoint::set_tra(const Trajectory *p_tra) {
 PointInfo& PointInfo::operator=(const SamplePoint& rhs) {
 	if (this != &rhs) {
 		SamplePoint::operator=(rhs);
-		total_traj_count_ = 0;
+//		total_traj_count_ = 0;
 		min_dis_ = 0;
 		x_len = 0;
 		y_len = 0;

@@ -11,6 +11,7 @@
 #include "../Strategy/k_point_strategy.h"
 #include "../Strategy/min_dis_strategy.h"
 #include "../Strategy/correlation_strategy.h"
+#include "../Strategy/all_point_strategy.h"
 #include "../Verify/verify.h"
 #include "../Verify/simple_verify.h"
 #include "../Verify/early_verify.h"
@@ -74,10 +75,11 @@ void ReadAndProcess() {
 	//EndPointStrategy strategy;
 	//EndAsCommonStrategy strategy;
 //	SinglePointStrategy strategy;
-	//TwoPointStrategy strategy;
-	//KPointStrategy strategy(3);
+//	TwoPointStrategy strategy;
+//	KPointStrategy strategy(3);
 //	MinDisStrategy strategy(3, SIMTHRESHOLD);
-	CorrelationStrategy strategy;
+//	CorrelationStrategy strategy;
+	AllPointStrategy strategy;
 	string joinInfo = "GridSide: " + to_string(DISUNIT) + ", DMAX: " + to_string(DMAX) + ", threshold: " + to_string(SIMTHRESHOLD) + ", Strategy: " + strategy.name();
 	Log::log(0, joinInfo);
 	printf("%s\n", joinInfo.c_str());
