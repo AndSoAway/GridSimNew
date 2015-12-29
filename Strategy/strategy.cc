@@ -55,36 +55,27 @@ void Strategy::TrajMergeUnion(list<int>& father_trajs, const std::list<int>& chi
 				cur_itor++;
 			}	
 }
-/*
-void Strategy::GetCandidateTrajs(const GridPanel* grid_panel, const SamplePoint& point, double dis, list<int>& candidates, bool is_end) {
+
+void Strategy::GetCandidateTrajs(const GridPanel* grid_panel, const PointInfo& point, double dis, list<int>& candidates, bool is_end) {
 	//clock_t get_grid = clock();
-	double x_dif = CONVERT_TO_X(dis);
-	double y_dif = CONVERT_TO_Y(dis);
-	double x_bottom = point.x() - x_dif ;
-	double y_bottom = point.y() - y_dif;
-	double x_upper = point.x() + x_dif;
-	double y_upper = point.y() + y_dif; 
-	pair<int, int> bottom = grid_panel->panel().GetGrid(x_bottom, y_bottom);
-	pair<int, int> upper = grid_panel->panel().GetGrid(x_upper, y_upper);
-	
 	//int point_sum = 0;
-	vector<const list<int>*> neighbour_lists;	
+	//vector<const list<int>*> neighbour_lists;	
 	int total_size = 0;
 	string unionInfo;
 	int grid_sum = 0;
-	for (int i = bottom.first; i <= upper.first; i++) {
-		for (int j = bottom.second; j <= upper.second; j++) {
-			pair<int, int> grid_index = make_pair(i, j);
-			const list<int>& trajs = grid_panel->panel().GetTrajsInGrid(grid_index, is_end);
-			TrajMergeUnion(candidates, trajs);
-			neighbour_lists.push_back(&trajs);
-			total_size += trajs.size();
-			grid_sum ++;
-		//	unionInfo += "grid <" + to_string(i) + ", " + to_string(j) + " traj_size: " + to_string(trajs.size()) + "\n";
-			//point_sum += grid_panel->panel().GetPointsInGrid(grid_index).size();
-		}
+	const vector<pair<int, int>>& around_grids;
+	int around_grid_size = around_grids.size();
+	for (int i = 0; i < around_grid_size; ++i) {
+		const pair<int, int>& grid_index = around_grids[i];
+		const list<int>& trajs = grid_panel->panel().GetTrajsInGrid(grid_index, is_end);
+		TrajMergeUnion(candidates, trajs);
+/*		neighbour_lists.push_back(&trajs);
+		total_size += trajs.size();
+		grid_sum ++;
+		unionInfo += "grid <" + to_string(i) + ", " + to_string(j) + " traj_size: " + to_string(trajs.size()) + "\n";
+		point_sum += grid_panel->panel().GetPointsInGrid(grid_index).size();
+*/
 	}
-	*/
 //	get_grid = clock() - get_grid;
 //	string info = "Get " + to_string(grid_sum) + " Grid : " + to_string((double)get_grid / CLOCKS_PER_SEC * 1000); 
 //	Log::log(1, info);
