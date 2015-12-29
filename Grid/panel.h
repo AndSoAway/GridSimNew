@@ -6,11 +6,13 @@
 #include <utility>
 #include <vector>
 #include <set>
+#include <unordered_set>
 #include <list>
 
 #include "../Tra/trajectory.h"
 #include "../Tra/sample_point.h"
 #include "../Tra/config.h"
+#include "../Tra/pair_hash.hpp"
 #include "rectangle.h"
 
 struct TrajInfo{
@@ -72,12 +74,16 @@ public:
 	typedef std::unordered_map<int, std::unordered_map<int, int>> trajgridcount;
 	typedef std::unordered_map<int, std::unordered_map<int, RelationInfo>> relationgridlist;
 
+	typedef std::unordered_set<std::pair<int, int>, pairhash> segmentset;
+	typedef std::unordered_map<int, segmentset> trasegment;
+	typedef std::unordered_map<int, std::unordered_map<int, trasegment>> gridsegments;
 	void InsertTrajectory(const Trajectory& traj);
 
 	void InsertPoint(const PointInfo& point, bool end=false);
 	
 	void InsertSegment(int tra_id, const PointInfo& begin, const PointInfo& end);
 	void InsertPoint(int x_grid, int y_grid, int tra_id, const PointInfo& info);
+	void InsertSegment(int x_grid_index, int y_grid_index, int tra_id, const PointInfo& begin, const PointInfo&);
 
 	void GetCandidatePoints(int tra_id, const PointInfo& point, std::vector<PointInfo>& candidates);
 
@@ -94,6 +100,8 @@ public:
 	void GetPointInfo(PointInfo& point_info, double dis) const;
 
 	//const std::vector<SamplePoint>& GetPointsInGrid(const std::pair<int, int>&) const;
+
+	Panel::segmentset& GetSegmentsInGrid(const std::pair<int, int>&, int);
 
 	const std::list<int>& GetTrajsInGrid(const std::pair<int, int>&, bool is_end = false) const;
 //	const std::list<int>& GetTrajsAroundGrid(const std::pair<int, int>& grid_index) const;
@@ -124,6 +132,7 @@ private:
 	trajgridlist point_traj_list_;
 //	trajgridlist around_traj_list_;
 	relationgridlist relation_grid_;
+	gridsegments point_segment_map_;
 //	trajgridlist end_traj_list_;
 //	trajgridcount all_traj_count_;
 //	trajInfoGridSet trajinfo_grid_set_;

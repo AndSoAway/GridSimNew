@@ -53,7 +53,7 @@
 
 //-----verify-----
 #define OVERMINDIS -10000
-#define SIMTHRESHOLD 0
+#define SIMTHRESHOLD 0.7
 
 //----STRATEGY-------
 #define RELATIONTHRESHOLD 0.5

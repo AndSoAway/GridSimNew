@@ -41,4 +41,7 @@ double minDistance(const SamplePoint& point, const SamplePoint& begin, const Sam
 int RegionHash(const std::pair<int, int>& cur_grid, const std::pair<int, int>& pre_grid);
 
 int RegionHash(int dif_x, int dif_y);
+double getMinDis(const PointInfo&, std::vector<double, int>& min_dis);
+
+double getMaxDis(const PointInfo&, std::vector<double, int>& min_dis);
 #endif

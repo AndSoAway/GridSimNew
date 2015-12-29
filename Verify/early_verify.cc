@@ -40,7 +40,7 @@ double EarlyVerify::verify(GridPanel& grid_panel, const Trajectory& target, cons
 		return OVERMINDIS;
 
 //	printf("DISUNIT is %d\n", DISUNIT);
-	double sim = 1 - (total_min_dist) / ((double)(n + m) * DISUNIT);	
+	double sim = 1 - (total_min_dist) / ((double)(n + m) * DMAX);	
 //	printf("get tr2can_min_dist %lf\n", tr2can_min_dist);
 //	printf("get can2tr_min_dist %lf\n", can2tr_min_dist);
 //	printf("DISUNIT %d, n %d, m %d\n", DISUNIT, n, m);

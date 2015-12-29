@@ -15,6 +15,8 @@
 #include "../Verify/verify.h"
 #include "../Verify/simple_verify.h"
 #include "../Verify/early_verify.h"
+#include "../Verify/signature_verify.h"
+#include "../Verify/expansion_verify.h"
 
 using namespace std;
 
@@ -79,6 +81,7 @@ void ReadAndProcess() {
 //	KPointStrategy strategy(3);
 //	MinDisStrategy strategy(3, SIMTHRESHOLD);
 //	CorrelationStrategy strategy;
+	//KPointStrategy strategy(3);
 	AllPointStrategy strategy;
 	string joinInfo = "GridSide: " + to_string(DISUNIT) + ", DMAX: " + to_string(DMAX) + ", threshold: " + to_string(SIMTHRESHOLD) + ", Strategy: " + strategy.name();
 	Log::log(0, joinInfo);
@@ -205,8 +208,12 @@ void Join(TrajData& traj_data, GridPanel& grid_panel, Strategy& strategy, unorde
 
 	SimpleVerify vrf_simple;
 	EarlyVerify vrf_early; 	
-	Verify(grid_panel, vrf_simple, can_map, sim_map);
-	Verify(grid_panel, vrf_early, can_map, sim_map);
+	SignatureVerify vrf_signature;
+	ExpansionVerify vrf_expansion;
+//	Verify(grid_panel, vrf_simple, can_map, sim_map);
+//	Verify(grid_panel, vrf_early, can_map, sim_map);
+//	Verify(grid_panel, vrf_signature, can_map, sim_map);
+	Verify(grid_panel, vrf_expansion, can_map, sim_map);
 	
 }
 

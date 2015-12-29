@@ -4,8 +4,8 @@
 
 class EarlyVerify : public BaseVerify {
 public:
-	double verify(GridPanel& grid_panel, const Trajectory& target, const Trajectory &candidate, double threshold);
+	virtual double verify(GridPanel& grid_panel, const Trajectory& target, const Trajectory &candidate, double threshold);
 
-	std::string name() {  return "EarlyVerify"; }
+	virtual std::string name() {  return "EarlyVerify"; }
 };
 #endif

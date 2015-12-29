@@ -91,11 +91,14 @@ public:
 
 //	int total_traj_count_;
 	int traj_count_in_grid_;
+	int index_;
 	std::pair<int, int> grid_index_;
 	double min_dis_;
 	double x_len;
 	double y_len;
 //	int around_traj_size_;
+	double x_part;
+	double y_part;
 	std::vector<std::pair<int, int>> neighbour_grid_;
 };
 

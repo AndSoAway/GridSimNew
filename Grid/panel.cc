@@ -90,7 +90,8 @@ void Panel::InsertSegment(int tra_id, const PointInfo& begin, const PointInfo& e
 //	printf("begin <%d %d>\n end <%d %d> %d\n", x1_grid_index, y1_grid_index, x2_grid_index, y2_grid_index, tra_id);
 	if (x1_grid_index == x2_grid_index) {
 		for (int y_grid_index = y1_grid_index; (y2_grid_index - y_grid_index) * step.second >= 0; y_grid_index += step.second) {
-			InsertPoint(x1_grid_index, y_grid_index, tra_id, end);
+			InsertPoint(x1_grid_index, y_grid_index, tra_id);
+			InsertSegment(x1_grid_index, y_grid_index, tra_id, begin, end);
 		}
 	} else {
 		double slope = delta_y / delta_x;
@@ -103,14 +104,16 @@ void Panel::InsertSegment(int tra_id, const PointInfo& begin, const PointInfo& e
 			double y_cor = slope * next_grid_index + intercept;
 			int next_y_grid_index = (int)y_cor;
 			while ((next_y_grid_index - y_grid_index) * step.second >= 0) {
-				InsertPoint(x_grid_index, y_grid_index, tra_id, end);
+				InsertPoint(x_grid_index, y_grid_index, tra_id);
+				InsertSegment(x_grid_index, y_grid_index, tra_id, begin, end);
 				y_grid_index += step.second;
 			}
 			y_grid_index = next_y_grid_index;
 			x_grid_index += step.first;
 		}
 		while ((y2_grid_index - y_grid_index) * step.second >= 0) {
-			InsertPoint(x_grid_index, y_grid_index, tra_id, end);
+			InsertPoint(x_grid_index, y_grid_index, tra_id);
+			InsertSegment(x_grid_index, y_grid_index, tra_id, begin, end);
 			y_grid_index += step.second;
 		}
 	}
@@ -170,6 +173,12 @@ void Panel::UpdateRelation(int x_grid_index, int y_grid_index, const PointInfo& 
 	return;
 }
 
+void Panel::InsertSegment(int x_grid_index, int y_grid_index, int tra_id, const PointInfo& begin, const PointInfo& end) {
+	trasegment& grid_segments = point_segment_map_[x_grid_index][y_grid_index];
+	segmentset& tra_segments = grid_segments[tra_id];
+	tra_segments.insert(make_pair(begin.index_, end.index_));
+}
+
 int Panel::GetXIndex(double lon) const {
 	double x_len = (lon - rectangle_.left_bottom().x()) * LEN_PER_X;    
 	int x_index = int(x_len / DISUNIT); 
@@ -198,6 +207,8 @@ void Panel::GetPointInfo(PointInfo& point_info, double dis) const {
 	double min_x = min(x_part, DISUNIT - x_part);
 	double min_y = min(y_part, DISUNIT - y_part);
 	point_info.min_dis_ = min(min_x, min_y);
+	point_info.x_part = x_part;
+	point_info.y_part = y_part;
 	
 	//printf("Grid<%d, %d>, x_len %lf, x_part %lf, y_part %lf, min_x %lf\n", grid_index.first, grid_index.second, x_len, x_part, y_part, min_x);
 	double x_dif = CONVERT_TO_X(dis);
@@ -284,6 +295,15 @@ const std::list<int>& Panel::GetTrajsInGrid(const pair<int, int>& grid_index, bo
 	return Panel::empty_list_;
 }
 */
+
+Panel::segmentset& Panel::GetSegmentsInGrid(const pair<int, int>& grid_index, int tra_id) {
+	int x_grid_index = grid_index.first;
+	int y_grid_index = grid_index.second;
+	trasegment& grid_segments = point_segment_map_[x_grid_index][y_grid_index];
+	segmentset& tra_segments = grid_segments[tra_id];
+	return tra_segments;
+}
+
 /*
 int Panel::GetAroundTrajCount(const std::pair<int, int>& grid_index) const {
 	trajgridlist::const_iterator itor = around_traj_list_.find(grid_index.first);
