@@ -186,6 +186,7 @@ void Panel::GetPointInfo(PointInfo& point_info, double dis) const {
 	const Point& point = point_info.point();
 	pair<int, int> grid_index = GetGrid(point_info);
 	point_info.grid_index_ = grid_index;
+	point_info.traj_count_in_grid_ = GetTrajCountInGrid(grid_index);
 //	point_info.around_traj_size_ = GetAroundTrajCount(grid_index);
 	double x_len = GetXLen(point.x());
 	double y_len = GetYLen(point.y());
