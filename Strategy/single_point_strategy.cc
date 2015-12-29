@@ -44,8 +44,8 @@ void SinglePointStrategy::FindCandidateTrajs(const GridPanel* grid_panel, const 
 */
 	int chose_index = (point_size - 1) / 2;
 	const PointInfo& chose_point = point_list[chose_index];
-	pair<int, int> grid_index = grid_panel->panel().GetGrid(chose_point);
-	candidates = grid_panel->panel().GetTrajsAroundGrid(grid_index);
+	GetCandidateTrajs(grid_panel, chose_point, dis, candidates, false);
+//      candidates = grid_panel->panel().GetTrajsAroundGrid(grid_index);
 //	int can_size = candidates.size();
 //	printf("tra %d, candidates size %d\n", traj.id(), can_size);
 //	list<int>::iterator end = candidates.end();
