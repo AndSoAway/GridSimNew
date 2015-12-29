@@ -92,10 +92,13 @@ void Strategy::GetCandidateTrajs(const GridPanel* grid_panel, const PointInfo& p
 */
 }
 
+/*
 void Strategy::FindCandidateTrajs(const GridPanel* grid_panel, Trajectory& traj, double dis, std::list<int>& candidates) {
 	const Trajectory& con_traj = traj;
 	FindCandidateTrajs(grid_panel, con_traj, dis, candidates);
 }
+*/
+
 /*
 int Strategy::GetTotalTrajCount(const GridPanel* grid_panel, const SamplePoint& point, double dis, bool is_end) {
 	pair<int, int> grid_index = grid_panel->panel().GetGrid(point);
@@ -103,7 +106,7 @@ int Strategy::GetTotalTrajCount(const GridPanel* grid_panel, const SamplePoint& 
 }
 */
 
-int Strategy::GetTotalTrajCount(const GridPanel* grid_panel, const SamplePoint& point, double dis, bool is_end) {
+int Strategy::GetTotalTrajCount(const GridPanel* grid_panel, const PointInfo& point, double dis, bool is_end) {
 	list<int> candidates;	
 	const vector<pair<int, int>>& around_grids = point.neighbour_grid_;
 	int around_grid_size = around_grids.size();
