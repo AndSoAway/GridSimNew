@@ -23,9 +23,11 @@ void Strategy::TrajMergeJoin(const list<int>& father_trajs, const std::list<int>
 	}
 }
 
-//void Strategy::FindCandidateTrajs(const GridPanel* grid_panel, const Trajectory& traj, double dis, list<int>& candidates) {
+/*
+void Strategy::FindCandidateTrajs(const GridPanel* grid_panel, const Trajectory& traj, double dis, list<int>& candidates) {
 
 }
+*/
 
 void Strategy::TrajMergeUnion(list<int>& father_trajs, const std::list<int>& child_trajs) const {
 			list<int>::const_iterator cur_itor, pre_itor;
