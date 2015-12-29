@@ -7,14 +7,15 @@ void AllPointStrategy::FindCandidateTrajs(const GridPanel* grid_panel, const Tra
 	int point_size = point_list.size();
 
 	const PointInfo& chose_point = point_list[0];
-	const pair<int, int>& grid_index = chose_point.grid_index_;
-	candidates = grid_panel->panel().GetTrajsAroundGrid(grid_index);
-	
+//	const pair<int, int>& grid_index = chose_point.grid_index_;
+//	candidates = grid_panel->panel().GetTrajsAroundGrid(grid_index);
+	GetCandidateTrajs(grid_panel, chose_point, dis, candidates, false);	
 	for(int i = 1; i < point_size; i++) {
-		list<int>  res;
 		const PointInfo& chose_point = point_list[i];
-		const pair<int, int>& grid_index = chose_point.grid_index_;
-		const list<int>& cur_can = grid_panel->panel().GetTrajsAroundGrid(grid_index);
+
+		list<int> cur_can;
+		list<int>  res;
+		GetCandidateTrajs(grid_panel, chose_point, dis, cur_can, false);
 		TrajMergeJoin(candidates, cur_can, res);
 		candidates.swap(res);
 	}	

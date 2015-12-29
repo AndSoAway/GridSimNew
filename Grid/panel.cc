@@ -143,7 +143,7 @@ void Panel::InsertPoint(int x_grid_index, int y_grid_index, int tra_id, const Po
 		UpdateRelation(x_grid_index, y_grid_index, end);
 	}
 	
-	for (int around_x = x_grid_index - 1; around_x <= x_grid_index + 1; ++around_x) {
+/*	for (int around_x = x_grid_index - 1; around_x <= x_grid_index + 1; ++around_x) {
 		for (int around_y = y_grid_index -1; around_y <= y_grid_index + 1; ++around_y) {
 			list<int>& around_id_list = around_traj_list_[around_x][around_y];
 			if (around_id_list.empty() || around_id_list.back() != tra_id) {
@@ -151,6 +151,7 @@ void Panel::InsertPoint(int x_grid_index, int y_grid_index, int tra_id, const Po
 			}
 		}
 	}
+*/
 }
 
 void Panel::UpdateRelation(int x_grid_index, int y_grid_index, const PointInfo& end) {
@@ -185,7 +186,8 @@ void Panel::GetPointInfo(PointInfo& point_info, double dis) const {
 	const Point& point = point_info.point();
 	pair<int, int> grid_index = GetGrid(point_info);
 	point_info.grid_index_ = grid_index;
-	point_info.around_traj_size_ = GetAroundTrajCount(grid_index);
+	point_info.traj_count_in_grid_ = GetTrajCountInGrid(grid_index);
+//	point_info.around_traj_size_ = GetAroundTrajCount(grid_index);
 	double x_len = GetXLen(point.x());
 	double y_len = GetYLen(point.y());
 	point_info.x_len = x_len;
@@ -282,6 +284,7 @@ const std::list<int>& Panel::GetTrajsInGrid(const pair<int, int>& grid_index, bo
 	return Panel::empty_list_;
 }
 */
+/*
 int Panel::GetAroundTrajCount(const std::pair<int, int>& grid_index) const {
 	trajgridlist::const_iterator itor = around_traj_list_.find(grid_index.first);
 	if (itor != around_traj_list_.end()) {
@@ -303,7 +306,7 @@ const std::list<int>& Panel::GetTrajsAroundGrid(const std::pair<int, int>& grid_
 	}	
 	return Panel::empty_list_;
 }
-
+*/
 const RelationInfo* Panel::GetRelationInfo(const std::pair<int, int>& grid_index) const {
 	relationgridlist::const_iterator itor = relation_grid_.find(grid_index.first);
 	if (itor != relation_grid_.end()) {

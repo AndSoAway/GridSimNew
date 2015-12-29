@@ -96,9 +96,9 @@ public:
 	//const std::vector<SamplePoint>& GetPointsInGrid(const std::pair<int, int>&) const;
 
 	const std::list<int>& GetTrajsInGrid(const std::pair<int, int>&, bool is_end = false) const;
-	const std::list<int>& GetTrajsAroundGrid(const std::pair<int, int>& grid_index) const;
+//	const std::list<int>& GetTrajsAroundGrid(const std::pair<int, int>& grid_index) const;
 
-	int GetAroundTrajCount(const std::pair<int, int>& grid_index) const;
+//	int GetAroundTrajCount(const std::pair<int, int>& grid_index) const;
 
 	int GetTrajCountInGrid(const std::pair<int, int>& grid_index, bool is_end = false) const ;
 
@@ -122,7 +122,7 @@ private:
 	double height_;
 //	gridset grid_set_;
 	trajgridlist point_traj_list_;
-	trajgridlist around_traj_list_;
+//	trajgridlist around_traj_list_;
 	relationgridlist relation_grid_;
 //	trajgridlist end_traj_list_;
 //	trajgridcount all_traj_count_;

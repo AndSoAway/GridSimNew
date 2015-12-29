@@ -78,21 +78,24 @@ protected:
 
 struct PointInfo: public SamplePoint {
 public:
-	PointInfo(): SamplePoint(), total_traj_count_(0), min_dis_(0), x_len(0), y_len(0) {}
+//	PointInfo(): SamplePoint(), total_traj_count_(0), min_dis_(0), x_len(0), y_len(0) {}
+	PointInfo(): SamplePoint(), min_dis_(0), x_len(0), y_len(0) {}
 
-	PointInfo(const SamplePoint& sample_point):SamplePoint(sample_point), total_traj_count_(0), min_dis_(0), x_len(0), y_len(0){
+//	PointInfo(const SamplePoint& sample_point):SamplePoint(sample_point), total_traj_count_(0), min_dis_(0), x_len(0), y_len(0){
+	PointInfo(const SamplePoint& sample_point):SamplePoint(sample_point), min_dis_(0), x_len(0), y_len(0){
 	} 
 
 	//PointInfo(const PointInfo& point_info) :SamplePoint(point_info){ }
 
 	PointInfo& operator=(const SamplePoint& samplePoint);
 
-	int total_traj_count_;
+//	int total_traj_count_;
+	int traj_count_in_grid_;
 	std::pair<int, int> grid_index_;
 	double min_dis_;
 	double x_len;
 	double y_len;
-	int around_traj_size_;
+//	int around_traj_size_;
 	std::vector<std::pair<int, int>> neighbour_grid_;
 };
 
