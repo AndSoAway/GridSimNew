@@ -23,7 +23,7 @@ void Strategy::TrajMergeJoin(const list<int>& father_trajs, const std::list<int>
 	}
 }
 
-void Strategy::FindCandidateTrajs(const GridPanel* grid_panel, const Trajectory& traj, double dis, list<int>& candidates) {
+//void Strategy::FindCandidateTrajs(const GridPanel* grid_panel, const Trajectory& traj, double dis, list<int>& candidates) {
 
 }
 
@@ -57,13 +57,14 @@ void Strategy::TrajMergeUnion(list<int>& father_trajs, const std::list<int>& chi
 }
 
 void Strategy::GetCandidateTrajs(const GridPanel* grid_panel, const PointInfo& point, double dis, list<int>& candidates, bool is_end) {
-	//clock_t get_grid = clock();
-	//int point_sum = 0;
-	//vector<const list<int>*> neighbour_lists;	
+/*	clock_t get_grid = clock();
+	int point_sum = 0;
+	vector<const list<int>*> neighbour_lists;	
 	int total_size = 0;
 	string unionInfo;
 	int grid_sum = 0;
-	const vector<pair<int, int>>& around_grids;
+*/
+	const vector<pair<int, int>>& around_grids = point.neighbour_grid_;
 	int around_grid_size = around_grids.size();
 	for (int i = 0; i < around_grid_size; ++i) {
 		const pair<int, int>& grid_index = around_grids[i];
@@ -76,16 +77,18 @@ void Strategy::GetCandidateTrajs(const GridPanel* grid_panel, const PointInfo& p
 		point_sum += grid_panel->panel().GetPointsInGrid(grid_index).size();
 */
 	}
-//	get_grid = clock() - get_grid;
-//	string info = "Get " + to_string(grid_sum) + " Grid : " + to_string((double)get_grid / CLOCKS_PER_SEC * 1000); 
-//	Log::log(1, info);
- //	clock_t cur = clock();
-//	MergeKList(neighbour_lists, candidates);
-//	cur = clock() - cur;
-//	unionInfo += "Total traj " + to_string(total_size) + " time: " + to_string((double)cur / CLOCKS_PER_SEC * 1000);
- //	Log::log(1, unionInfo);
-//	printf("Get can_trajs %ld, point size %d\n", candidates.size(), point_sum);
-//}
+/*
+	get_grid = clock() - get_grid;
+	string info = "Get " + to_string(grid_sum) + " Grid : " + to_string((double)get_grid / CLOCKS_PER_SEC * 1000); 
+	Log::log(1, info);
+	clock_t cur = clock();
+	MergeKList(neighbour_lists, candidates);
+	cur = clock() - cur;
+	unionInfo += "Total traj " + to_string(total_size) + " time: " + to_string((double)cur / CLOCKS_PER_SEC * 1000);
+	Log::log(1, unionInfo);
+	printf("Get can_trajs %ld, point size %d\n", candidates.size(), point_sum);
+*/
+}
 
 void Strategy::FindCandidateTrajs(const GridPanel* grid_panel, Trajectory& traj, double dis, std::list<int>& candidates) {
 	const Trajectory& con_traj = traj;
@@ -97,35 +100,18 @@ int Strategy::GetTotalTrajCount(const GridPanel* grid_panel, const SamplePoint& 
 	return grid_panel->panel().GetAroundTrajCount(grid_index);
 }
 */
-/*
+
 int Strategy::GetTotalTrajCount(const GridPanel* grid_panel, const SamplePoint& point, double dis, bool is_end) {
-//	clock_t cal_time = clock();
-	double x_dif = CONVERT_TO_X(dis);
-  	double y_dif = CONVERT_TO_Y(dis);
-  	double x_bottom = point.x() - x_dif ;
-  	double y_bottom = point.y() - y_dif;
-  	double x_upper = point.x() + x_dif;
-  	double y_upper = point.y() + y_dif; 
-  	pair<int, int> bottom = grid_panel->panel().GetGrid(x_bottom, y_bottom);
-  	pair<int, int> upper = grid_panel->panel().GetGrid(x_upper, y_upper);
-	
-//	cal_time = clock() - cal_time;
-	//string cal_info  = "Cal time : " + to_string((double)cal_time / CLOCKS_PER_SEC * 1000);
-	//Log::log(1, cal_info);
-	int traj_sum = 0;
-	for (int i = bottom.first; i <= upper.first; i++) {
-		for (int j = bottom.second; j <= upper.second; j++) {
-			pair<int, int> grid_index = make_pair(i, j);
-			//clock_t getcount_time = clock();
-			int traj_size = grid_panel->panel().GetTrajCountInGrid(grid_index, is_end);
-			//getcount_time = clock() - getcount_time;
-			//string getcount_info = "getcount time: <" + to_string(i) + ", " + to_string(j) + "> ,size" + to_string(traj_size) + ", " + to_string((double)getcount_time / CLOCKS_PER_SEC * 1000);
-			//Log::log(1, getcount_info);
-			traj_sum += traj_size;
-		}
+	list<int> candidates;	
+	const vector<pair<int, int>>& around_grids = point.neighbour_grid_;
+	int around_grid_size = around_grids.size();
+	for (int i = 0; i < around_grid_size; ++i) {
+		const pair<int, int>& grid_index = around_grids[i];
+		const list<int>& trajs = grid_panel->panel().GetTrajsInGrid(grid_index, is_end);
+		TrajMergeUnion(candidates, trajs);
 	}
-	return traj_sum;
-}*/
+	return candidates.size();
+}
 
 void Strategy::FilterEnd(const GridPanel* grid_panel, const Trajectory& traj, std::list<int>& candidates) {
 	vector<pair<int, int>> end_grid;
