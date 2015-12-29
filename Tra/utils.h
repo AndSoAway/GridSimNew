@@ -37,4 +37,8 @@ bool order_by_count(std::pair<int, int> count1, std::pair<int, int> count2);
 double minDistance(const SamplePoint& point, const Trajectory& tra);
 
 double minDistance(const SamplePoint& point, const SamplePoint& begin, const SamplePoint& end);
+
+int RegionHash(const std::pair<int, int>& cur_grid, const std::pair<int, int>& pre_grid);
+
+int RegionHash(int dif_x, int dif_y);
 #endif

@@ -186,3 +186,23 @@ double minDistance(const SamplePoint& point, const SamplePoint& begin, const Sam
   double res =  a * area / c;
 	return res;
 }
+
+int RegionHash(const pair<int, int>& cur_grid, const pair<int, int>& pre_grid) {
+	int dif_x = cur_grid.first - pre_grid.first;
+	int dif_y = cur_grid.second - pre_grid.second;
+	return RegionHash(dif_x, dif_y);
+}
+
+int RegionHash(int dif_x, int dif_y) {
+	int region_code = 1;
+	if (dif_x > 0 && dif_y >= 0) {
+		region_code = 0;
+	} else if (dif_x <= 0 && dif_y > 0) {
+		region_code = 1;
+	} else if(dif_x < 0 && dif_y <= 0) {
+		region_code = 2;
+	} else if (dif_x >= 0 && dif_y < 0) {
+		region_code = 3;
+	}	
+	return region_code;	
+}
