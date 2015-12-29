@@ -7,7 +7,7 @@
 
 class CorrelationStrategy : public Strategy {
 public:
-	void FindCandidateTrajs(const GridPanel* grid_panel, Trajectory& traj, double dis, std::list<int>& candidates);
+	void FindCandidateTrajs(const GridPanel* grid_panel, const Trajectory& traj, double dis, std::list<int>& candidates);
 
 	std::string name() { return "correlation strategy\n"; }
 

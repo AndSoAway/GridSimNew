@@ -140,16 +140,19 @@ bool BoundVerify::getDis(GridPanel& grid_panel, int test_id, unordered_map<int, 
 	for (int i = 0; i < n; ++i) {
 		const PointInfo& point = point_list[i];
 		vector<pair<double, int>> min_dis;
+		printf("Begin getMinDis\n");
 		getMinDis(grid_panel, test_id, point, min_dis);
-		
+		printf("End getMinDis\n");
 		if (min_dis.empty())
 			return false;
 		sort(min_dis.begin(), min_dis.end(), sort_by_min);
 		sort_min[i] = min_dis;
 		
 		int first_grid_index = min_dis[0].second;
+		printf("Begin getMaxDis %d total_size %d\n", first_grid_index, n);
 		double max_dis = getMaxDis(first_grid_index, point);	
-		first_max[i] = max_dis;
+		printf("End getMaxDis\n");
+		first_max.push_back(max_dis);
 	} 
 	return true;
 }

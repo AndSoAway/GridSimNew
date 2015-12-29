@@ -62,6 +62,7 @@ void JoinAndCandidate(GridPanel& grid_panel, Strategy& strategy, TrajData& traj_
 	clock_t total_insert_time = 0;
 
 	long long total_can_pair = 0; 
+	long long all_can_pair = 0; 
 	time_t begin_ts = time(NULL);
 	time_t end_ts = time(NULL);
 	int size = traj_data.traj_index_point_count.size();
@@ -87,6 +88,7 @@ void JoinAndCandidate(GridPanel& grid_panel, Strategy& strategy, TrajData& traj_
 		total_query_time += tmp_query;
 
 		total_can_pair += cur_size;
+		all_can_pair += cur_size;
 
 		clock_t tmp_insert = clock();
 		grid_panel.InsertTrajectory(traj);
@@ -95,7 +97,7 @@ void JoinAndCandidate(GridPanel& grid_panel, Strategy& strategy, TrajData& traj_
 		total_insert_time += tmp_insert;
 	}
 	end_ts = time(NULL);
-	string processInfo = "Joined tra count " + to_string(count) + ", query_time: " + to_string((double)total_query_time / CLOCKS_PER_SEC) + ", insert_time: " + to_string((double)total_insert_time / CLOCKS_PER_SEC) + ", time_interval "+ to_string(end_ts - begin_ts) + ", new pair count: " + to_string(total_can_pair);
+	string processInfo = "Joined tra count " + to_string(count) + ", query_time: " + to_string((double)total_query_time / CLOCKS_PER_SEC) + ", insert_time: " + to_string((double)total_insert_time / CLOCKS_PER_SEC) + ", time_interval "+ to_string(end_ts - begin_ts) + ", new pair count: " + to_string(all_can_pair);
 	Log::log(0, processInfo);
 	printf("%s\n", processInfo.c_str());
 }
@@ -191,7 +193,7 @@ void read_traj(TrajData& traj_data) {
   /*for (int i = 0;  i < FILE_NUM; i++) {
 		FILE* file = fopen(file_paths[i], "rb");*/
 
-  for (int i = 0; i < 2; i++) {
+  for (int i = 0; i < 1; i++) {
 //		FILE* file = fopen(test_files[i], "rb");
 
 //  for (int i = 0;  i < FILE_NUM; i++) {

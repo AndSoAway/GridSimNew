@@ -3,8 +3,8 @@
 #include "correlation_strategy.h"
 
 using namespace std;
-void CorrelationStrategy::FindCandidateTrajs(const GridPanel* grid_panel, Trajectory& traj, double dis, std::list<int>& candidates) {
-	vector<PointInfo>& point_list = traj.pointinfo_list();	
+void CorrelationStrategy::FindCandidateTrajs(const GridPanel* grid_panel, const Trajectory& traj, double dis, std::list<int>& candidates) {
+	const vector<PointInfo>& point_list = traj.pointinfo_list();	
 	int point_size = point_list.size();
 	
 	pair<int, int> *pre_grid, *cur_grid;
@@ -25,7 +25,7 @@ void CorrelationStrategy::FindCandidateTrajs(const GridPanel* grid_panel, Trajec
 	min_tra_count = first_point.traj_count_in_grid_; 
 	bool is_first = true;
 	for (int i = 1; i < point_size; ++i) {
-		PointInfo& cur_point = point_list[i];
+		const PointInfo& cur_point = point_list[i];
 		cur_grid = &cur_point.grid_index_;
 		cur_relation = grid_panel->panel().GetRelationInfo(*cur_grid);
 		

@@ -9,9 +9,9 @@ bool order_second_des(const pair<int, double>& lft, const pair<int, double>& rhs
 	return lft.second > rhs.second;
 }
 
-void MinDisStrategy::FindCandidateTrajs(const GridPanel* grid_panel, Trajectory& traj, double dis, std::list<int>& candidates) {
+void MinDisStrategy::FindCandidateTrajs(const GridPanel* grid_panel, const Trajectory& traj, double dis, std::list<int>& candidates) {
 //	traj.CalPointInfo(grid_panel, dis);
-	vector<PointInfo>& point_info = traj.pointinfo_list();
+	const vector<PointInfo>& point_info = traj.pointinfo_list();
 	int point_info_size = point_info.size();
 	double sim_dis = 2 * (1 - sim_threshold_) * point_info_size * DMAX; 
 
@@ -34,7 +34,7 @@ void MinDisStrategy::FindCandidateTrajs(const GridPanel* grid_panel, Trajectory&
 //		vector<const list<int>*> top_k_lists;
 		for (int i = 0; i < top_k; i++) {
 			int index = index_min[i].first;
-			pair<int, int>& grid_index = point_info[index].grid_index_;
+			const pair<int, int>& grid_index = point_info[index].grid_index_;
 			const list<int>& tra_list = grid_panel->panel().GetTrajsInGrid(grid_index, false);
 //			top_k_lists.push_back(&tra_list);
 			TrajMergeUnion(candidates, tra_list);

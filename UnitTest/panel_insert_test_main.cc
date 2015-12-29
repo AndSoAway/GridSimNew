@@ -17,6 +17,7 @@
 #include "../Verify/early_verify.h"
 #include "../Verify/signature_verify.h"
 #include "../Verify/expansion_verify.h"
+#include "../Verify/bound_verify.h"
 
 using namespace std;
 
@@ -79,7 +80,7 @@ void ReadAndProcess() {
 //	SinglePointStrategy strategy;
 //	TwoPointStrategy strategy;
 //	KPointStrategy strategy(3);
-//	MinDisStrategy strategy(3, SIMTHRESHOLD);
+//	MinDisStrategy strategy(SIMTHRESHOLD, 1);
 //	CorrelationStrategy strategy;
 	//KPointStrategy strategy(3);
 	AllPointStrategy strategy;
@@ -210,10 +211,12 @@ void Join(TrajData& traj_data, GridPanel& grid_panel, Strategy& strategy, unorde
 	EarlyVerify vrf_early; 	
 	SignatureVerify vrf_signature;
 	ExpansionVerify vrf_expansion;
+	BoundVerify vrf_bound;
 //	Verify(grid_panel, vrf_simple, can_map, sim_map);
 //	Verify(grid_panel, vrf_early, can_map, sim_map);
 //	Verify(grid_panel, vrf_signature, can_map, sim_map);
-	Verify(grid_panel, vrf_expansion, can_map, sim_map);
+//	Verify(grid_panel, vrf_expansion, can_map, sim_map);
+	Verify(grid_panel, vrf_bound, can_map, sim_map);
 	
 }
 

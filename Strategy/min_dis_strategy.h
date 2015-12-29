@@ -6,7 +6,7 @@
 class MinDisStrategy : public Strategy {
 public:
 	MinDisStrategy(double sim, int k=3): k_(k), sim_threshold_(sim){ }
-	void FindCandidateTrajs(const GridPanel* grid_panel, Trajectory& traj, double dis, std::list<int>& candidates);
+	void FindCandidateTrajs(const GridPanel* grid_panel, const Trajectory& traj, double dis, std::list<int>& candidates);
 
 //	void GetCandidateTrajs(const GridPanel* grid_panel, const PointInfo& point_info, std::list<int>& candidates);
 	
