@@ -2,6 +2,7 @@
 #include <cmath>
 #include <climits>
 #include "trajectory.h"
+#include "../Grid/grid_panel.h"
 
 #define TORADIAN(x) ((x) * PI / 180.0 )
 
@@ -207,68 +208,93 @@ int RegionHash(int dif_x, int dif_y) {
 	return region_code;	
 }
 
-double getMinDis(const PointInfo& target_point vector<double, int>& min_dis_grid) {
+void getMinDis(GridPanel& grid_panel, int test_id, const PointInfo& target_point, vector<pair<double, int>>& min_dis_grid) {
 	const pair<int, int>& point_grid = target_point.grid_index_;
-	const vector<pair<int,int>>& around_grid = target_point.neighbour_gird_;
+	const vector<pair<int,int>>& around_grid = target_point.neighbour_grid_;
 	int grid_size = around_grid.size();	
+
 	double x_part = target_point.x_part;
 	double y_part = target_point.y_part;
+	//double other_x = DISUNIT - x_part;
+	//double other_y = DISUNIT - y_part;
+	//double max_x_part = x_part > other_x ? x_part : other_x;
+	//double max_y_part = y_part > other_y ? y_part : other_y;
+
 	for (int i = 0; i < grid_size; i++) {
 		const pair<int, int>& grid_index = around_grid[i];
+			
+		//if this grid doesn't intersect the test_id, ignore it
+		if (grid_panel.panel().GetSegmentsInGrid(grid_index, test_id).empty()) {
+			continue;
+		}		
+
+		double min_dis = 0;
+	
 		if (grid_index.first == point_grid.first && grid_index.second == point_grid.second) {
-			min_dis_grid.push_back(make_pair(0, i));
+			min_dis = 0;
+//			max_dis = sqrt(max_x_part * max_x_part + max_y_part * max_y_part);
 		} else if (grid_index.first == point_grid.first && grid_index.second == point_grid.second + 1) {
-			min_dis_grid.push_back(make_pair(DISUNIT - y_part, i));
+			min_dis = DISUNIT - y_part;
+//			max_dis = sqrt(max_x_part * max_x_part + (other_y + DISUNIT) * (DISUNIT + other_y));	
 		} else if (grid_index.first == point_grid.first && grid_index.second == point_grid.second - 1) {
-			min_dis_grid.push_back(make_pair(y_part, i));
+			min_dis = y_part;
+//			max_dis = sqrt(max_x_part * max_x_part + (y_part + DISUNIT) * (y_part + DISUNIT));
 		} else if (grid_index.first == point_grid.first - 1 && grid_index.second == point_grid.second) {
-			min_dis_grid.push_back(make_pair(x_part, i));
+			min_dis = x_part;
+//			max_dis = sqrt((x_part + DISUNIT) * (x_part + DISUNIT) + max_y_part * max_y_part);
 		} else if (grid_index.first == point_grid.first - 1 && grid_index.second == point_grid.second - 1) {
-			min_dis_grid.push_back(make_pair(sqrt(x_part * x_part + y_part * y_part), i));
+			min_dis = sqrt(x_part * x_part + y_part * y_part);
+//			max_dis = sqrt((x_part + DISUNIT) * (x_part + DISUNIT) + (y_part + DISUNIT) * (y_part + DISUNIT));
 		} else if (grid_index.first == point_grid.first - 1 && grid_index.second == point_grid.second + 1) {
-			min_dis_grid.push_back(make_pair(sqrt(x_part * x_part + (DISUNIT - y_part) * (DISUNIT - y_part)), i));
+			min_dis = sqrt(x_part * x_part + (DISUNIT - y_part) * (DISUNIT - y_part));
+//			max_dis = sqrt((x_part + DISUNIT) * (x_part + DISUNIT) + (DISUNIT + other_y) * (DISUNIT + other_y));
 		} else if (grid_index.first == point_grid.first + 1 && grid_index.second == point_grid.second) {
-			min_dis_grid.push_back(make_pair(DISUNIT - x_part, i));
+			min_dis = (DISUNIT - x_part);
+//			max_dis = sqrt((DISUNIT + other_x) * (DISUNIT + other_x) + (max_y_part) * (max_y_part));
 		} else if (grid_index.first == point_grid.first + 1 && grid_index.second == point_grid.second - 1) {
-			min_dis_grid.push_back(make_pair(sqrt((DISUNIT - x_part ) * (DISUNIT - x_part) + y_part * y_part), i));
+			min_dis = sqrt((DISUNIT - x_part ) * (DISUNIT - x_part) + y_part * y_part);
+//			max_dis = sqrt((DISUNIT + other_x) * (DISUNIT + other_x) + (y_part + DISUNIT) * (y_part + DISUNIT));
 		} else if (grid_index.first == point_grid.first + 1 && grid_index.second == point_grid.second + 1) {
-			min_dis_grid.push_back(make_pair(sqrt((DISUNIT - x_part) * ( DISUNIT - x_part) + (DISUNIT - y_part) * (DISUNIT - y_part)), i));
+			min_dis = sqrt((DISUNIT - x_part) * ( DISUNIT - x_part) + (DISUNIT - y_part) * (DISUNIT - y_part));
+//			max_dis = sqrt((other_x + DISUNIT ) * ( other_x + DISUNIT) + (other_y + DISUNIT) * (other_y + DISUNIT));
 		}
+		min_dis_grid.push_back(make_pair(min_dis, i));
+//		max_dis_grid.push_back(make_pair(max_dis, i));
 	}	
 }
 
-double getMaxDis(const PointInfo& target_point, vector<double, int>& min_dis) {
-	const pair<int, int>& grid_index = target_point.grid_index_;
-	const vector<pair<int, int>>& around_grid = target_point.neighbour_grid_;
-	int grid_size = around_grid.size();	
+
+double getMaxDis(int grid, const PointInfo& target_point) {
+	const pair<int, int>& point_grid = target_point.grid_index_;
+	const vector<pair<int,int>>& around_grid = target_point.neighbour_grid_;
 	double x_part = target_point.x_part;
 	double y_part = target_point.y_part;
 	double other_x = DISUNIT - x_part;
 	double other_y = DISUNIT - y_part;
 	double max_x_part = x_part > other_x ? x_part : other_x;
 	double max_y_part = y_part > other_y ? y_part : other_y;
-	for (int i = 0; i < grid_size; i++) {
-		const pair<int, int>& grid_index = around_grid[i];
-		double dis = 0;
-		if (grid_index.first == point_grid.first && grid_index.second == point_grid.second) {
-			dis = 0;
-		} else if (grid_index.first == point_grid.first && grid_index.second == point_grid.second + 1) {
-			dis = sqrt(max_x_part * max_x_part + (other_y + DISUNIT) * (DISUNIT + other_y));	
-		} else if (grid_index.first == point_grid.first && grid_index.second == point_grid.second - 1) {
-			dis = sqrt(max_x_part * max_x_part + (y_part + DISUNIT) * (y_part + DISUNIT));
-		} else if (grid_index.first == point_grid.first - 1 && grid_index.second == point_grid.second) {
-			dis = sqrt((x_part + DISUNIT) * (x_part + DISUNIT) + max_y_part * max_y_part);
-		} else if (grid_index.first == point_grid.first - 1 && grid_index.second == point_grid.second - 1) {
-			dis = sqrt((x_part + DISUNIT) * (x_part + DISUNIT) + (y_part + DISUNIT) * (y_part + DISUNIT));
-		} else if (grid_index.first == point_grid.first - 1 && grid_index.second == point_grid.second + 1) {
-			dis = sqrt((x_part + DISUNIT) * (x_part + DISUNIT) + (DISUNIT + other_y) * (DISUNIT + other_y))
-		} else if (grid_index.first == point_grid.first + 1 && grid_index.second == point_grid.second) {
-			dis = sqrt((DISUNIT + other_x) * (DISUNIT + other_x) + (max_y_part) * (max_y_part));
-		} else if (grid_index.first == point_grid.first + 1 && grid_index.second == point_grid.second - 1) {
-			dis = sqrt((DISUNIT + other_x) * (DISUNIT + other_x) + (y_part + DISUNIT) * (y_part + DISUNIT));
-		} else if (grid_index.first == point_grid.first + 1 && grid_index.second == point_grid.second + 1) {
-			dis = sqrt((other_x + DISUNIT ) * ( other_x + DISUNIT) + (other_y + DISUNIT) * (other_y + DISUNIT));
-		}
-		min_dis_grid.push_back(dis, i);
-	}	
+
+	const pair<int, int>& grid_index = around_grid[grid];
+			
+	double max_dis = 0;
+	if (grid_index.first == point_grid.first && grid_index.second == point_grid.second) {
+		max_dis = sqrt(max_x_part * max_x_part + max_y_part * max_y_part);
+	} else if (grid_index.first == point_grid.first && grid_index.second == point_grid.second + 1) {
+		max_dis = sqrt(max_x_part * max_x_part + (other_y + DISUNIT) * (DISUNIT + other_y));	
+	} else if (grid_index.first == point_grid.first && grid_index.second == point_grid.second - 1) {
+		max_dis = sqrt(max_x_part * max_x_part + (y_part + DISUNIT) * (y_part + DISUNIT));
+	} else if (grid_index.first == point_grid.first - 1 && grid_index.second == point_grid.second) {
+		max_dis = sqrt((x_part + DISUNIT) * (x_part + DISUNIT) + max_y_part * max_y_part);
+	} else if (grid_index.first == point_grid.first - 1 && grid_index.second == point_grid.second - 1) {
+		max_dis = sqrt((x_part + DISUNIT) * (x_part + DISUNIT) + (y_part + DISUNIT) * (y_part + DISUNIT));
+	} else if (grid_index.first == point_grid.first - 1 && grid_index.second == point_grid.second + 1) {
+		max_dis = sqrt((x_part + DISUNIT) * (x_part + DISUNIT) + (DISUNIT + other_y) * (DISUNIT + other_y));
+	} else if (grid_index.first == point_grid.first + 1 && grid_index.second == point_grid.second) {
+		max_dis = sqrt((DISUNIT + other_x) * (DISUNIT + other_x) + (max_y_part) * (max_y_part));
+	} else if (grid_index.first == point_grid.first + 1 && grid_index.second == point_grid.second - 1) {
+		max_dis = sqrt((DISUNIT + other_x) * (DISUNIT + other_x) + (y_part + DISUNIT) * (y_part + DISUNIT));
+	} else if (grid_index.first == point_grid.first + 1 && grid_index.second == point_grid.second + 1) {
+		max_dis = sqrt((other_x + DISUNIT ) * ( other_x + DISUNIT) + (other_y + DISUNIT) * (other_y + DISUNIT));
+	}
+	return max_dis;
 }

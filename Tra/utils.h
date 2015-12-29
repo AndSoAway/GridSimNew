@@ -6,12 +6,15 @@
 #include <ctime>
 #include <utility>
 #include "config.h"
-#include "sample_point.h"
 #include "point.h"
 
 class SamplePoint;
 
+class PointInfo;
+
 class Trajectory;
+
+class GridPanel;
 
 void split(const std::string&, std::vector<std::string>&, const std::string&);
 
@@ -41,7 +44,8 @@ double minDistance(const SamplePoint& point, const SamplePoint& begin, const Sam
 int RegionHash(const std::pair<int, int>& cur_grid, const std::pair<int, int>& pre_grid);
 
 int RegionHash(int dif_x, int dif_y);
-double getMinDis(const PointInfo&, std::vector<double, int>& min_dis);
 
-double getMaxDis(const PointInfo&, std::vector<double, int>& min_dis);
+void getMinDis(GridPanel& grid_panel, int test_id, const PointInfo&, std::vector<std::pair<double, int>>& min_dis);
+
+double getMaxDis(int grid, const PointInfo& target_point);
 #endif

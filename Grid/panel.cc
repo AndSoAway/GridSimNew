@@ -90,7 +90,7 @@ void Panel::InsertSegment(int tra_id, const PointInfo& begin, const PointInfo& e
 //	printf("begin <%d %d>\n end <%d %d> %d\n", x1_grid_index, y1_grid_index, x2_grid_index, y2_grid_index, tra_id);
 	if (x1_grid_index == x2_grid_index) {
 		for (int y_grid_index = y1_grid_index; (y2_grid_index - y_grid_index) * step.second >= 0; y_grid_index += step.second) {
-			InsertPoint(x1_grid_index, y_grid_index, tra_id);
+			InsertPoint(x1_grid_index, y_grid_index, tra_id, end);
 			InsertSegment(x1_grid_index, y_grid_index, tra_id, begin, end);
 		}
 	} else {
@@ -104,7 +104,7 @@ void Panel::InsertSegment(int tra_id, const PointInfo& begin, const PointInfo& e
 			double y_cor = slope * next_grid_index + intercept;
 			int next_y_grid_index = (int)y_cor;
 			while ((next_y_grid_index - y_grid_index) * step.second >= 0) {
-				InsertPoint(x_grid_index, y_grid_index, tra_id);
+				InsertPoint(x_grid_index, y_grid_index, tra_id, end);
 				InsertSegment(x_grid_index, y_grid_index, tra_id, begin, end);
 				y_grid_index += step.second;
 			}
@@ -112,7 +112,7 @@ void Panel::InsertSegment(int tra_id, const PointInfo& begin, const PointInfo& e
 			x_grid_index += step.first;
 		}
 		while ((y2_grid_index - y_grid_index) * step.second >= 0) {
-			InsertPoint(x_grid_index, y_grid_index, tra_id);
+			InsertPoint(x_grid_index, y_grid_index, tra_id, end);
 			InsertSegment(x_grid_index, y_grid_index, tra_id, begin, end);
 			y_grid_index += step.second;
 		}
