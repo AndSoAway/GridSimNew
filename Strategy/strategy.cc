@@ -30,50 +30,50 @@ void Strategy::FindCandidateTrajs(const GridPanel* grid_panel, const Trajectory&
 */
 
 void Strategy::TrajMergeUnion(list<int>& father_trajs, const std::list<int>& child_trajs) const {
-			list<int>::const_iterator cur_itor, pre_itor;
-			cur_itor = child_trajs.cbegin();
-			list<int>::iterator can_itor = father_trajs.begin();
-			while (cur_itor != child_trajs.cend() && can_itor != father_trajs.end()) {
-				while (can_itor != father_trajs.end()) {
-					if (*cur_itor == *can_itor) {
-						can_itor++;
-						break;
-					} else if (*cur_itor > *can_itor){
-						can_itor++;
-					} else {
-						father_trajs.insert(can_itor, *cur_itor);
-						break;
-					}
-				}
-				pre_itor = cur_itor;
-				cur_itor++;
-				while (cur_itor != child_trajs.cend() && *cur_itor == *pre_itor) {
-					pre_itor = cur_itor;
-					cur_itor++; 
-				}
-			} 
-			while (cur_itor != child_trajs.cend()) {
+	list<int>::const_iterator cur_itor, pre_itor;
+	cur_itor = child_trajs.cbegin();
+	list<int>::iterator can_itor = father_trajs.begin();
+	while (cur_itor != child_trajs.cend() && can_itor != father_trajs.end()) {
+		while (can_itor != father_trajs.end()) {
+			if (*cur_itor == *can_itor) {
+				can_itor++;
+				break;
+			} else if (*cur_itor > *can_itor){
+				can_itor++;
+			} else {
 				father_trajs.insert(can_itor, *cur_itor);
-				cur_itor++;
-			}	
+				break;
+			}
+		}
+		pre_itor = cur_itor;
+		cur_itor++;
+		while (cur_itor != child_trajs.cend() && *cur_itor == *pre_itor) {
+			pre_itor = cur_itor;
+			cur_itor++; 
+		}
+	} 
+	while (cur_itor != child_trajs.cend()) {
+		father_trajs.insert(can_itor, *cur_itor);
+		cur_itor++;
+	}	
 }
 
 void Strategy::GetCandidateTrajs(const GridPanel* grid_panel, const PointInfo& point, double dis, list<int>& candidates, bool is_end) {
-/*	clock_t get_grid = clock();
-	int point_sum = 0;
-	vector<const list<int>*> neighbour_lists;	
-	int total_size = 0;
-	string unionInfo;
-	int grid_sum = 0;
-*/
+//	clock_t get_grid = clock();
+//	int point_sum = 0;
+//	vector<const list<int>*> neighbour_lists;	
+//	int total_size = 0;
+//	string unionInfo;
+//	int grid_sum = 0;
+
 	const vector<pair<int, int>>& around_grids = point.neighbour_grid_;
 	int around_grid_size = around_grids.size();
 	for (int i = 0; i < around_grid_size; ++i) {
 		const pair<int, int>& grid_index = around_grids[i];
 		const list<int>& trajs = grid_panel->panel().GetTrajsInGrid(grid_index, is_end);
 		TrajMergeUnion(candidates, trajs);
-/*		neighbour_lists.push_back(&trajs);
-		total_size += trajs.size();
+//		neighbour_lists.push_back(&trajs);
+/*		total_size += trajs.size();
 		grid_sum ++;
 		unionInfo += "grid <" + to_string(i) + ", " + to_string(j) + " traj_size: " + to_string(trajs.size()) + "\n";
 		point_sum += grid_panel->panel().GetPointsInGrid(grid_index).size();
@@ -83,9 +83,10 @@ void Strategy::GetCandidateTrajs(const GridPanel* grid_panel, const PointInfo& p
 	get_grid = clock() - get_grid;
 	string info = "Get " + to_string(grid_sum) + " Grid : " + to_string((double)get_grid / CLOCKS_PER_SEC * 1000); 
 	Log::log(1, info);
-	clock_t cur = clock();
-	MergeKList(neighbour_lists, candidates);
-	cur = clock() - cur;
+*/
+//	clock_t cur = clock();
+//	MergeKList(neighbour_lists, candidates);
+/*	cur = clock() - cur;
 	unionInfo += "Total traj " + to_string(total_size) + " time: " + to_string((double)cur / CLOCKS_PER_SEC * 1000);
 	Log::log(1, unionInfo);
 	printf("Get can_trajs %ld, point size %d\n", candidates.size(), point_sum);
