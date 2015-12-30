@@ -29,7 +29,7 @@ int VerifySim(GridPanel& grid_panel, BaseVerify& vrf_method, unordered_map<int, 
 //			verify_cur = clock() - verify_cur;
 //			verify_clock += verify_cur;
 			
-			printf("verify id %d, sim %lf\n", first_id, sim);
+//			printf("verify id %d, sim %lf\n", first_id, sim);
 			sim_map[first_id][second_id] = sim;
 			if (sim <= 1.0 && sim >= SIMTHRESHOLD)
 				success_pair_count++;
