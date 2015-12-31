@@ -82,8 +82,8 @@ double BoundVerify::getLowerAndUpper(GridPanel& grid_panel, const Trajectory& ta
 	const vector<PointInfo>& tr_point_list = target.point_list();
 	int n = tr_point_list.size();
 
-	total_lower_dis = 0;
-	total_upper_dis = 0;
+	*total_lower_dis = 0;
+	*total_upper_dis = 0;
 	for (int point_index = 0; point_index < n; ++point_index) {
 		const PointInfo& point_info = tr_point_list[point_index];
 
@@ -140,18 +140,14 @@ bool BoundVerify::getDis(GridPanel& grid_panel, int test_id, unordered_map<int, 
 	for (int i = 0; i < n; ++i) {
 		const PointInfo& point = point_list[i];
 		vector<pair<double, int>> min_dis;
-		printf("Begin getMinDis\n");
 		getMinDis(grid_panel, test_id, point, min_dis);
-		printf("End getMinDis\n");
 		if (min_dis.empty())
 			return false;
 		sort(min_dis.begin(), min_dis.end(), sort_by_min);
 		sort_min[i] = min_dis;
 		
 		int first_grid_index = min_dis[0].second;
-		printf("Begin getMaxDis %d total_size %d\n", first_grid_index, n);
 		double max_dis = getMaxDis(first_grid_index, point);	
-		printf("End getMaxDis\n");
 		first_max.push_back(max_dis);
 	} 
 	return true;
