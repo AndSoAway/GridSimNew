@@ -21,6 +21,62 @@ void Trajectory::CalPointInfo(const GridPanel* grid_panel, double dis) {
 	}
 }
 
+void Trajectory::CalGrid() {
+	int point_size = point_info_.size();
+	for (int index = 1; index < point_size - 1; ++index) {
+		PointInfo& begin = point_info_[index -1];
+		PointInfo& end = point_info_[index];
+	
+		double begin_x = begin.x_len / (double)DISUNT;
+		double begin_y = begin.y_len / (double)DISUNIT;
+	
+		double end_x = end.x_len / (double)DISUNIT;
+		double end_y = end.y_len / (double)DISUNIT;
+		
+		double delta_x = end_x - begin_x;
+		double delta_y = end_y - end_y;
+		
+		pair<int, int> step(delta_x > 0 ? 1 : -1, delta_y > 0 ? 1 : -1);
+		int x1_grid_index = begin.grid_index_.first;
+		int y1_grid_index = begin.grid_index_.second;
+		
+		int x2_grid_index = end.grid_index_.first;
+		int y2_grid_index = end.grid_inde_.second;
+
+		if (x1_grid_index == x2_grid_index) {
+			for (int y_grid_index = y1_grid_index; (y2_grid_index - y_grid_index) * step.second >= 0; y_grid_index += step.second) {
+			InsertSegment(x1_grid_index, y_grid_index, index - 1, index);
+		} else {
+			double slope = delta_y / delta_x;
+			double intercept = end_y - slope * end_x;
+			int x_grid_index = x1_grid_index;
+			int y_grid_index = y1_grid_index;
+
+			while (x_grid_index != x2_grid_index) {
+				int next_grid_index = x_grid_index + step.first;
+				double y_cor = slope * next_grid_index + intercept;
+				int next_y_grid_index = (int)y_cor;
+				while ((next_y_grid_index - y_grid_index) * step.second >= 0) {
+					InsertSegment(x_grid_index, y_grid_index, index - 1, index);
+					y_grid_index += step.second;
+				}
+				y_grid_index = next_y_grid_index;
+				x_grid_index += step.first;
+			}
+			while ((y2_grid_index - y_grid_index) * step.second >= 0) {
+				InsertSegment(x_grid_index, y_grid_index, index - 1, index);
+				y_grid_index += step.second;
+			}
+		}
+	} 	
+}
+
+void Trajectory::InsertSegment(int x_grid_index, int y_grid_index, int begin, int end) {
+	trasegment& grid_segments = point_segement_map_[x_grid_index][y_grid_index];
+	segmentset& tra_segments = grid_segments[tra_id];
+	tra_segments.insert(make_pair(begin, end));	
+}
+
 void Trajectory::UpdateSpecialPoint() {
   int size = point_info_.size();
   if (size < POINTMINSIZE)

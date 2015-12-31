@@ -12,149 +12,17 @@ using namespace std;
 
 const list<int> Panel::empty_list_;
 
-void Panel::InsertTrajectory(const Trajectory& traj) {
- 	const vector<PointInfo>& point_list = traj.point_list();
-	int point_size = point_list.size();
-/*	for (int i = 0; i < point_size; ++i) {
-	  	InsertPoint(point_list[i], false);
-	}
-*/
-	int id = traj.id();
-	for (int index = 1; index < point_size - 1; index++) 
-		InsertSegment(id, point_list[index - 1], point_list[index]);
-
-}
-
-/*
-void Panel::InsertPoint(const PointInfo& point, bool end) {
-	int x_grid_index = point.grid_index_.first;
-	int y_grid_index = point.grid_index_.second;
-	
-	int x_lb = x_grid_index - 1;
-	int x_up = x_grid_index + 1;
-	int y_lb = y_grid_index - 1;
-	int y_up = y_grid_index + 1;
-	//grid_set_[x_grid_index][y_grid_index].push_back(point);
-
-	int tra_id = point.tra_id();
-	
-	//insert(point_traj_list_[x_grid_index][y_grid_index], tra_id);
-	list<int>& point_id_list = point_traj_list_[x_grid_index][y_grid_index];
-	if (point_id_list.empty() || tra_id != point_id_list.back()) {
-		point_id_list.insert(point_id_list.end(), tra_id);
-		for (int x = x_lb; x <= x_up; x++) {
-			for (int y = y_lb; y <= y_up; y++) {
-				int count = all_traj_count_[x][y];
-				all_traj_count_[x][y] = count + 1;
-			}
-		}
-	}
-		
-/ *
-	if (end) {
-		//insert(end_traj_list_[x_grid_index][y_grid_index], tra_id);
-		list<int>& end_id_list = end_traj_list_[x_grid_index][y_grid_index];
-		if (point_id_list.empty() || tra_id != point_id_list.back())
-			end_id_list.insert(end_id_list.end(), tra_id);
-	}
-* /
-}*/
-
-void Panel::InsertSegment(int tra_id, const PointInfo& begin, const PointInfo& end) {
-//line segment intersection in the grid algorithm
-	double begin_x = begin.x_len / (double)DISUNIT;
-	double begin_y = begin.y_len / (double)DISUNIT;		
-
-	double end_x = end.x_len / (double)DISUNIT;
-	double end_y = end.y_len / (double)DISUNIT;
-
-	double delta_x = end_x - begin_x;
-	double delta_y = end_y - begin_y;
-	
-	pair<int, int> step(delta_x > 0 ? 1 : -1, delta_y > 0 ? 1 : -1);
-	
-
-	int x1_grid_index = begin.grid_index_.first;
-	int y1_grid_index = begin.grid_index_.second;
-
-	int x2_grid_index = end.grid_index_.first;
-	int y2_grid_index = end.grid_index_.second;
-/*
-	int min_x_grid_index = min(x1_grid_index, x2_grid_index);
-	int max_x_grid_index = max(x1_grid_index, x2_grid_index);
-
-	int min_y_grid_index = min(y1_grid_index, y2_grid_index);
-	int max_y_grid_index = max(y1_grid_index, y2_grid_index);
-*/
-//	printf("begin (%lf, %lf), end (%lf, %lf)\n", begin.x(), begin.y(), end.x(), end.y());
-//	printf("begin <%d %d>\n end <%d %d> %d\n", x1_grid_index, y1_grid_index, x2_grid_index, y2_grid_index, tra_id);
-	if (x1_grid_index == x2_grid_index) {
-		for (int y_grid_index = y1_grid_index; (y2_grid_index - y_grid_index) * step.second >= 0; y_grid_index += step.second) {
-			InsertPoint(x1_grid_index, y_grid_index, tra_id, end);
-			InsertSegment(x1_grid_index, y_grid_index, tra_id, begin, end);
-		}
-	} else {
-		double slope = delta_y / delta_x;
-		double intercept = end_y - slope * end_x;
-		int x_grid_index = x1_grid_index;
-		int y_grid_index = y1_grid_index;
-
-		while (x_grid_index != x2_grid_index) {
-			int next_grid_index = x_grid_index + step.first;
-			double y_cor = slope * next_grid_index + intercept;
-			int next_y_grid_index = (int)y_cor;
-			while ((next_y_grid_index - y_grid_index) * step.second >= 0) {
-				InsertPoint(x_grid_index, y_grid_index, tra_id, end);
-				InsertSegment(x_grid_index, y_grid_index, tra_id, begin, end);
-				y_grid_index += step.second;
-			}
-			y_grid_index = next_y_grid_index;
-			x_grid_index += step.first;
-		}
-		while ((y2_grid_index - y_grid_index) * step.second >= 0) {
-			InsertPoint(x_grid_index, y_grid_index, tra_id, end);
-			InsertSegment(x_grid_index, y_grid_index, tra_id, begin, end);
-			y_grid_index += step.second;
-		}
-	}
-//	printf("min_x %d, min_y %d, max_x %d, max_y %d\n", min_x_grid_index, min_y_grid_index, max_x_grid_index, max_y_grid_index);
-/*	for (int x = min_x_grid_index; x <= max_x_grid_index; x++) {
-		for (int y = min_y_grid_index; y <= max_y_grid_index; y++) {
-			double x_left_log = double(x) * DISUNIT / LEN_PER_X + rectangle_.left_bottom().x();
-			double y_left_lat = double(y) * DISUNIT / LEN_PER_Y + rectangle_.left_bottom().y();
-			double x_right_log = double(x + 1) * DISUNIT / LEN_PER_X + rectangle_.left_bottom().x();
-			double y_right_lat = double(y + 1) * DISUNIT / LEN_PER_Y + rectangle_.left_bottom().y();
-			Point left_bottom(x_left_log, y_left_lat);
-			Point right_upper(x_right_log, y_right_lat);
-			Rectangle rect(left_bottom, right_upper);
-			if (rect.IntersectSegment(begin.point(), end.point())) {
-				list<int>& tra_id_list = point_traj_list_[x][y];
-				//insert(tra_id_list, tra_id);
-				if (tra_id_list.empty() || tra_id_list.back() != tra_id)
-					tra_id_list.insert(tra_id_list.end(), tra_id);
-			} 
-		}
-	}
-*/
+void Panel::InsertTrajectory(Trajectory& traj) {
+	Trajectory::gridsegments point_segment = traj.point_segment_map();
 }
 
 void Panel::InsertPoint(int x_grid_index, int y_grid_index, int tra_id, const PointInfo& end) {
 	list<int>& tra_id_list = point_traj_list_[x_grid_index][y_grid_index];
-//	printf("Insert <%d, %d> %d\n", x_grid_index, y_grid_index, tra_id);
 	if (tra_id_list.empty() || tra_id_list.back() != tra_id) {
 		tra_id_list.insert(tra_id_list.end(), tra_id);
 		UpdateRelation(x_grid_index, y_grid_index, end);
 	}
 	
-/*	for (int around_x = x_grid_index - 1; around_x <= x_grid_index + 1; ++around_x) {
-		for (int around_y = y_grid_index -1; around_y <= y_grid_index + 1; ++around_y) {
-			list<int>& around_id_list = around_traj_list_[around_x][around_y];
-			if (around_id_list.empty() || around_id_list.back() != tra_id) {
-				around_id_list.insert(around_id_list.end(), tra_id);
-			}
-		}
-	}
-*/
 }
 
 void Panel::UpdateRelation(int x_grid_index, int y_grid_index, const PointInfo& end) {
@@ -173,11 +41,13 @@ void Panel::UpdateRelation(int x_grid_index, int y_grid_index, const PointInfo& 
 	return;
 }
 
+/*
 void Panel::InsertSegment(int x_grid_index, int y_grid_index, int tra_id, const PointInfo& begin, const PointInfo& end) {
 	trasegment& grid_segments = point_segment_map_[x_grid_index][y_grid_index];
 	segmentset& tra_segments = grid_segments[tra_id];
 	tra_segments.insert(make_pair(begin.index_, end.index_));
 }
+*/
 
 int Panel::GetXIndex(double lon) const {
 	double x_len = (lon - rectangle_.left_bottom().x()) * LEN_PER_X;    

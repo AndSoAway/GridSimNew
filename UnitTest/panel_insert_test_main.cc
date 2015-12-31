@@ -80,10 +80,10 @@ void ReadAndProcess() {
 //	SinglePointStrategy strategy;
 //	TwoPointStrategy strategy;
 //	KPointStrategy strategy(3);
-//	MinDisStrategy strategy(SIMTHRESHOLD, 1);
+	MinDisStrategy strategy(SIMTHRESHOLD, 1);
 //	CorrelationStrategy strategy;
 	//KPointStrategy strategy(3);
-	AllPointStrategy strategy;
+//	AllPointStrategy strategy;
 	string joinInfo = "GridSide: " + to_string(DISUNIT) + ", DMAX: " + to_string(DMAX) + ", threshold: " + to_string(SIMTHRESHOLD) + ", Strategy: " + strategy.name();
 	Log::log(0, joinInfo);
 	printf("%s\n", joinInfo.c_str());
