@@ -30,6 +30,37 @@ void Strategy::FindCandidateTrajs(const GridPanel* grid_panel, const Trajectory&
 */
 
 void Strategy::TrajMergeUnion(list<int>& father_trajs, const std::list<int>& child_trajs) const {
+	list<int>::iterator fa_itor, fa_end_itor;
+	list<int>::const_iterator ch_itor, ch_end_itor;
+	fa_itor = father_trajs.begin();
+	fa_end_itor = father_trajs.end();
+
+	ch_itor = child_trajs.cbegin();
+	ch_end_itor = child_trajs.cend();
+
+	while (true) {
+		if (fa_itor == fa_end_itor) {
+			while (ch_itor != ch_end_itor) {
+				father_trajs.push_back(*ch_itor);
+				ch_itor++;
+			}
+			return;
+		}
+
+		if (ch_itor == ch_end_itor) {
+			return;
+		}
+
+		if (*fa_itor < *ch_itor) { ++fa_itor; }
+		else if (*ch_itor < *fa_itor) { father_trajs.insert(fa_itor, *ch_itor); ++ch_itor;}
+		else { ++fa_itor; ++ch_itor; }
+	}
+	
+	/*
+	list<int>::const_iterator cur_itor, pre_itor;
+	cur_itor = child_trajs.cbegin();
+	pre_itor = cur_itor;
+
 	list<int>::const_iterator cur_itor, pre_itor;
 	cur_itor = child_trajs.cbegin();
 	list<int>::iterator can_itor = father_trajs.begin();
@@ -56,6 +87,7 @@ void Strategy::TrajMergeUnion(list<int>& father_trajs, const std::list<int>& chi
 		father_trajs.insert(can_itor, *cur_itor);
 		cur_itor++;
 	}	
+*/
 }
 
 void Strategy::GetCandidateTrajs(const GridPanel* grid_panel, const PointInfo& point, double dis, list<int>& candidates, bool is_end) {
