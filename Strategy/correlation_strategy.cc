@@ -49,6 +49,7 @@ void CorrelationStrategy::FindCandidateTrajs(const GridPanel* grid_panel, Trajec
 			GetCandidateTrajs(grid_panel, point_list[min_size_point], dis, min_tra_list, false);
 			if (is_first) {
 				candidates = min_tra_list;
+				is_first  = false;
 			}else {
 				list<int> res;
 				TrajMergeJoin(candidates, min_tra_list, res);
